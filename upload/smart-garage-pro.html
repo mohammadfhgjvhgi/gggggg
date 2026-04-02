@@ -1,0 +1,2478 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الكراج الذكي - Smart Garage System</title>
+    <meta name="description" content="نظام الكراج الذكي المتكامل - إدارة احترافية للمواقف">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary: #06b6d4;
+            --primary-dark: #0891b2;
+            --secondary: #8b5cf6;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1e293b 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #67e8f9, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(6, 182, 212, 0.15);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.6); }
+        }
+        
+        .pulse-danger {
+            animation: pulseDanger 0.5s infinite;
+        }
+        
+        @keyframes pulseDanger {
+            0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.8); }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.5s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .tab-active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #16a34a);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .status-online {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+        
+        .status-offline {
+            background: var(--warning);
+            box-shadow: 0 0 10px var(--warning);
+        }
+        
+        .status-danger {
+            background: var(--danger);
+            box-shadow: 0 0 10px var(--danger);
+            animation: blink 0.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .sensor-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sensor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .sensor-card:hover::before {
+            opacity: 1;
+        }
+        
+        .sensor-card.danger::before {
+            background: linear-gradient(90deg, transparent, var(--danger), transparent);
+            opacity: 1;
+        }
+        
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 200px;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 20px;
+            height: 20px;
+            background: var(--danger);
+            border-radius: 10px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulseBadge 2s infinite;
+        }
+        
+        @keyframes pulseBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #475569;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            right: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(-24px);
+        }
+        
+        .congestion-bar {
+            transition: all 0.3s ease;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .data-value {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+        
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        
+        .ripple:active::after {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body class="text-white antialiased">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950">
+        <div class="text-center">
+            <div class="relative w-24 h-24 mx-auto mb-6">
+                <div class="absolute inset-0 border-4 border-cyan-500/20 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-transparent border-t-cyan-500 rounded-full spin"></div>
+                <div class="absolute inset-4 border-4 border-transparent border-t-purple-500 rounded-full spin" style="animation-duration: 0.75s; animation-direction: reverse;"></div>
+            </div>
+            <h2 class="text-xl font-bold gradient-text mb-2">الكراج الذكي</h2>
+            <p class="text-slate-400 text-sm" id="loading-status">جاري التحميل...</p>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="hidden fixed inset-0 z-50 overflow-auto">
+        <!-- Animated Background -->
+        <div class="fixed inset-0 pointer-events-none">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="w-full max-w-md">
+                <!-- Logo -->
+                <div class="text-center mb-8 slide-up">
+                    <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-cyan-500 via-blue-500 to-purple-500 rounded-3xl shadow-2xl shadow-cyan-500/30 mb-4 pulse-glow">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h8m-8 4h8m-4 4v3m-6-3h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-4xl font-bold gradient-text mb-2">الكراج الذكي</h1>
+                    <p class="text-slate-400">Smart Garage Management System</p>
+                </div>
+
+                <!-- Login Card -->
+                <div class="glass-card rounded-3xl p-8 slide-up" style="animation-delay: 0.1s;">
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl font-bold text-white mb-1">تسجيل الدخول</h2>
+                        <p class="text-slate-400 text-sm">أدخل بياناتك للوصول إلى لوحة التحكم</p>
+                    </div>
+
+                    <form id="login-form" class="space-y-5">
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-slate-300 text-sm font-medium mb-2">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                    البريد الإلكتروني
+                                </span>
+                            </label>
+                            <input type="email" id="login-email" required
+                                class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition"
+                                placeholder="example@garage.com">
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label class="block text-slate-300 text-sm font-medium mb-2">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                    كلمة المرور
+                                </span>
+                            </label>
+                            <div class="relative">
+                                <input type="password" id="login-password" required
+                                    class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition"
+                                    placeholder="••••••••">
+                                <button type="button" id="toggle-password" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-cyan-400 transition p-1">
+                                    <svg class="w-5 h-5" id="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="login-error" class="hidden bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-red-400 text-sm">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span id="error-message"></span>
+                            </div>
+                        </div>
+
+                        <!-- Login Button -->
+                        <button type="submit" id="login-btn" class="w-full btn-primary text-white font-semibold py-4 rounded-xl shadow-lg transition ripple">
+                            <span id="login-btn-text" class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                </svg>
+                                تسجيل الدخول
+                            </span>
+                        </button>
+                    </form>
+
+                    <!-- Quick Login -->
+                    <div class="mt-8 pt-6 border-t border-slate-700/50">
+                        <p class="text-center text-slate-400 text-sm mb-4">دخول سريع كـ:</p>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="quickLogin('admin')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-purple-500/30 hover:bg-purple-500/10 hover:border-purple-500/50 transition group">
+                                <span class="text-3xl group-hover:scale-110 transition">👑</span>
+                                <span class="text-xs text-purple-300 font-medium">مدير النظام</span>
+                            </button>
+                            <button onclick="quickLogin('guard')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-blue-500/30 hover:bg-blue-500/10 hover:border-blue-500/50 transition group">
+                                <span class="text-3xl group-hover:scale-110 transition">🛡️</span>
+                                <span class="text-xs text-blue-300 font-medium">حارس الأمن</span>
+                            </button>
+                            <button onclick="quickLogin('visitor')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-green-500/30 hover:bg-green-500/10 hover:border-green-500/50 transition group">
+                                <span class="text-3xl group-hover:scale-110 transition">👤</span>
+                                <span class="text-xs text-green-300 font-medium">زائر</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="text-center text-xs text-slate-500 mt-6">
+                        كلمة المرور الافتراضية: <code class="text-cyan-400 bg-slate-800 px-2 py-1 rounded">123456</code>
+                    </p>
+                </div>
+
+                <!-- Features -->
+                <div class="grid grid-cols-3 gap-3 mt-6 slide-up" style="animation-delay: 0.2s;">
+                    <div class="glass-card rounded-xl p-4 text-center">
+                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-slate-400">آمن 100%</p>
+                    </div>
+                    <div class="glass-card rounded-xl p-4 text-center">
+                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-slate-400">تحديث لحظي</p>
+                    </div>
+                    <div class="glass-card rounded-xl p-4 text-center">
+                        <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs text-slate-400">متعدد المستخدمين</p>
+                    </div>
+                </div>
+
+                <p class="text-center text-slate-600 text-xs mt-6">
+                    © 2024 Smart Garage System - All Rights Reserved
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="hidden pb-24">
+        <!-- Header -->
+        <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-xl border-b border-slate-700/30">
+            <div class="px-4 py-3">
+                <div class="flex items-center justify-between">
+                    <!-- Logo & Title -->
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl shadow-lg shadow-cyan-500/20">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 4h8m-4 4v3m-6-3h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-bold gradient-text">الكراج الذكي</h1>
+                            <div class="flex items-center gap-2">
+                                <span id="connection-status" class="status-indicator status-offline"></span>
+                                <span id="connection-text" class="text-xs text-slate-400">جاري الاتصال...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center gap-2">
+                        <!-- User Info (Desktop) -->
+                        <div id="user-info-desktop" class="hidden md:flex items-center gap-2 px-3 py-2 bg-slate-800/50 rounded-xl">
+                            <span id="user-role-icon" class="text-xl">👤</span>
+                            <div class="text-right">
+                                <div id="user-display-name" class="text-sm font-medium text-white"></div>
+                                <div id="user-display-role" class="text-xs text-slate-400"></div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications -->
+                        <button id="notifications-btn" class="relative p-2.5 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 transition">
+                            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                            </svg>
+                            <span id="notification-badge" class="hidden notification-badge">0</span>
+                        </button>
+
+                        <!-- Sound Toggle -->
+                        <button id="sound-toggle-btn" class="p-2.5 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 transition">
+                            <svg id="sound-icon" class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+                            </svg>
+                        </button>
+
+                        <!-- Logout -->
+                        <button id="logout-btn" class="p-2.5 rounded-xl bg-slate-800/50 hover:bg-red-500/20 transition group">
+                            <svg class="w-5 h-5 text-slate-400 group-hover:text-red-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Alert Banner -->
+        <div id="alert-banner" class="hidden bg-gradient-to-r from-red-600 via-red-500 to-rose-600 px-4 py-3">
+            <div class="flex items-center justify-center gap-3">
+                <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span id="alert-banner-text" class="font-bold"></span>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-4 gap-2 p-4">
+            <div class="glass-card glass-card-hover rounded-2xl p-3 text-center">
+                <div class="card-icon mx-auto mb-2 bg-gradient-to-br from-cyan-500/20 to-blue-500/20">
+                    <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 4h8m-4 4v3m-6-3h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <div id="stat-cars" class="text-2xl font-bold text-cyan-300 data-value">0</div>
+                <div class="text-[10px] text-slate-400 mt-1">داخل الكراج</div>
+            </div>
+            <div class="glass-card glass-card-hover rounded-2xl p-3 text-center">
+                <div class="card-icon mx-auto mb-2 bg-gradient-to-br from-green-500/20 to-emerald-500/20">
+                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                </div>
+                <div id="stat-available" class="text-2xl font-bold text-green-300 data-value">20</div>
+                <div class="text-[10px] text-slate-400 mt-1">متاح</div>
+            </div>
+            <div class="glass-card glass-card-hover rounded-2xl p-3 text-center">
+                <div class="card-icon mx-auto mb-2 bg-gradient-to-br from-orange-500/20 to-amber-500/20">
+                    <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <div id="stat-temp" class="text-2xl font-bold text-orange-300 data-value">25°</div>
+                <div class="text-[10px] text-slate-400 mt-1">حرارة</div>
+            </div>
+            <div class="glass-card glass-card-hover rounded-2xl p-3 text-center">
+                <div class="card-icon mx-auto mb-2 bg-gradient-to-br from-teal-500/20 to-cyan-500/20">
+                    <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                </div>
+                <div id="stat-humidity" class="text-2xl font-bold text-teal-300 data-value">50%</div>
+                <div class="text-[10px] text-slate-400 mt-1">رطوبة</div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="px-4 mb-4">
+            <div class="flex gap-1 bg-slate-800/30 rounded-2xl p-1.5 overflow-x-auto">
+                <button class="tab-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition whitespace-nowrap tab-active" data-tab="dashboard">
+                    <svg class="w-4 h-4 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+                    </svg>
+                    الرئيسية
+                </button>
+                <button class="tab-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition whitespace-nowrap text-slate-400" data-tab="gates">
+                    <svg class="w-4 h-4 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                    </svg>
+                    البوابات
+                </button>
+                <button class="tab-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition whitespace-nowrap text-slate-400" data-tab="sensors">
+                    <svg class="w-4 h-4 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    المستشعرات
+                </button>
+                <button class="tab-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition whitespace-nowrap text-slate-400" data-tab="reservation">
+                    <svg class="w-4 h-4 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    </svg>
+                    الحجز
+                </button>
+                <button class="tab-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition whitespace-nowrap text-slate-400" data-tab="reports">
+                    <svg class="w-4 h-4 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    التقارير
+                </button>
+                <button class="tab-btn flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition whitespace-nowrap text-slate-400" data-tab="settings">
+                    <svg class="w-4 h-4 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    إعدادات
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="tab-contents" class="px-4">
+            <!-- Dashboard Tab -->
+            <div id="tab-dashboard" class="tab-content space-y-4">
+                <!-- Occupancy Card -->
+                <div class="glass-card rounded-2xl p-5 border-2 border-cyan-500/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg text-cyan-300 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 4h8m-4 4v3m-6-3h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2z"/>
+                            </svg>
+                            معدل الإشغال
+                        </h3>
+                        <span id="occupancy-badge" class="px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">متاح</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-6">
+                        <div class="text-center">
+                            <div id="occupancy-count" class="text-5xl font-bold text-white data-value">0</div>
+                            <div class="text-slate-400 text-sm">من <span id="occupancy-max">20</span> موقف</div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="h-4 bg-slate-700/50 rounded-full overflow-hidden mb-2">
+                                <div id="occupancy-bar" class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 progress-bar rounded-full" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-slate-400">
+                                <span>0%</span>
+                                <span id="occupancy-percent" class="text-cyan-400 font-bold">0%</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Simulation Buttons -->
+                    <div id="sim-buttons" class="flex gap-3 mt-5">
+                        <button onclick="simulateCarEntry()" class="flex-1 py-3 rounded-xl btn-success font-medium transition ripple flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            دخول سيارة
+                        </button>
+                        <button onclick="simulateCarExit()" class="flex-1 py-3 rounded-xl btn-danger font-medium transition ripple flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                            </svg>
+                            خروج سيارة
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Congestion Prediction -->
+                <div class="glass-card rounded-2xl p-5 border border-purple-500/30">
+                    <h3 class="font-bold text-lg text-purple-300 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        التنبؤ بالازدحام
+                    </h3>
+                    <div id="congestion-chart" class="flex gap-1.5 overflow-x-auto pb-2">
+                        <!-- Generated by JS -->
+                    </div>
+                    <div class="flex justify-center gap-4 mt-3 text-xs">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-green-500"></span> منخفض</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-yellow-500"></span> متوسط</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-orange-500"></span> عالي</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-red-500"></span> حرج</span>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Car Movement Chart -->
+                    <div class="glass-card rounded-2xl p-5 border border-blue-500/30">
+                        <h3 class="font-bold text-blue-300 mb-4">حركة السيارات اليوم</h3>
+                        <div class="chart-container">
+                            <canvas id="carMovementChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Environment Chart -->
+                    <div class="glass-card rounded-2xl p-5 border border-teal-500/30">
+                        <h3 class="font-bold text-teal-300 mb-4">الحرارة والرطوبة</h3>
+                        <div class="chart-container">
+                            <canvas id="environmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Events -->
+                <div class="glass-card rounded-2xl p-5 border border-slate-600/30">
+                    <h3 class="font-bold text-slate-300 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        آخر الأحداث
+                    </h3>
+                    <div id="event-log" class="max-h-48 overflow-y-auto space-y-2">
+                        <div class="text-center text-slate-500 py-6">
+                            <svg class="w-12 h-12 mx-auto mb-2 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                            </svg>
+                            لا توجد أحداث بعد
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gates Tab -->
+            <div id="tab-gates" class="tab-content hidden space-y-4">
+                <!-- Permission Error -->
+                <div id="gates-permission-error" class="hidden glass-card rounded-2xl bg-red-500/10 border border-red-500/30 p-4">
+                    <div class="flex items-center gap-3 text-red-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2a1 1 0 001 1h4m-6-4V6a2 2 0 012-2h2a2 2 0 012 2v7m-6 4h6m6-4v6a2 2 0 01-2 2H8a2 2 0 01-2-2v-6"/>
+                        </svg>
+                        <span class="font-medium">ليس لديك صلاحية للتحكم بالبوابات</span>
+                    </div>
+                </div>
+
+                <!-- Entry Gate -->
+                <div id="entry-gate-card" class="glass-card sensor-card rounded-2xl p-5 border-2 border-slate-600/50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div id="entry-gate-icon" class="card-icon bg-gradient-to-br from-emerald-500/20 to-green-500/20">
+                                <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">بوابة الدخول</h3>
+                                <p class="text-slate-400 text-sm">Entry Gate - Servo D9</p>
+                                <span id="entry-gate-status" class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium bg-slate-600">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    مغلق
+                                </span>
+                            </div>
+                        </div>
+                        <button id="entry-gate-btn" onclick="toggleGate('entry')" class="py-4 px-8 rounded-xl font-bold text-lg btn-success transition ripple">
+                            فتح
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Exit Gate -->
+                <div id="exit-gate-card" class="glass-card sensor-card rounded-2xl p-5 border-2 border-slate-600/50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div id="exit-gate-icon" class="card-icon bg-gradient-to-br from-blue-500/20 to-indigo-500/20">
+                                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">بوابة الخروج</h3>
+                                <p class="text-slate-400 text-sm">Exit Gate - Servo D10</p>
+                                <span id="exit-gate-status" class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium bg-slate-600">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    مغلق
+                                </span>
+                            </div>
+                        </div>
+                        <button id="exit-gate-btn" onclick="toggleGate('exit')" class="py-4 px-8 rounded-xl font-bold text-lg btn-primary transition ripple">
+                            فتح
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Security Door -->
+                <div id="security-door-card" class="glass-card sensor-card rounded-2xl p-5 border-2 border-slate-600/50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div id="security-door-icon" class="card-icon bg-gradient-to-br from-purple-500/20 to-violet-500/20">
+                                <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">باب غرفة الأمن</h3>
+                                <p class="text-slate-400 text-sm">Security Door - Relay D25</p>
+                                <span id="security-door-status" class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium bg-slate-600">
+                                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                    مغلق
+                                </span>
+                            </div>
+                        </div>
+                        <button id="security-door-btn" onclick="toggleGate('security')" class="py-4 px-8 rounded-xl font-bold text-lg transition ripple" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            فتح
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sensors Tab -->
+            <div id="tab-sensors" class="tab-content hidden space-y-4">
+                <!-- Alert Levels Info -->
+                <div class="glass-card rounded-2xl p-5 border border-slate-600/30">
+                    <h3 class="font-bold text-slate-300 mb-4">مستويات الإنذار</h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-center">
+                            <div class="text-2xl mb-2">⚠️</div>
+                            <div class="font-bold text-yellow-400">مستوى 1</div>
+                            <div class="text-xs text-slate-400 mt-1">تحذير - تنبيه فقط</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-orange-500/10 border border-orange-500/30 text-center">
+                            <div class="text-2xl mb-2">🔶</div>
+                            <div class="font-bold text-orange-400">مستوى 2</div>
+                            <div class="text-xs text-slate-400 mt-1">خطر - صوت + إشعار</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-center">
+                            <div class="text-2xl mb-2">🚨</div>
+                            <div class="font-bold text-red-400">مستوى 3</div>
+                            <div class="text-xs text-slate-400 mt-1">طوارئ - تصرف فوري!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flame Sensor -->
+                <div id="flame-sensor-card" class="glass-card sensor-card rounded-2xl p-5 border-2 border-orange-500/30">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="card-icon bg-gradient-to-br from-orange-500/20 to-red-500/20">
+                                <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">حساس اللهب</h3>
+                                <p class="text-slate-400 text-sm">Flame Sensor - Pin D22</p>
+                                <span id="flame-status" class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                                    <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                                    آمن
+                                </span>
+                            </div>
+                        </div>
+                        <div id="flame-test-btns" class="flex gap-2">
+                            <button onclick="simulateAlert('flame', 1)" class="px-4 py-2 rounded-lg text-xs font-medium border border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/20 transition">1</button>
+                            <button onclick="simulateAlert('flame', 2)" class="px-4 py-2 rounded-lg text-xs font-medium border border-orange-500/50 text-orange-400 hover:bg-orange-500/20 transition">2</button>
+                            <button onclick="simulateAlert('flame', 3)" class="px-4 py-2 rounded-lg text-xs font-medium border border-red-500/50 text-red-400 hover:bg-red-500/20 transition">3</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gas Sensor -->
+                <div id="gas-sensor-card" class="glass-card sensor-card rounded-2xl p-5 border-2 border-amber-500/30">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="card-icon bg-gradient-to-br from-amber-500/20 to-yellow-500/20">
+                                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">حساس الغاز MQ-2</h3>
+                                <p class="text-slate-400 text-sm">Gas Sensor - Pin A0</p>
+                                <span id="gas-status" class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                                    <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                                    آمن
+                                </span>
+                            </div>
+                        </div>
+                        <div id="gas-test-btns" class="flex gap-2">
+                            <button onclick="simulateAlert('gas', 1)" class="px-4 py-2 rounded-lg text-xs font-medium border border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/20 transition">1</button>
+                            <button onclick="simulateAlert('gas', 2)" class="px-4 py-2 rounded-lg text-xs font-medium border border-orange-500/50 text-orange-400 hover:bg-orange-500/20 transition">2</button>
+                            <button onclick="simulateAlert('gas', 3)" class="px-4 py-2 rounded-lg text-xs font-medium border border-red-500/50 text-red-400 hover:bg-red-500/20 transition">3</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vibration Sensor -->
+                <div id="vibration-sensor-card" class="glass-card sensor-card rounded-2xl p-5 border-2 border-purple-500/30">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="card-icon bg-gradient-to-br from-purple-500/20 to-violet-500/20">
+                                <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">حساس الاهتزاز</h3>
+                                <p class="text-slate-400 text-sm">Vibration Sensor - Pin D23</p>
+                                <span id="vibration-status" class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                                    <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                                    آمن
+                                </span>
+                            </div>
+                        </div>
+                        <div id="vibration-test-btns" class="flex gap-2">
+                            <button onclick="simulateAlert('vibration', 1)" class="px-4 py-2 rounded-lg text-xs font-medium border border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/20 transition">1</button>
+                            <button onclick="simulateAlert('vibration', 2)" class="px-4 py-2 rounded-lg text-xs font-medium border border-orange-500/50 text-orange-400 hover:bg-orange-500/20 transition">2</button>
+                            <button onclick="simulateAlert('vibration', 3)" class="px-4 py-2 rounded-lg text-xs font-medium border border-red-500/50 text-red-400 hover:bg-red-500/20 transition">3</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DHT11 Sensor -->
+                <div class="glass-card sensor-card rounded-2xl p-5 border-2 border-teal-500/30">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="card-icon bg-gradient-to-br from-teal-500/20 to-cyan-500/20">
+                                <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl">حساس DHT11</h3>
+                                <p class="text-slate-400 text-sm">Temperature & Humidity - Pin D26</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="text-center p-4 bg-orange-500/10 rounded-xl">
+                            <div class="text-3xl font-bold text-orange-300 data-value" id="dht-temp">25°C</div>
+                            <div class="text-xs text-slate-400 mt-1">درجة الحرارة</div>
+                        </div>
+                        <div class="text-center p-4 bg-teal-500/10 rounded-xl">
+                            <div class="text-3xl font-bold text-teal-300 data-value" id="dht-humidity">50%</div>
+                            <div class="text-xs text-slate-400 mt-1">الرطوبة النسبية</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reservation Tab -->
+            <div id="tab-reservation" class="tab-content hidden space-y-4">
+                <!-- Active Reservations -->
+                <div class="glass-card rounded-2xl p-5 border border-purple-500/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg text-purple-300">الحجوزات النشطة</h3>
+                        <button onclick="showReservationModal()" class="btn-primary px-4 py-2 rounded-xl text-sm font-medium transition ripple">
+                            + حجز جديد
+                        </button>
+                    </div>
+                    <div id="reservations-list" class="max-h-64 overflow-y-auto space-y-3">
+                        <div class="text-center text-slate-500 py-8">
+                            <svg class="w-16 h-16 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            </svg>
+                            لا توجد حجوزات نشطة
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fee Calculator -->
+                <div class="glass-card rounded-2xl p-5 border border-green-500/30">
+                    <h3 class="font-bold text-lg text-green-300 mb-4">حاسبة الرسوم</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center p-4 bg-slate-800/50 rounded-xl">
+                            <div class="text-3xl font-bold text-cyan-300 data-value" id="fee-rate">2</div>
+                            <div class="text-xs text-slate-400 mt-1">ريال/ساعة</div>
+                        </div>
+                        <div class="text-center p-4 bg-slate-800/50 rounded-xl">
+                            <div class="text-3xl font-bold text-green-300 data-value" id="fee-total">0</div>
+                            <div class="text-xs text-slate-400 mt-1">ريال إجمالي</div>
+                        </div>
+                        <div class="text-center p-4 bg-slate-800/50 rounded-xl">
+                            <div class="text-3xl font-bold text-purple-300 data-value" id="fee-count">0</div>
+                            <div class="text-xs text-slate-400 mt-1">حجز مكتمل</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="tab-reports" class="tab-content hidden space-y-4">
+                <!-- Today Summary -->
+                <div class="glass-card rounded-2xl p-5 border border-blue-500/30">
+                    <h3 class="font-bold text-lg text-blue-300 mb-4">ملخص اليوم</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="text-center p-4 bg-cyan-500/10 rounded-xl">
+                            <div class="text-3xl font-bold text-cyan-300 data-value" id="report-entries">0</div>
+                            <div class="text-xs text-slate-400 mt-1">سيارات دخلت</div>
+                        </div>
+                        <div class="text-center p-4 bg-orange-500/10 rounded-xl">
+                            <div class="text-3xl font-bold text-orange-300 data-value" id="report-exits">0</div>
+                            <div class="text-xs text-slate-400 mt-1">سيارات خرجت</div>
+                        </div>
+                        <div class="text-center p-4 bg-green-500/10 rounded-xl">
+                            <div class="text-3xl font-bold text-green-300 data-value" id="report-revenue">0</div>
+                            <div class="text-xs text-slate-400 mt-1">ريال إيرادات</div>
+                        </div>
+                        <div class="text-center p-4 bg-red-500/10 rounded-xl">
+                            <div class="text-3xl font-bold text-red-300 data-value" id="report-alerts">0</div>
+                            <div class="text-xs text-slate-400 mt-1">إنذارات</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue Chart -->
+                <div class="glass-card rounded-2xl p-5 border border-purple-500/30">
+                    <h3 class="font-bold text-lg text-purple-300 mb-4">الإيرادات الأسبوعية</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="tab-settings" class="tab-content hidden space-y-4">
+                <!-- App Settings -->
+                <div class="glass-card rounded-2xl p-5 border border-slate-600/30">
+                    <h3 class="font-bold text-lg text-slate-300 mb-6">إعدادات التطبيق</h3>
+                    
+                    <div class="space-y-5">
+                        <!-- Notifications Toggle -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="font-medium">الإشعارات</div>
+                                <div class="text-xs text-slate-400">تلقي إشعارات الإنذارات</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="setting-notifications" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <!-- Sound Toggle -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="font-medium">الأصوات</div>
+                                <div class="text-xs text-slate-400">تشغيل صوت الإنذار</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="setting-sound" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <!-- Hourly Rate -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">سعر الساعة (ريال)</label>
+                            <input type="number" id="setting-rate" value="2" min="1" max="100"
+                                class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition">
+                        </div>
+
+                        <!-- Max Cars -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">عدد المواقف الكلي</label>
+                            <input type="number" id="setting-max-cars" value="20" min="1" max="100"
+                                class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition">
+                        </div>
+
+                        <!-- SMS Phone -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">رقم SMS للطوارئ</label>
+                            <input type="tel" id="setting-sms" placeholder="05xxxxxxxx"
+                                class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition">
+                        </div>
+
+                        <button onclick="saveSettings()" class="w-full btn-primary py-3 rounded-xl font-medium transition ripple">
+                            حفظ الإعدادات
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SMS Log -->
+                <div class="glass-card rounded-2xl p-5 border border-purple-500/30">
+                    <h3 class="font-bold text-lg text-purple-300 mb-4">سجل الرسائل</h3>
+                    <div id="sms-log" class="max-h-48 overflow-y-auto space-y-2">
+                        <div class="text-center text-slate-500 py-6">لا توجد رسائل مرسلة</div>
+                    </div>
+                </div>
+
+                <!-- Clear Data -->
+                <div class="glass-card rounded-2xl p-5 border border-red-500/30">
+                    <h3 class="font-bold text-lg text-red-300 mb-4">إدارة البيانات</h3>
+                    <button onclick="clearAllData()" class="w-full btn-danger py-3 rounded-xl font-medium transition ripple">
+                        مسح جميع البيانات المحلية
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reservation Modal -->
+    <div id="reservation-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0" onclick="hideReservationModal()"></div>
+        <div class="relative glass-card rounded-3xl p-6 w-full max-w-md bounce-in">
+            <button onclick="hideReservationModal()" class="absolute top-4 left-4 p-2 rounded-lg hover:bg-slate-700/50 transition text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            
+            <h3 class="text-xl font-bold mb-6">حجز موقف جديد</h3>
+            
+            <form id="reservation-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">اسم المستخدم</label>
+                    <input type="text" id="res-name" required
+                        class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">رقم الهاتف</label>
+                    <input type="tel" id="res-phone"
+                        class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">رقم اللوحة</label>
+                    <input type="text" id="res-plate" required
+                        class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">رقم الموقف</label>
+                    <input type="number" id="res-spot" min="1" value="1"
+                        class="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none transition">
+                </div>
+                <button type="submit" class="w-full btn-primary py-3 rounded-xl font-medium transition ripple">
+                    تأكيد الحجز
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0" onclick="hidePaymentModal()"></div>
+        <div class="relative glass-card rounded-3xl p-6 w-full max-w-md bounce-in">
+            <button onclick="hidePaymentModal()" class="absolute top-4 left-4 p-2 rounded-lg hover:bg-slate-700/50 transition text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            
+            <h3 class="text-xl font-bold mb-6">دفع الرسوم</h3>
+            
+            <div id="payment-details" class="space-y-3 mb-6"></div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-3">طريقة الدفع</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" onclick="setPaymentMethod('cash')" class="payment-method active flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-600 hover:border-cyan-500 transition" data-method="cash">
+                        <span class="text-2xl">💵</span>
+                        <span class="text-xs">نقداً</span>
+                    </button>
+                    <button type="button" onclick="setPaymentMethod('card')" class="payment-method flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-600 hover:border-cyan-500 transition" data-method="card">
+                        <span class="text-2xl">💳</span>
+                        <span class="text-xs">بطاقة</span>
+                    </button>
+                    <button type="button" onclick="setPaymentMethod('online')" class="payment-method flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-600 hover:border-cyan-500 transition" data-method="online">
+                        <span class="text-2xl">📱</span>
+                        <span class="text-xs">أونلاين</span>
+                    </button>
+                </div>
+            </div>
+            
+            <button onclick="processPayment()" class="w-full btn-success py-3 rounded-xl font-medium transition ripple">
+                تأكيد الدفع
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-lg slide-up">
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const FIREBASE_CONFIG = {
+            apiKey: "ui3Cleq45lLNKrkiy0PmRo0n6BRbeisP55PXZXk6",
+            authDomain: "my-systim.firebaseapp.com",
+            databaseURL: "https://my-systim-default-rtdb.firebaseio.com",
+            projectId: "my-systim",
+            storageBucket: "my-systim.appspot.com"
+        };
+
+        // ==================== GLOBAL STATE ====================
+        let app, database;
+        let isConnected = false;
+        let currentUser = null;
+        let unsubscribers = [];
+
+        // Garage Data
+        let garageData = {
+            carsCount: 0,
+            maxCars: 20,
+            temperature: 25,
+            humidity: 50,
+            flameAlert: false,
+            gasAlert: false,
+            vibrationAlert: false,
+            gasLevel: 0
+        };
+
+        // Commands
+        let commands = {
+            entryGate: false,
+            exitGate: false,
+            securityDoor: false
+        };
+
+        // Local Data
+        let reservations = [];
+        let payments = [];
+        let eventLog = [];
+        let smsLog = [];
+
+        // Settings
+        let settings = {
+            hourlyRate: 2,
+            maxCars: 20,
+            smsEnabled: false,
+            smsPhone: '',
+            notificationsEnabled: true,
+            soundEnabled: true
+        };
+
+        // Alert States
+        let lastAlertState = { flame: false, gas: false, vibration: false };
+        let alertCount = 0;
+
+        // ==================== USER MANAGEMENT ====================
+        const DEFAULT_USERS = [
+            { id: '1', name: 'أحمد المدير', email: 'admin@garage.com', role: 'admin', phone: '0501234567' },
+            { id: '2', name: 'محمد الحارس', email: 'guard@garage.com', role: 'guard', phone: '0509876543' },
+            { id: '3', name: 'زائر', email: 'visitor@garage.com', role: 'visitor' }
+        ];
+
+        const ROLE_PERMISSIONS = {
+            admin: ['view_dashboard', 'control_gates', 'view_alerts', 'manage_users', 'view_reports', 'manage_reservations', 'manage_settings', 'manage_sms'],
+            guard: ['view_dashboard', 'control_gates', 'view_alerts'],
+            visitor: ['view_dashboard', 'view_alerts', 'make_reservation']
+        };
+
+        function getUsers() {
+            try {
+                const stored = localStorage.getItem('garage_users');
+                if (stored) return JSON.parse(stored);
+                localStorage.setItem('garage_users', JSON.stringify(DEFAULT_USERS));
+                return DEFAULT_USERS;
+            } catch (e) {
+                return DEFAULT_USERS;
+            }
+        }
+
+        function getCurrentUser() {
+            try {
+                const stored = localStorage.getItem('garage_auth_user');
+                return stored ? JSON.parse(stored) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function login(email, password) {
+            const users = getUsers();
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+            
+            if (!user) return { success: false, error: 'البريد الإلكتروني غير موجود' };
+            if (password !== '123456') return { success: false, error: 'كلمة المرور غير صحيحة' };
+            
+            localStorage.setItem('garage_auth_user', JSON.stringify(user));
+            return { success: true, user };
+        }
+
+        function logout() {
+            localStorage.removeItem('garage_auth_user');
+            currentUser = null;
+            
+            // Unsubscribe from Firebase
+            unsubscribers.forEach(unsub => unsub && unsub());
+            unsubscribers = [];
+            
+            showLoginScreen();
+        }
+
+        function hasPermission(permission) {
+            if (!currentUser) return false;
+            return ROLE_PERMISSIONS[currentUser.role]?.includes(permission) || false;
+        }
+
+        function getRoleNameAr(role) {
+            return { admin: 'مدير النظام', guard: 'حارس الأمن', visitor: 'زائر' }[role] || role;
+        }
+
+        function getRoleIcon(role) {
+            return { admin: '👑', guard: '🛡️', visitor: '👤' }[role] || '👤';
+        }
+
+        // ==================== FIREBASE INITIALIZATION ====================
+        function initFirebase() {
+            updateLoadingStatus('جاري الاتصال بـ Firebase...');
+            
+            try {
+                app = firebase.initializeApp(FIREBASE_CONFIG);
+                database = firebase.database();
+                
+                // Test connection
+                const connectedRef = database.ref('.info/connected');
+                connectedRef.on('value', (snap) => {
+                    isConnected = snap.val() === true;
+                    updateConnectionStatus();
+                });
+                
+                // Subscribe to data
+                subscribeToFirebase();
+                
+                console.log('✅ Firebase initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('❌ Firebase initialization error:', error);
+                isConnected = false;
+                updateConnectionStatus();
+                return false;
+            }
+        }
+
+        function subscribeToFirebase() {
+            // Garage Data
+            const garageRef = database.ref('garage');
+            const unsubGarage = garageRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    garageData = { ...garageData, ...data };
+                    updateDashboardUI();
+                    checkAlerts(data);
+                }
+            }, (error) => {
+                console.error('Garage data error:', error);
+            });
+            unsubscribers.push(() => garageRef.off('value', unsubGarage));
+
+            // Commands
+            const commandsRef = database.ref('commands');
+            const unsubCommands = commandsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    commands = { ...commands, ...data };
+                    updateGatesUI();
+                }
+            }, (error) => {
+                console.error('Commands error:', error);
+            });
+            unsubscribers.push(() => commandsRef.off('value', unsubCommands));
+        }
+
+        // ==================== FIREBASE OPERATIONS ====================
+        async function updateFirebaseGarage(data) {
+            if (!isConnected) return;
+            try {
+                await database.ref('garage').update(data);
+            } catch (error) {
+                console.error('Update garage error:', error);
+            }
+        }
+
+        async function updateFirebaseCommands(data) {
+            if (!isConnected) return;
+            try {
+                await database.ref('commands').update(data);
+            } catch (error) {
+                console.error('Update commands error:', error);
+            }
+        }
+
+        // ==================== LOCAL DATA ====================
+        function loadLocalData() {
+            try {
+                const data = localStorage.getItem('garage_app_data');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    reservations = parsed.reservations || [];
+                    payments = parsed.payments || [];
+                    eventLog = parsed.eventLog || [];
+                    smsLog = parsed.smsLog || [];
+                    settings = { ...settings, ...parsed.settings };
+                }
+            } catch (e) {
+                console.error('Load local data error:', e);
+            }
+        }
+
+        function saveLocalData() {
+            try {
+                localStorage.setItem('garage_app_data', JSON.stringify({
+                    reservations, payments, eventLog, smsLog, settings
+                }));
+            } catch (e) {
+                console.error('Save local data error:', e);
+            }
+        }
+
+        // ==================== ALERT SYSTEM ====================
+        function checkAlerts(data) {
+            const alertBanner = document.getElementById('alert-banner');
+            const alertText = document.getElementById('alert-banner-text');
+            let alerts = [];
+
+            if (data.flameAlert) alerts.push('🔥 حريق!');
+            if (data.gasAlert) alerts.push('💨 تسرب غاز!');
+            if (data.vibrationAlert) alerts.push('📳 اهتزاز!');
+
+            if (alerts.length > 0) {
+                alertBanner.classList.remove('hidden');
+                alertText.textContent = alerts.join(' ');
+            } else {
+                alertBanner.classList.add('hidden');
+            }
+
+            // Check for new alerts
+            if (data.flameAlert && !lastAlertState.flame) {
+                triggerAlert('flame', 2);
+            }
+            if (data.gasAlert && !lastAlertState.gas) {
+                triggerAlert('gas', 2);
+            }
+            if (data.vibrationAlert && !lastAlertState.vibration) {
+                triggerAlert('vibration', 2);
+            }
+
+            lastAlertState = {
+                flame: data.flameAlert,
+                gas: data.gasAlert,
+                vibration: data.vibrationAlert
+            };
+
+            updateSensorsUI();
+        }
+
+        function triggerAlert(type, level) {
+            const messages = {
+                flame: {
+                    1: 'تم اكتشاف حرارة عالية',
+                    2: '⚠️ تحذير: ارتفاع حرارة ملحوظ!',
+                    3: '🚨 طوارئ: لهب مكتشف! أخلِ المكان فوراً!'
+                },
+                gas: {
+                    1: 'تم اكتشاف تركيز غاز منخفض',
+                    2: '⚠️ تحذير: تسرب غاز محتمل!',
+                    3: '🚨 طوارئ: تسرب غاز! أخلِ المكان فوراً!'
+                },
+                vibration: {
+                    1: 'تم اكتشاف اهتزاز خفيف',
+                    2: '⚠️ تحذير: اهتزاز غير طبيعي!',
+                    3: '🚨 طوارئ: اهتزاز قوي! قد يكون زلزال!'
+                }
+            };
+
+            addEvent('alert', messages[type][level], '🚨');
+            alertCount++;
+            updateNotificationBadge();
+
+            if (settings.notificationsEnabled) {
+                sendNotification('إنذار!', messages[type][level]);
+            }
+
+            if (settings.soundEnabled) {
+                playAlertSound(level);
+            }
+
+            if (level === 3 && settings.smsEnabled && settings.smsPhone) {
+                addSMSLog(settings.smsPhone, messages[type][level], type, level);
+            }
+        }
+
+        function simulateAlert(type, level) {
+            const alertKey = type + 'Alert';
+            garageData[alertKey] = level > 0;
+            
+            if (level > 0) {
+                triggerAlert(type, level);
+            }
+            
+            updateSensorsUI();
+            updateFirebaseGarage({ [alertKey]: level > 0 });
+            
+            // Auto reset after 3 seconds
+            setTimeout(() => {
+                garageData[alertKey] = false;
+                updateSensorsUI();
+                updateFirebaseGarage({ [alertKey]: false });
+            }, 3000);
+        }
+
+        function playAlertSound(level) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const playBeep = (freq, duration, delay) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = freq;
+                    oscillator.type = level === 3 ? 'square' : 'sine';
+                    
+                    const startTime = audioContext.currentTime + delay;
+                    gainNode.gain.setValueAtTime(level === 3 ? 0.5 : 0.3, startTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                    
+                    oscillator.start(startTime);
+                    oscillator.stop(startTime + duration);
+                };
+
+                const count = level === 3 ? 5 : level === 2 ? 3 : 1;
+                for (let i = 0; i < count; i++) {
+                    playBeep(660 + (level * 150), 0.15, i * 0.25);
+                }
+            } catch (e) {
+                console.log('Cannot play sound');
+            }
+        }
+
+        function sendNotification(title, body) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body,
+                    icon: '/icon-192.png',
+                    vibrate: [200, 100, 200],
+                    tag: 'garage-alert',
+                    requireInteraction: true
+                });
+            }
+        }
+
+        // ==================== GATE CONTROL ====================
+        async function toggleGate(type) {
+            if (!hasPermission('control_gates')) {
+                showToast('ليس لديك صلاحية للتحكم بالبوابات', 'error');
+                return;
+            }
+
+            const gateMap = {
+                entry: 'entryGate',
+                exit: 'exitGate',
+                security: 'securityDoor'
+            };
+
+            const key = gateMap[type];
+            const newState = !commands[key];
+            commands[key] = newState;
+
+            // Update Firebase
+            await updateFirebaseCommands({ [key]: newState });
+
+            // Add event
+            const gateNames = {
+                entry: 'بوابة الدخول',
+                exit: 'بوابة الخروج',
+                security: 'باب غرفة الأمن'
+            };
+            addEvent('gate', newState ? `فتح ${gateNames[type]}` : `إغلاق ${gateNames[type]}`, newState ? '🔓' : '🔒');
+            
+            updateGatesUI();
+            showToast(newState ? `تم فتح ${gateNames[type]}` : `تم إغلاق ${gateNames[type]}`, 'success');
+        }
+
+        // ==================== SIMULATION ====================
+        function simulateCarEntry() {
+            if (garageData.carsCount < garageData.maxCars) {
+                garageData.carsCount++;
+                addEvent('entry', 'سيارة جديدة دخلت الكراج', '🚗');
+                updateDashboardUI();
+                updateFirebaseGarage({ carsCount: garageData.carsCount });
+                showToast('تم تسجيل دخول سيارة', 'success');
+            } else {
+                showToast('الكراج ممتلئ!', 'warning');
+            }
+        }
+
+        function simulateCarExit() {
+            if (garageData.carsCount > 0) {
+                garageData.carsCount--;
+                addEvent('exit', 'سيارة غادرت الكراج', '🚙');
+                updateDashboardUI();
+                updateFirebaseGarage({ carsCount: garageData.carsCount });
+                showToast('تم تسجيل خروج سيارة', 'success');
+            } else {
+                showToast('لا توجد سيارات في الكراج!', 'warning');
+            }
+        }
+
+        // ==================== EVENTS ====================
+        function addEvent(type, message, icon) {
+            eventLog.unshift({
+                id: Date.now().toString(),
+                type,
+                message,
+                icon,
+                timestamp: new Date().toISOString()
+            });
+            
+            if (eventLog.length > 100) eventLog.pop();
+            saveLocalData();
+            updateEventLogUI();
+        }
+
+        // ==================== RESERVATIONS ====================
+        function showReservationModal() {
+            document.getElementById('reservation-modal').classList.remove('hidden');
+        }
+
+        function hideReservationModal() {
+            document.getElementById('reservation-modal').classList.add('hidden');
+            document.getElementById('reservation-form').reset();
+        }
+
+        function createReservation(e) {
+            e.preventDefault();
+            
+            const reservation = {
+                id: Date.now().toString(),
+                userId: currentUser?.id || 'guest',
+                userName: document.getElementById('res-name').value,
+                userPhone: document.getElementById('res-phone').value,
+                vehiclePlate: document.getElementById('res-plate').value,
+                spotNumber: parseInt(document.getElementById('res-spot').value) || 1,
+                startTime: new Date().toISOString(),
+                status: 'active'
+            };
+            
+            reservations.unshift(reservation);
+            addEvent('reservation', `حجز موقف رقم ${reservation.spotNumber} للوحة ${reservation.vehiclePlate}`, '🅿️');
+            saveLocalData();
+            updateReservationsUI();
+            hideReservationModal();
+            showToast('تم إنشاء الحجز بنجاح', 'success');
+        }
+
+        function completeReservation(id) {
+            const res = reservations.find(r => r.id === id);
+            if (!res) return;
+            
+            const duration = Math.max(1, Math.ceil((new Date() - new Date(res.startTime)) / (1000 * 60 * 60)));
+            const fee = duration * settings.hourlyRate;
+            
+            document.getElementById('payment-details').innerHTML = `
+                <div class="bg-slate-800/50 rounded-xl p-4 space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">رقم اللوحة:</span>
+                        <span class="font-medium">${res.vehiclePlate}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">رقم الموقف:</span>
+                        <span class="font-medium">${res.spotNumber}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">المدة:</span>
+                        <span class="font-medium">${duration} ساعة</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-bold border-t border-slate-600 pt-3">
+                        <span>المبلغ:</span>
+                        <span class="text-green-400">${fee} ريال</span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('payment-modal').dataset.reservationId = id;
+            document.getElementById('payment-modal').dataset.fee = fee;
+            document.getElementById('payment-modal').classList.remove('hidden');
+        }
+
+        function hidePaymentModal() {
+            document.getElementById('payment-modal').classList.add('hidden');
+        }
+
+        let paymentMethod = 'cash';
+
+        function setPaymentMethod(method) {
+            paymentMethod = method;
+            document.querySelectorAll('.payment-method').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.method === method);
+                btn.classList.toggle('border-cyan-500', btn.dataset.method === method);
+                btn.classList.toggle('bg-cyan-500/10', btn.dataset.method === method);
+            });
+        }
+
+        function processPayment() {
+            const modal = document.getElementById('payment-modal');
+            const resId = modal.dataset.reservationId;
+            const fee = parseFloat(modal.dataset.fee);
+            
+            const res = reservations.find(r => r.id === resId);
+            if (res) {
+                res.status = 'completed';
+                res.fee = fee;
+                
+                payments.unshift({
+                    id: Date.now().toString(),
+                    reservationId: resId,
+                    userId: res.userId,
+                    amount: fee,
+                    vehiclePlate: res.vehiclePlate,
+                    paymentMethod,
+                    paidAt: new Date().toISOString()
+                });
+                
+                addEvent('payment', `دفعة ${fee} ريال - ${res.vehiclePlate}`, '💰');
+                saveLocalData();
+                updateReservationsUI();
+                updateReportsUI();
+            }
+            
+            hidePaymentModal();
+            showToast('تم الدفع بنجاح', 'success');
+        }
+
+        // ==================== SMS ====================
+        function addSMSLog(phone, message, type, level) {
+            smsLog.unshift({
+                id: Date.now().toString(),
+                phone,
+                message,
+                type,
+                level,
+                status: 'sent',
+                sentAt: new Date().toISOString()
+            });
+            
+            if (smsLog.length > 50) smsLog.pop();
+            saveLocalData();
+            updateSMSLogUI();
+        }
+
+        // ==================== UI UPDATES ====================
+        function updateLoadingStatus(text) {
+            document.getElementById('loading-status').textContent = text;
+        }
+
+        function updateConnectionStatus() {
+            const indicator = document.getElementById('connection-status');
+            const text = document.getElementById('connection-text');
+            
+            if (isConnected) {
+                indicator.className = 'status-indicator status-online';
+                text.textContent = 'متصل بـ Firebase';
+                text.className = 'text-xs text-green-400';
+            } else {
+                indicator.className = 'status-indicator status-offline';
+                text.textContent = 'وضع المحاكاة';
+                text.className = 'text-xs text-amber-400';
+            }
+        }
+
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notification-badge');
+            if (alertCount > 0) {
+                badge.textContent = alertCount > 9 ? '9+' : alertCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function updateDashboardUI() {
+            // Stats
+            document.getElementById('stat-cars').textContent = garageData.carsCount;
+            document.getElementById('stat-available').textContent = garageData.maxCars - garageData.carsCount;
+            document.getElementById('stat-temp').textContent = garageData.temperature + '°';
+            document.getElementById('stat-humidity').textContent = garageData.humidity + '%';
+            
+            // Occupancy
+            document.getElementById('occupancy-count').textContent = garageData.carsCount;
+            document.getElementById('occupancy-max').textContent = garageData.maxCars;
+            
+            const percent = Math.round((garageData.carsCount / garageData.maxCars) * 100);
+            document.getElementById('occupancy-bar').style.width = percent + '%';
+            document.getElementById('occupancy-percent').textContent = percent + '%';
+            
+            // Occupancy badge
+            const badge = document.getElementById('occupancy-badge');
+            if (percent >= 90) {
+                badge.textContent = 'ممتلئ';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-400';
+            } else if (percent >= 70) {
+                badge.textContent = 'شبه ممتلئ';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-medium bg-orange-500/20 text-orange-400';
+            } else {
+                badge.textContent = 'متاح';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400';
+            }
+            
+            // DHT11
+            document.getElementById('dht-temp').textContent = garageData.temperature + '°C';
+            document.getElementById('dht-humidity').textContent = garageData.humidity + '%';
+            
+            // Simulation buttons visibility
+            document.getElementById('sim-buttons').style.display = isConnected ? 'none' : 'flex';
+            
+            // Congestion chart
+            updateCongestionChart();
+        }
+
+        function updateGatesUI() {
+            // Entry Gate
+            const entryCard = document.getElementById('entry-gate-card');
+            const entryStatus = document.getElementById('entry-gate-status');
+            const entryBtn = document.getElementById('entry-gate-btn');
+            
+            entryCard.classList.toggle('border-emerald-500', commands.entryGate);
+            entryStatus.innerHTML = commands.entryGate 
+                ? '<span class="w-2 h-2 rounded-full bg-green-400"></span> مفتوح'
+                : '<span class="w-2 h-2 rounded-full bg-slate-400"></span> مغلق';
+            entryStatus.className = `inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium ${commands.entryGate ? 'bg-green-500/20 text-green-400' : 'bg-slate-600 text-slate-300'}`;
+            entryBtn.textContent = commands.entryGate ? 'إغلاق' : 'فتح';
+            entryBtn.className = `py-4 px-8 rounded-xl font-bold text-lg transition ripple ${commands.entryGate ? 'btn-danger' : 'btn-success'}`;
+            
+            // Exit Gate
+            const exitCard = document.getElementById('exit-gate-card');
+            const exitStatus = document.getElementById('exit-gate-status');
+            const exitBtn = document.getElementById('exit-gate-btn');
+            
+            exitCard.classList.toggle('border-blue-500', commands.exitGate);
+            exitStatus.innerHTML = commands.exitGate 
+                ? '<span class="w-2 h-2 rounded-full bg-green-400"></span> مفتوح'
+                : '<span class="w-2 h-2 rounded-full bg-slate-400"></span> مغلق';
+            exitStatus.className = `inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium ${commands.exitGate ? 'bg-green-500/20 text-green-400' : 'bg-slate-600 text-slate-300'}`;
+            exitBtn.textContent = commands.exitGate ? 'إغلاق' : 'فتح';
+            exitBtn.className = `py-4 px-8 rounded-xl font-bold text-lg transition ripple ${commands.exitGate ? 'btn-danger' : 'btn-primary'}`;
+            
+            // Security Door
+            const securityCard = document.getElementById('security-door-card');
+            const securityStatus = document.getElementById('security-door-status');
+            const securityBtn = document.getElementById('security-door-btn');
+            
+            securityCard.classList.toggle('border-purple-500', commands.securityDoor);
+            securityStatus.innerHTML = commands.securityDoor 
+                ? '<span class="w-2 h-2 rounded-full bg-green-400"></span> مفتوح'
+                : '<span class="w-2 h-2 rounded-full bg-slate-400"></span> مغلق';
+            securityStatus.className = `inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium ${commands.securityDoor ? 'bg-green-500/20 text-green-400' : 'bg-slate-600 text-slate-300'}`;
+            securityBtn.textContent = commands.securityDoor ? 'إغلاق' : 'فتح';
+            securityBtn.className = `py-4 px-8 rounded-xl font-bold text-lg transition ripple ${commands.securityDoor ? 'btn-danger' : ''}`;
+            if (!commands.securityDoor) {
+                securityBtn.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
+            }
+            
+            // Permission check
+            if (!hasPermission('control_gates')) {
+                document.getElementById('gates-permission-error').classList.remove('hidden');
+                document.querySelectorAll('#tab-gates button[onclick]').forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                });
+            }
+        }
+
+        function updateSensorsUI() {
+            // Flame
+            const flameCard = document.getElementById('flame-sensor-card');
+            const flameStatus = document.getElementById('flame-status');
+            flameCard.classList.toggle('danger', garageData.flameAlert);
+            flameCard.classList.toggle('border-red-500', garageData.flameAlert);
+            flameStatus.innerHTML = garageData.flameAlert 
+                ? '<span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span> خطر!'
+                : '<span class="w-2 h-2 rounded-full bg-green-400"></span> آمن';
+            flameStatus.className = `inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium ${garageData.flameAlert ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`;
+            
+            // Gas
+            const gasCard = document.getElementById('gas-sensor-card');
+            const gasStatus = document.getElementById('gas-status');
+            gasCard.classList.toggle('danger', garageData.gasAlert);
+            gasCard.classList.toggle('border-red-500', garageData.gasAlert);
+            gasStatus.innerHTML = garageData.gasAlert 
+                ? '<span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span> خطر!'
+                : '<span class="w-2 h-2 rounded-full bg-green-400"></span> آمن';
+            gasStatus.className = `inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium ${garageData.gasAlert ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`;
+            
+            // Vibration
+            const vibrationCard = document.getElementById('vibration-sensor-card');
+            const vibrationStatus = document.getElementById('vibration-status');
+            vibrationCard.classList.toggle('danger', garageData.vibrationAlert);
+            vibrationCard.classList.toggle('border-red-500', garageData.vibrationAlert);
+            vibrationStatus.innerHTML = garageData.vibrationAlert 
+                ? '<span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span> خطر!'
+                : '<span class="w-2 h-2 rounded-full bg-green-400"></span> آمن';
+            vibrationStatus.className = `inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs font-medium ${garageData.vibrationAlert ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`;
+            
+            // Test buttons visibility
+            const testBtnsStyle = isConnected ? 'none' : 'flex';
+            document.getElementById('flame-test-btns').style.display = testBtnsStyle;
+            document.getElementById('gas-test-btns').style.display = testBtnsStyle;
+            document.getElementById('vibration-test-btns').style.display = testBtnsStyle;
+        }
+
+        function updateEventLogUI() {
+            const container = document.getElementById('event-log');
+            
+            if (eventLog.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-slate-500 py-6">
+                        <svg class="w-12 h-12 mx-auto mb-2 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                        </svg>
+                        لا توجد أحداث بعد
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = eventLog.slice(0, 20).map(event => `
+                <div class="flex items-center gap-3 p-3 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition">
+                    <span class="text-xl">${event.icon}</span>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm truncate">${event.message}</div>
+                        <div class="text-xs text-slate-500">${formatTime(event.timestamp)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateReservationsUI() {
+            const container = document.getElementById('reservations-list');
+            const active = reservations.filter(r => r.status === 'active');
+            
+            if (active.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-slate-500 py-8">
+                        <svg class="w-16 h-16 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        </svg>
+                        لا توجد حجوزات نشطة
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = active.map(res => `
+                <div class="flex items-center justify-between p-4 bg-slate-800/30 rounded-xl">
+                    <div>
+                        <div class="font-medium">${res.vehiclePlate}</div>
+                        <div class="text-xs text-slate-400">موقف ${res.spotNumber} • ${res.userName}</div>
+                        <div class="text-xs text-slate-500">${formatTime(res.startTime)}</div>
+                    </div>
+                    <button onclick="completeReservation('${res.id}')" class="btn-success px-4 py-2 rounded-xl text-sm font-medium transition ripple">
+                        دفع
+                    </button>
+                </div>
+            `).join('');
+            
+            // Update fee calculator
+            document.getElementById('fee-rate').textContent = settings.hourlyRate;
+            document.getElementById('fee-total').textContent = payments.reduce((sum, p) => sum + p.amount, 0);
+            document.getElementById('fee-count').textContent = payments.length;
+        }
+
+        function updateReportsUI() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const todayEvents = eventLog.filter(e => new Date(e.timestamp) >= today);
+            const todayPayments = payments.filter(p => new Date(p.paidAt) >= today);
+            
+            document.getElementById('report-entries').textContent = todayEvents.filter(e => e.type === 'entry').length;
+            document.getElementById('report-exits').textContent = todayEvents.filter(e => e.type === 'exit').length;
+            document.getElementById('report-revenue').textContent = todayPayments.reduce((sum, p) => sum + p.amount, 0);
+            document.getElementById('report-alerts').textContent = todayEvents.filter(e => e.type === 'alert').length;
+        }
+
+        function updateSMSLogUI() {
+            const container = document.getElementById('sms-log');
+            
+            if (smsLog.length === 0) {
+                container.innerHTML = '<div class="text-center text-slate-500 py-6">لا توجد رسائل مرسلة</div>';
+                return;
+            }
+            
+            container.innerHTML = smsLog.slice(0, 10).map(log => `
+                <div class="p-3 bg-slate-800/30 rounded-xl">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-cyan-400">${log.phone}</span>
+                        <span class="text-slate-500 text-xs">${formatTime(log.sentAt)}</span>
+                    </div>
+                    <div class="text-xs text-slate-400 mt-1">${log.message}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateCongestionChart() {
+            const container = document.getElementById('congestion-chart');
+            const currentHour = new Date().getHours();
+            
+            let html = '';
+            for (let hour = 6; hour <= 23; hour++) {
+                let predictedCars = 5 + Math.floor(Math.random() * 8);
+                let level = 'low';
+                
+                // Peak hours
+                if (hour >= 7 && hour <= 9) {
+                    predictedCars = 15 + Math.floor(Math.random() * 5);
+                    level = predictedCars > 17 ? 'critical' : 'high';
+                } else if (hour >= 16 && hour <= 19) {
+                    predictedCars = 12 + Math.floor(Math.random() * 6);
+                    level = predictedCars > 16 ? 'high' : 'medium';
+                } else if (hour >= 12 && hour <= 14) {
+                    predictedCars = 8 + Math.floor(Math.random() * 5);
+                    level = 'medium';
+                }
+                
+                if (hour === currentHour) {
+                    predictedCars = garageData.carsCount;
+                }
+                
+                const colors = {
+                    low: 'bg-green-500',
+                    medium: 'bg-yellow-500',
+                    high: 'bg-orange-500',
+                    critical: 'bg-red-500'
+                };
+                
+                const height = Math.max(20, (predictedCars / garageData.maxCars) * 100);
+                const isCurrent = hour === currentHour;
+                
+                html += `
+                    <div class="flex flex-col items-center min-w-[28px]">
+                        <div class="${colors[level]} w-5 congestion-bar flex items-end justify-center pb-1 ${isCurrent ? 'ring-2 ring-white/50' : ''}"
+                             style="height: ${height}px; opacity: ${isCurrent ? 1 : 0.5 + (predictedCars / garageData.maxCars) * 0.5}">
+                            <span class="text-[8px] font-bold text-white">${predictedCars}</span>
+                        </div>
+                        <span class="text-[9px] text-slate-500 mt-1 ${isCurrent ? 'text-white font-bold' : ''}">${hour}</span>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // ==================== CHARTS ====================
+        let carMovementChart, environmentChart, revenueChart;
+
+        function initCharts() {
+            // Car Movement Chart
+            const carCtx = document.getElementById('carMovementChart').getContext('2d');
+            const carData = Array.from({ length: 24 }, (_, i) => ({
+                hour: `${i}:00`,
+                entries: Math.floor(Math.random() * 10) + (i >= 7 && i <= 9 ? 15 : i >= 17 && i <= 19 ? 12 : 3),
+                exits: Math.floor(Math.random() * 8) + (i >= 17 && i <= 19 ? 14 : 2)
+            }));
+
+            carMovementChart = new Chart(carCtx, {
+                type: 'line',
+                data: {
+                    labels: carData.map(d => d.hour),
+                    datasets: [
+                        {
+                            label: 'دخول',
+                            data: carData.map(d => d.entries),
+                            borderColor: '#22d3ee',
+                            backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'خروج',
+                            data: carData.map(d => d.exits),
+                            borderColor: '#f97316',
+                            backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#9ca3af', font: { size: 10 }, boxWidth: 12 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#6b7280', font: { size: 8 }, maxRotation: 0 },
+                            grid: { color: 'rgba(55, 65, 81, 0.3)' }
+                        },
+                        y: {
+                            ticks: { color: '#6b7280', font: { size: 8 } },
+                            grid: { color: 'rgba(55, 65, 81, 0.3)' }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+
+            // Environment Chart
+            const envCtx = document.getElementById('environmentChart').getContext('2d');
+            const envData = Array.from({ length: 24 }, (_, i) => ({
+                hour: `${i}:00`,
+                temp: 20 + Math.sin(i / 4) * 8 + Math.random() * 3,
+                humidity: 50 + Math.cos(i / 3) * 15 + Math.random() * 5
+            }));
+
+            environmentChart = new Chart(envCtx, {
+                type: 'line',
+                data: {
+                    labels: envData.map(d => d.hour),
+                    datasets: [
+                        {
+                            label: 'الحرارة °C',
+                            data: envData.map(d => d.temp.toFixed(1)),
+                            borderColor: '#f97316',
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'الرطوبة %',
+                            data: envData.map(d => d.humidity.toFixed(1)),
+                            borderColor: '#22d3ee',
+                            tension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#9ca3af', font: { size: 10 }, boxWidth: 12 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#6b7280', font: { size: 8 }, maxRotation: 0 },
+                            grid: { color: 'rgba(55, 65, 81, 0.3)' }
+                        },
+                        y: {
+                            ticks: { color: '#6b7280', font: { size: 8 } },
+                            grid: { color: 'rgba(55, 65, 81, 0.3)' }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Chart
+            const revCtx = document.getElementById('revenueChart').getContext('2d');
+            const revData = Array.from({ length: 7 }, (_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                return {
+                    day: date.toLocaleDateString('ar-EG', { weekday: 'short' }),
+                    revenue: Math.floor(Math.random() * 300) + 100
+                };
+            }).reverse();
+
+            revenueChart = new Chart(revCtx, {
+                type: 'bar',
+                data: {
+                    labels: revData.map(d => d.day),
+                    datasets: [{
+                        label: 'الإيرادات (ريال)',
+                        data: revData.map(d => d.revenue),
+                        backgroundColor: 'rgba(139, 92, 246, 0.5)',
+                        borderColor: '#8b5cf6',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { color: '#9ca3af', font: { size: 10 }, boxWidth: 12 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#6b7280', font: { size: 9 } },
+                            grid: { display: false }
+                        },
+                        y: {
+                            ticks: { color: '#6b7280', font: { size: 8 } },
+                            grid: { color: 'rgba(55, 65, 81, 0.3)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==================== SETTINGS ====================
+        function saveSettings() {
+            settings.hourlyRate = parseInt(document.getElementById('setting-rate').value) || 2;
+            settings.maxCars = parseInt(document.getElementById('setting-max-cars').value) || 20;
+            settings.smsPhone = document.getElementById('setting-sms').value;
+            settings.smsEnabled = !!settings.smsPhone;
+            settings.notificationsEnabled = document.getElementById('setting-notifications').checked;
+            settings.soundEnabled = document.getElementById('setting-sound').checked;
+            
+            garageData.maxCars = settings.maxCars;
+            
+            saveLocalData();
+            updateDashboardUI();
+            updateFirebaseGarage({ maxCars: settings.maxCars });
+            
+            showToast('تم حفظ الإعدادات بنجاح', 'success');
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ هل أنت متأكد من مسح جميع البيانات المحلية؟\n\nسيتم حذف:\n- سجل الأحداث\n- الحجوزات\n- المدفوعات\n- الرسائل')) {
+                localStorage.removeItem('garage_app_data');
+                reservations = [];
+                payments = [];
+                eventLog = [];
+                smsLog = [];
+                
+                updateEventLogUI();
+                updateReservationsUI();
+                updateReportsUI();
+                updateSMSLogUI();
+                
+                showToast('تم مسح جميع البيانات', 'success');
+            }
+        }
+
+        // ==================== HELPERS ====================
+        function formatTime(timestamp) {
+            return new Date(timestamp).toLocaleTimeString('ar-EG', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-orange-500',
+                info: 'bg-cyan-500'
+            };
+            
+            toast.className = `fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-lg slide-up ${colors[type]}`;
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // ==================== SCREENS ====================
+        function showLoadingScreen() {
+            document.getElementById('loading-screen').classList.remove('hidden');
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.add('hidden');
+        }
+
+        function hideLoadingScreen() {
+            document.getElementById('loading-screen').classList.add('hidden');
+        }
+
+        function showLoginScreen() {
+            hideLoadingScreen();
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('main-app').classList.add('hidden');
+        }
+
+        function showMainApp() {
+            hideLoadingScreen();
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            
+            updateUserInfo();
+            updateDashboardUI();
+            updateGatesUI();
+            updateSensorsUI();
+            updateEventLogUI();
+            updateReservationsUI();
+            updateReportsUI();
+            updateSMSLogUI();
+            initCharts();
+        }
+
+        function updateUserInfo() {
+            if (currentUser) {
+                document.getElementById('user-info-desktop').classList.remove('hidden');
+                document.getElementById('user-display-name').textContent = currentUser.name;
+                document.getElementById('user-display-role').textContent = getRoleNameAr(currentUser.role);
+                document.getElementById('user-role-icon').textContent = getRoleIcon(currentUser.role);
+            }
+        }
+
+        function quickLogin(role) {
+            const emails = {
+                admin: 'admin@garage.com',
+                guard: 'guard@garage.com',
+                visitor: 'visitor@garage.com'
+            };
+            
+            document.getElementById('login-email').value = emails[role];
+            document.getElementById('login-password').value = '123456';
+        }
+
+        // ==================== TABS ====================
+        function initTabs() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+                    
+                    // Update buttons
+                    document.querySelectorAll('.tab-btn').forEach(b => {
+                        b.classList.remove('tab-active');
+                        b.classList.add('text-slate-400');
+                    });
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('text-slate-400');
+                    
+                    // Update content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    document.getElementById('tab-' + tab).classList.remove('hidden');
+                });
+            });
+        }
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load local data
+            loadLocalData();
+            
+            // Initialize Firebase
+            initFirebase();
+            
+            // Check for stored user
+            currentUser = getCurrentUser();
+            
+            // Request notification permission
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+            
+            // Initialize tabs
+            initTabs();
+            
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                const result = login(email, password);
+                
+                if (result.success) {
+                    currentUser = result.user;
+                    showMainApp();
+                } else {
+                    const errorDiv = document.getElementById('login-error');
+                    document.getElementById('error-message').textContent = result.error;
+                    errorDiv.classList.remove('hidden');
+                    errorDiv.classList.add('shake');
+                    setTimeout(() => errorDiv.classList.remove('shake'), 500);
+                }
+            });
+            
+            // Toggle password
+            document.getElementById('toggle-password').addEventListener('click', () => {
+                const input = document.getElementById('login-password');
+                input.type = input.type === 'password' ? 'text' : 'password';
+            });
+            
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            // Sound toggle
+            document.getElementById('sound-toggle-btn').addEventListener('click', () => {
+                settings.soundEnabled = !settings.soundEnabled;
+                saveLocalData();
+                
+                const icon = document.getElementById('sound-icon');
+                if (settings.soundEnabled) {
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>';
+                    icon.classList.remove('text-slate-400');
+                    icon.classList.add('text-cyan-400');
+                } else {
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>';
+                    icon.classList.add('text-slate-400');
+                    icon.classList.remove('text-cyan-400');
+                }
+            });
+            
+            // Notifications button
+            document.getElementById('notifications-btn').addEventListener('click', async () => {
+                if ('Notification' in window) {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        showToast('تم تفعيل الإشعارات', 'success');
+                        settings.notificationsEnabled = true;
+                        saveLocalData();
+                    } else {
+                        showToast('تم رفض الإشعارات', 'warning');
+                    }
+                }
+            });
+            
+            // Reservation form
+            document.getElementById('reservation-form').addEventListener('submit', createReservation);
+            
+            // Settings values
+            document.getElementById('setting-rate').value = settings.hourlyRate;
+            document.getElementById('setting-max-cars').value = settings.maxCars;
+            document.getElementById('setting-sms').value = settings.smsPhone || '';
+            document.getElementById('setting-notifications').checked = settings.notificationsEnabled;
+            document.getElementById('setting-sound').checked = settings.soundEnabled;
+            
+            // Show appropriate screen
+            setTimeout(() => {
+                if (currentUser) {
+                    showMainApp();
+                } else {
+                    showLoginScreen();
+                }
+            }, 800);
+        });
+    </script>
+</body>
+</html>

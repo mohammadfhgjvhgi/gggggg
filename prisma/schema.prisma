@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ═══════════════════════════════════════
+//   الصلاحيات والأدوار
+// ═══════════════════════════════════════
+
+enum Role {
+  admin      // مدير النظام - صلاحيات كاملة
+  manager    // مدير - تحكم + زبائن + حجوزات + حسابات
+  employee   // موظف - تحكم + عرض الزبائن
+  viewer     // مشاهد - عرض فقط
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(viewer)
+  phone     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ═══════════════════════════════════════
+//   الزبائن
+// ═══════════════════════════════════════
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings  Booking[]
+
+  @@map("customers")
+}
+
+// ═══════════════════════════════════════
+//   الحجوزات
+// ═══════════════════════════════════════
+
+enum BookingStatus {
+  pending     // معلق
+  confirmed   // مؤكد
+  cancelled   // ملغي
+  completed   // مكتمل
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  customerId    String
+  customer      Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  eventDate     DateTime      // تاريخ الحدث
+  eventType     String        // نوع الحدث (زفاف، خطوبة، حفل...)
+  guestCount    Int           // عدد الضيوف
+  hallPrice     Float         // سعر الصالة
+  status        BookingStatus @default(pending)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  payments      Payment[]
+
+  @@map("bookings")
+}
+
+// ═══════════════════════════════════════
+//   المدفوعات والفواتير
+// ═══════════════════════════════════════
+
+enum PaymentMethod {
+  cash      // نقدي
+  transfer  // تحويل بنكي
+  card      // بطاقة
+  cheque    // شيك
+}
+
+enum PaymentStatus {
+  pending   // معلق
+  partial   // مدفوع جزئياً
+  paid      // مدفوع
+  refunded  // مسترد
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  bookingId     String
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount        Float
+  method        PaymentMethod @default(cash)
+  status        PaymentStatus @default(pending)
+  receiptNumber String?
+  notes         String?
+  paidAt        DateTime      @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("payments")
+}
+
+// ═══════════════════════════════════════
+//   إعدادات النظام
+// ═══════════════════════════════════════
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
