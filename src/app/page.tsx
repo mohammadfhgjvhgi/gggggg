@@ -428,7 +428,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
 export default function Home() {
   const { isAuthenticated, loading, user, checkAuth } = useAuthStore()
-  const { currentPage, sidebarOpen, setSidebarOpen } = useAppStore()
+  const { currentPage, sidebarOpen, setSidebarOpen, setCurrentPage } = useAppStore()
 
   useEffect(() => {
     checkAuth()
