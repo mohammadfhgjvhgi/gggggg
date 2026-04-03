@@ -29,6 +29,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  notifications Notification[]
+  activityLogs   ActivityLog[]
+
   @@map("users")
 }
 
@@ -125,4 +128,44 @@ model Setting {
   updatedAt DateTime @updatedAt
 
   @@map("settings")
+}
+
+// ═══════════════════════════════════════
+//   الإشعارات
+// ═══════════════════════════════════════
+
+enum NotificationType {
+  info      // معلومة
+  warning   // تحذير
+  error     // خطأ
+  success   // نجاح
+}
+
+model Notification {
+  id        String            @id @default(cuid())
+  userId    String?
+  user      User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      NotificationType  @default(info)
+  read      Boolean           @default(false)
+  link      String?
+  createdAt DateTime          @default(now())
+
+  @@map("notifications")
+}
+
+// ═══════════════════════════════════════
+//   سجل النشاطات
+// ═══════════════════════════════════════
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   // create_customer, update_booking, delete_payment, control_gate...
+  details   String
+  createdAt DateTime @default(now())
+
+  @@map("activity_logs")
 }

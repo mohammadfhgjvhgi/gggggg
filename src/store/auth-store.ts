@@ -93,7 +93,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 //   حالة التطبيق
 // ═══════════════════════════════════════
 
-export type AppPage = 'dashboard' | 'customers' | 'bookings' | 'billing' | 'users' | 'settings'
+export type AppPage = 'home' | 'dashboard' | 'customers' | 'bookings' | 'billing' | 'calendar' | 'activity' | 'users' | 'settings' | 'profile'
 
 interface AppState {
   currentPage: AppPage

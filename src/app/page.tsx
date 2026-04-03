@@ -31,6 +31,10 @@ import {
   Eye,
   Loader2,
   Sparkles,
+  LayoutDashboard,
+  Calendar,
+  ClipboardList,
+  UserCircle,
 } from 'lucide-react'
 
 import CustomerManagement from '@/components/customer-management'
@@ -39,6 +43,11 @@ import BillingManagement from '@/components/billing-management'
 import UserManagement from '@/components/user-management'
 import SettingsPanel from '@/components/settings-panel'
 import ControlDashboard from '@/components/control-dashboard'
+import DashboardPage from '@/components/dashboard-page'
+import CalendarView from '@/components/calendar-view'
+import ActivityLogPage from '@/components/activity-log-page'
+import ProfilePage from '@/components/profile-page'
+import NotificationBell from '@/components/notification-bell'
 import { PermissionsCard } from '@/components/permission-banner'
 
 // ═══════════════════════════════════════════════════
@@ -315,10 +324,13 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
+  { key: 'home', label: 'لوحة المعلومات', icon: LayoutDashboard, roles: ['admin', 'manager', 'employee', 'viewer'] },
   { key: 'dashboard', label: 'التحكم بالأجهزة', icon: Gamepad2, roles: ['admin', 'manager', 'employee', 'viewer'] },
   { key: 'customers', label: 'الزبائن', icon: Users, roles: ['admin', 'manager', 'employee', 'viewer'] },
   { key: 'bookings', label: 'الحجوزات', icon: CalendarDays, roles: ['admin', 'manager', 'employee', 'viewer'] },
   { key: 'billing', label: 'الفواتير', icon: CreditCard, roles: ['admin', 'manager', 'employee', 'viewer'] },
+  { key: 'calendar', label: 'التقويم', icon: Calendar, roles: ['admin', 'manager', 'employee', 'viewer'] },
+  { key: 'activity', label: 'سجل النشاطات', icon: ClipboardList, roles: ['admin', 'manager'] },
   { key: 'users', label: 'المستخدمين', icon: Shield, roles: ['admin'] },
   { key: 'settings', label: 'الإعدادات', icon: Settings, roles: ['admin', 'manager', 'employee', 'viewer'] },
 ]
@@ -446,6 +458,8 @@ export default function Home() {
 
   const renderPage = () => {
     switch (currentPage) {
+      case 'home':
+        return <DashboardPage />
       case 'dashboard':
         return <ControlDashboard />
       case 'customers':
@@ -454,22 +468,32 @@ export default function Home() {
         return <BookingManagement />
       case 'billing':
         return <BillingManagement />
+      case 'calendar':
+        return <CalendarView />
+      case 'activity':
+        return <ActivityLogPage />
       case 'users':
         return <UserManagement />
       case 'settings':
         return <SettingsPanel />
+      case 'profile':
+        return <ProfilePage />
       default:
-        return <ControlDashboard />
+        return <DashboardPage />
     }
   }
 
   const pageTitle: Record<string, string> = {
+    home: 'لوحة المعلومات',
     dashboard: 'لوحة التحكم بالأجهزة',
     customers: 'إدارة الزبائن',
     bookings: 'إدارة الحجوزات',
     billing: 'إدارة الفواتير والمدفوعات',
+    calendar: 'تقويم الأفراح',
+    activity: 'سجل النشاطات',
     users: 'إدارة المستخدمين',
     settings: 'الإعدادات',
+    profile: 'الملف الشخصي',
   }
 
   return (
@@ -511,14 +535,20 @@ export default function Home() {
           {/* Spacer */}
           <div className="flex-1" />
 
+          {/* Notification Bell */}
+          <NotificationBell />
+
           {/* User Info */}
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="hidden sm:flex gap-1 text-xs">
               {ROLE_LABELS[user?.role || 'viewer']}
             </Badge>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold">
+            <button
+              onClick={() => setCurrentPage('profile')}
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold hover:scale-105 transition-transform"
+            >
               {user?.name?.charAt(0) || 'U'}
-            </div>
+            </button>
           </div>
         </header>
 
