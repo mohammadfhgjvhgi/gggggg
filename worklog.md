@@ -96,3 +96,29 @@ Stage Summary:
 - All follow existing patterns: authHeaders(), useToast(), shadcn/ui, Arabic text, gold/amber theme
 - All export default function ComponentName() pattern
 - Lint passes cleanly, dev server compiles without errors
+
+---
+Task ID: 2
+Agent: main
+Task: Visual Overhaul - Luxury Dark Theme for Committee Presentation
+
+Work Log:
+- Rewrote globals.css: dark luxury color system (#0a0a0f, #d4a853 gold), Google Fonts (Playfair Display, Cormorant Garamond, DM Sans, DM Mono), glassmorphism utilities, grain overlay, mesh backgrounds, gold scrollbar, animations (fade-up, pulse-gold, shimmer, glow, float), card-hover, btn-gold, text-gold-gradient, divider-gold, status dots, table-row-hover
+- Updated layout.tsx: added grain + mesh-bg classes, DM Sans font family
+- Redesigned page.tsx (Login + Sidebar + Header): glass login card with gold accents, mesh-bg-login, Playfair Display titles, gold gradient buttons, glass sidebar with gold active state, glass header with gold border
+- Redesigned dashboard-page.tsx: personal greeting, glass stat cards with colored icons, DM Mono numbers, gold revenue chart, ESP32 card with pulsing dot, timeline-style bookings/payments
+- Redesigned control-dashboard.tsx: gold-bordered ESP32 status, large toggle gate/door buttons, violet seat card, 3x2 lights grid with gold glow on ON, pink MP3 card with circular play button
+- Redesigned customer-management.tsx, booking-management.tsx, billing-management.tsx: Playfair headers, glass search bars, gold tab filters, table-row-hover, gold action buttons, glass dialogs, gold pagination, DM Mono numbers
+- Redesigned calendar-view.tsx: gold month header, glass day grid, gold today highlight, colored booking dots, glass popup
+- Redesigned activity-log-page.tsx: timeline layout with vertical line, colored dots, user avatars, gold filters
+- Redesigned settings-panel.tsx: gold right-border sections, glass cards, gold-styled form fields, red reset card
+- Redesigned profile-page.tsx: large gold avatar, glass info card, gold edit form
+- Redesigned notification-bell.tsx: gold bell, glass dropdown, gold unread indicators
+- Redesigned permission-banner.tsx: glass-gold banners with gold accents
+
+Stage Summary:
+- Complete visual overhaul to luxury dark gold theme
+- All 13 components + globals.css + layout.tsx redesigned
+- Zero lint errors, zero runtime errors
+- All functionality preserved - only visual changes
+- Ready for committee presentation

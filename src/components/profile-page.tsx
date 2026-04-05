@@ -121,27 +121,27 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto">
+    <div className="space-y-6 max-w-2xl mx-auto animate-fade-up">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <User className="h-6 w-6 text-amber-600" />
+        <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
+          <User className="h-6 w-6 text-[#d4a853]" />
           الملف الشخصي
         </h2>
-        <p className="text-muted-foreground text-sm mt-1">إدارة بياناتك الشخصية وكلمة المرور</p>
+        <p className="text-[#8a8690] text-sm mt-1">إدارة بياناتك الشخصية وكلمة المرور</p>
       </div>
 
       {/* User Info Card */}
-      <Card className="border-border">
+      <Card className="glass border-[#d4a853]/10 card-hover">
         <CardContent className="p-6">
           <div className="flex items-center gap-4">
             {/* Avatar */}
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#d4a853] to-[#a07c3a] flex items-center justify-center text-[#0a0a0f] text-3xl font-bold shadow-[0_0_20px_rgba(212,168,83,0.3)] ring-2 ring-[#d4a853]/30 ring-offset-2 ring-offset-[#0a0a0f]">
               {user?.name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold">{user?.name}</h3>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-lg font-bold text-[#f5f0e8] font-[Playfair_Display]">{user?.name}</h3>
                 <Badge
                   variant="outline"
                   className={`text-xs ${ROLE_BADGE_COLORS[user?.role || 'viewer'] || ''}`}
@@ -149,14 +149,14 @@ export default function ProfilePage() {
                   {ROLE_LABELS[user?.role || 'viewer']}
                 </Badge>
               </div>
-              <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Mail className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-4 mt-2 text-sm text-[#8a8690]">
+                <div className="flex items-center gap-1.5">
+                  <Mail className="h-3.5 w-3.5 text-[#d4a853]" />
                   <span dir="ltr">{user?.email}</span>
                 </div>
                 {user?.phone && (
-                  <div className="flex items-center gap-1">
-                    <Phone className="h-3.5 w-3.5" />
+                  <div className="flex items-center gap-1.5">
+                    <Phone className="h-3.5 w-3.5 text-[#d4a853]" />
                     <span dir="ltr">{user.phone}</span>
                   </div>
                 )}
@@ -167,48 +167,50 @@ export default function ProfilePage() {
       </Card>
 
       {/* Edit Profile Form */}
-      <Card className="border-border">
+      <Card className="glass border-[#d4a853]/10 card-hover">
         <CardHeader className="pb-4">
-          <CardTitle className="text-base flex items-center gap-2">
-            <User className="h-4 w-4 text-amber-600" />
+          <CardTitle className="text-base flex items-center gap-2 text-[#f5f0e8]">
+            <User className="h-4 w-4 text-[#d4a853]" />
             تعديل البيانات الشخصية
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="profile-name">الاسم الكامل</Label>
+            <Label htmlFor="profile-name" className="text-[#8a8690]">الاسم الكامل</Label>
             <Input
               id="profile-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="أدخل اسمك"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="profile-phone">رقم الهاتف</Label>
+            <Label htmlFor="profile-phone" className="text-[#8a8690]">رقم الهاتف</Label>
             <Input
               id="profile-phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="أدخل رقم الهاتف"
               dir="ltr"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20 font-[DM_Mono]"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="profile-email">البريد الإلكتروني</Label>
+            <Label htmlFor="profile-email" className="text-[#8a8690]">البريد الإلكتروني</Label>
             <Input
               id="profile-email"
               value={user?.email || ''}
               disabled
-              className="bg-muted/50"
+              className="bg-[#1a1a25] border-[#1f1f2e] text-[#8a8690] font-[DM_Mono]"
               dir="ltr"
             />
-            <p className="text-xs text-muted-foreground">لا يمكن تغيير البريد الإلكتروني</p>
+            <p className="text-xs text-[#8a8690]/60">لا يمكن تغيير البريد الإلكتروني</p>
           </div>
           <Button
             onClick={handleSaveProfile}
             disabled={saving}
-            className="bg-amber-600 hover:bg-amber-700 gap-2"
+            className="btn-gold gap-2"
           >
             <Save className="h-4 w-4" />
             {saving ? 'جاري الحفظ...' : 'حفظ التعديلات'}
@@ -217,49 +219,52 @@ export default function ProfilePage() {
       </Card>
 
       {/* Change Password Form */}
-      <Card className="border-border">
+      <Card className="glass border-[#d4a853]/10 card-hover">
         <CardHeader className="pb-4">
-          <CardTitle className="text-base flex items-center gap-2">
-            <Lock className="h-4 w-4 text-amber-600" />
+          <CardTitle className="text-base flex items-center gap-2 text-[#f5f0e8]">
+            <Lock className="h-4 w-4 text-[#d4a853]" />
             تغيير كلمة المرور
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="current-password">كلمة المرور الحالية</Label>
+            <Label htmlFor="current-password" className="text-[#8a8690]">كلمة المرور الحالية</Label>
             <Input
               id="current-password"
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="أدخل كلمة المرور الحالية"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
             />
           </div>
-          <Separator />
+          <Separator className="bg-[#1f1f2e]" />
           <div className="space-y-2">
-            <Label htmlFor="new-password">كلمة المرور الجديدة</Label>
+            <Label htmlFor="new-password" className="text-[#8a8690]">كلمة المرور الجديدة</Label>
             <Input
               id="new-password"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="أدخل كلمة المرور الجديدة (6 أحرف على الأقل)"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirm-password">تأكيد كلمة المرور الجديدة</Label>
+            <Label htmlFor="confirm-password" className="text-[#8a8690]">تأكيد كلمة المرور الجديدة</Label>
             <Input
               id="confirm-password"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="أعد إدخال كلمة المرور الجديدة"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
             />
           </div>
           <Button
             onClick={handleChangePassword}
             disabled={changingPassword}
-            className="bg-amber-600 hover:bg-amber-700 gap-2"
+            className="btn-gold gap-2"
           >
             <Shield className="h-4 w-4" />
             {changingPassword ? 'جاري التغيير...' : 'تغيير كلمة المرور'}

@@ -14,14 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { ClipboardList, Filter } from 'lucide-react'
 
 const authHeaders = () => ({
@@ -84,6 +76,22 @@ const ACTION_COLORS: Record<string, string> = {
   user_action: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400',
 }
 
+const ACTION_DOT_COLORS: Record<string, string> = {
+  create_customer: 'bg-emerald-500',
+  update_customer: 'bg-blue-500',
+  delete_customer: 'bg-red-500',
+  create_booking: 'bg-emerald-500',
+  update_booking: 'bg-blue-500',
+  delete_booking: 'bg-red-500',
+  create_payment: 'bg-green-500',
+  update_payment: 'bg-blue-500',
+  delete_payment: 'bg-red-500',
+  control_gate: 'bg-amber-500',
+  control_door: 'bg-amber-500',
+  control_lights: 'bg-yellow-500',
+  user_action: 'bg-gray-500',
+}
+
 const ROLE_BADGE_COLORS: Record<Role, string> = {
   admin: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
   manager: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
@@ -118,6 +126,13 @@ function getRelativeTime(dateStr: string): string {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+  })
+}
+
+function formatTime(dateStr: string): string {
+  return new Date(dateStr).toLocaleTimeString('ar-SA', {
+    hour: '2-digit',
+    minute: '2-digit',
   })
 }
 
@@ -200,26 +215,42 @@ export default function ActivityLogPage() {
     for (let i = start; i <= end; i++) pages.push(i)
 
     return (
-      <div className="flex items-center justify-between pt-4 border-t">
-        <span className="text-sm text-muted-foreground">
-          عرض {((page - 1) * pagination.limit) + 1} - {Math.min(page * pagination.limit, pagination.total)} من {pagination.total}
+      <div className="flex items-center justify-between pt-4 border-t border-[#1f1f2e]">
+        <span className="text-sm text-[#8a8690] font-[DM_Mono]">
+          {((page - 1) * pagination.limit) + 1} - {Math.min(page * pagination.limit, pagination.total)} / {pagination.total}
         </span>
         <div className="flex items-center gap-1">
-          <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+            className="text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[#1a1a25]"
+          >
             السابق
           </Button>
           {pages.map((p) => (
             <Button
               key={p}
-              variant={p === page ? 'default' : 'outline'}
+              variant={p === page ? 'default' : 'ghost'}
               size="sm"
-              className="w-8 h-8 p-0"
+              className={`w-8 h-8 p-0 font-[DM_Mono] text-xs ${
+                p === page
+                  ? 'bg-[#d4a853] text-[#0a0a0f] hover:bg-[#d4a853]'
+                  : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[#1a1a25]'
+              }`}
               onClick={() => setPage(p)}
             >
               {p}
             </Button>
           ))}
-          <Button variant="outline" size="sm" disabled={page >= pagination.totalPages} onClick={() => setPage(page + 1)}>
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={page >= pagination.totalPages}
+            onClick={() => setPage(page + 1)}
+            className="text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[#1a1a25]"
+          >
             التالي
           </Button>
         </div>
@@ -229,15 +260,15 @@ export default function ActivityLogPage() {
 
   if (!isAdmin) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade-up">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <ClipboardList className="h-6 w-6 text-amber-600" />
+          <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
+            <ClipboardList className="h-6 w-6 text-[#d4a853]" />
             سجل النشاطات
           </h2>
         </div>
-        <Card className="border-border">
-          <CardContent className="p-12 text-center text-muted-foreground">
+        <Card className="glass border-[#d4a853]/10">
+          <CardContent className="p-12 text-center text-[#8a8690]">
             <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-30" />
             <p>ليس لديك صلاحية الوصول إلى سجل النشاطات</p>
             <p className="text-sm mt-1">هذه الصفحة متاحة فقط للمدراء</p>
@@ -248,30 +279,30 @@ export default function ActivityLogPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <ClipboardList className="h-6 w-6 text-amber-600" />
+        <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
+          <ClipboardList className="h-6 w-6 text-[#d4a853]" />
           سجل النشاطات
         </h2>
-        <p className="text-muted-foreground text-sm mt-1">متابعة جميع العمليات والإجراءات في النظام</p>
+        <p className="text-[#8a8690] text-sm mt-1">متابعة جميع العمليات والإجراءات في النظام</p>
       </div>
 
       {/* Filters */}
-      <Card className="border-border">
+      <Card className="glass border-[#d4a853]/10">
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-[#d4a853]">
               <Filter className="h-4 w-4" />
               تصفية:
             </div>
             <div className="flex-1">
               <Select value={userIdFilter || '__all__'} onValueChange={(v) => setUserIdFilter(v === '__all__' ? '' : v)}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20">
                   <SelectValue placeholder="جميع المستخدمين" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-[#12121a] border-[#1f1f2e]">
                   <SelectItem value="__all__">جميع المستخدمين</SelectItem>
                   {users.map((u) => (
                     <SelectItem key={u.id} value={u.id}>
@@ -283,10 +314,10 @@ export default function ActivityLogPage() {
             </div>
             <div className="flex-1">
               <Select value={actionFilter || '__all__'} onValueChange={(v) => setActionFilter(v === '__all__' ? '' : v)}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20">
                   <SelectValue placeholder="جميع الإجراءات" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-[#12121a] border-[#1f1f2e]">
                   <SelectItem value="__all__">جميع الإجراءات</SelectItem>
                   {Object.entries(ACTION_LABELS).map(([key, label]) => (
                     <SelectItem key={key} value={key}>
@@ -300,71 +331,77 @@ export default function ActivityLogPage() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card className="border-border">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="text-right font-semibold">الوقت</TableHead>
-                  <TableHead className="text-right font-semibold">المستخدم</TableHead>
-                  <TableHead className="text-right font-semibold">الإجراء</TableHead>
-                  <TableHead className="text-right font-semibold">التفاصيل</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={4}>
-                      <div className="space-y-3">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Skeleton key={i} className="h-12 w-full" />
-                        ))}
+      {/* Timeline Log */}
+      <Card className="glass border-[#d4a853]/10">
+        <CardContent className="p-4 sm:p-6">
+          {loading ? (
+            <div className="space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-20 w-full bg-[#1a1a25]" />
+              ))}
+            </div>
+          ) : logs.length === 0 ? (
+            <div className="text-center py-12 text-[#8a8690]">
+              <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-30" />
+              <p>لا توجد سجلات نشاطات</p>
+            </div>
+          ) : (
+            <div className="relative">
+              {/* Vertical timeline line */}
+              <div className="absolute top-0 bottom-0 start-6 w-px bg-[#1f1f2e]" />
+
+              <div className="space-y-1">
+                {logs.map((log) => {
+                  const dotColor = ACTION_DOT_COLORS[log.action] || 'bg-gray-500'
+                  const firstLetter = log.userName.charAt(0)
+
+                  return (
+                    <div
+                      key={log.id}
+                      className="relative flex gap-4 p-3 rounded-lg hover:bg-[#1a1a25]/50 transition-colors duration-200 group"
+                    >
+                      {/* Timeline dot */}
+                      <div className="relative shrink-0 z-10">
+                        <div className={`w-10 h-10 rounded-full bg-[#12121a] border-2 border-[#1f1f2e] flex items-center justify-center text-xs font-bold text-[#f5f0e8]`}>
+                          {firstLetter}
+                        </div>
+                        <div className={`absolute -start-[1px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full ${dotColor} border-2 border-[#0a0a0f]`} style={{ left: '-5px' }} />
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ) : logs.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-12 text-muted-foreground">
-                      <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                      <p>لا توجد سجلات نشاطات</p>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  logs.map((log) => (
-                    <TableRow key={log.id} className="hover:bg-muted/50">
-                      <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
-                        {getRelativeTime(log.createdAt)}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm">{log.userName}</span>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 pt-1">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="font-semibold text-sm text-[#f5f0e8]">{log.userName}</span>
                           <Badge
                             variant="outline"
                             className={`text-[10px] px-1.5 py-0 h-5 ${ROLE_BADGE_COLORS[log.userRole] || ''}`}
                           >
                             {ROLE_LABELS_MAP[log.userRole] || log.userRole}
                           </Badge>
+                          <Badge
+                            variant="outline"
+                            className={`text-[10px] px-2 py-0.5 ${ACTION_COLORS[log.action] || ''}`}
+                          >
+                            {ACTION_LABELS[log.action] || log.action}
+                          </Badge>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="outline"
-                          className={`text-[10px] px-2 py-0.5 ${ACTION_COLORS[log.action] || ''}`}
-                        >
-                          {ACTION_LABELS[log.action] || log.action}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground max-w-xs truncate">
-                        {log.details}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                        <p className="text-sm text-[#8a8690] truncate">{log.details}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[11px] text-[#8a8690] font-[DM_Mono]">
+                            {formatTime(log.createdAt)}
+                          </span>
+                          <span className="text-[11px] text-[#8a8690]/60">
+                            {getRelativeTime(log.createdAt)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           {renderPagination()}
         </CardContent>
       </Card>

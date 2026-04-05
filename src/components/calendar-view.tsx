@@ -124,7 +124,7 @@ export default function CalendarView() {
   const selectedBookings = selectedDay ? bookingsByDay[selectedDay] || [] : []
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Permission Banner */}
       {userIsReadOnly && (
         <ReadOnlyBanner message="يمكنك فقط عرض الحجوزات في التقويم. لإضافة أو تعديل حجز، تواصل مع المدير." />
@@ -133,27 +133,37 @@ export default function CalendarView() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <CalendarDays className="h-6 w-6 text-amber-600" />
+          <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
+            <CalendarDays className="h-6 w-6 text-[#d4a853]" />
             التقويم
           </h2>
-          <p className="text-muted-foreground text-sm mt-1">عرض الحجوزات الشهرية</p>
+          <p className="text-[#8a8690] text-sm mt-1">عرض الحجوزات الشهرية</p>
         </div>
       </div>
 
       {/* Calendar Card */}
-      <Card className="border-border">
-        <CardContent className="p-4">
+      <Card className="glass border-[#d4a853]/10 card-hover">
+        <CardContent className="p-4 sm:p-6">
           {/* Month Navigation */}
           <div className="flex items-center justify-between mb-6">
-            <Button variant="outline" size="sm" onClick={nextMonth} className="gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={nextMonth}
+              className="gap-1.5 text-[#d4a853] hover:text-[#f0d48a] hover:bg-[#d4a853]/10 btn-ghost-gold"
+            >
               <ChevronRight className="h-4 w-4" />
               السابق
             </Button>
-            <h3 className="text-lg font-bold">
+            <h3 className="text-xl font-bold text-gold-gradient font-[Playfair_Display] tracking-wide">
               {ARABIC_MONTHS[month]} {year}
             </h3>
-            <Button variant="outline" size="sm" onClick={prevMonth} className="gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={prevMonth}
+              className="gap-1.5 text-[#d4a853] hover:text-[#f0d48a] hover:bg-[#d4a853]/10 btn-ghost-gold"
+            >
               التالي
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -164,7 +174,7 @@ export default function CalendarView() {
             {ARABIC_DAYS.map((day) => (
               <div
                 key={day}
-                className="text-center text-xs font-semibold text-muted-foreground py-2"
+                className="text-center text-xs font-semibold text-[#8a8690] py-2 font-[DM_Sans]"
               >
                 {day}
               </div>
@@ -175,7 +185,7 @@ export default function CalendarView() {
           {loading ? (
             <div className="grid grid-cols-7 gap-1">
               {Array.from({ length: 35 }).map((_, i) => (
-                <Skeleton key={i} className="h-16 rounded-lg" />
+                <Skeleton key={i} className="h-16 rounded-lg bg-[#1a1a25]" />
               ))}
             </div>
           ) : (
@@ -196,19 +206,19 @@ export default function CalendarView() {
                   <button
                     key={day}
                     onClick={() => handleDayClick(day)}
-                    className={`h-16 rounded-lg border text-center transition-colors relative ${
+                    className={`h-16 rounded-lg text-center transition-all duration-200 relative ${
                       isToday
-                        ? 'border-amber-500 bg-amber-500/10'
+                        ? 'border-2 border-[#d4a853] bg-[#d4a853]/10 shadow-[0_0_12px_rgba(212,168,83,0.15)]'
                         : hasBookings
-                        ? 'border-border hover:bg-muted/50 cursor-pointer'
-                        : 'border-transparent hover:bg-muted/30'
+                        ? 'border border-[#1f1f2e] hover:bg-[#1a1a25] hover:border-[#d4a853]/30 cursor-pointer'
+                        : 'border border-transparent hover:bg-[#1a1a25]/50'
                     }`}
                   >
                     <span
-                      className={`text-sm font-medium ${
+                      className={`text-sm font-medium font-[DM_Sans] ${
                         isToday
-                          ? 'text-amber-600 dark:text-amber-400 font-bold'
-                          : 'text-foreground'
+                          ? 'text-[#d4a853] font-bold'
+                          : 'text-[#f5f0e8]'
                       }`}
                     >
                       {day}
@@ -223,7 +233,7 @@ export default function CalendarView() {
                           />
                         ))}
                         {dayBookings.length > 3 && (
-                          <span className="text-[8px] text-muted-foreground">
+                          <span className="text-[8px] text-[#8a8690] font-[DM_Mono]">
                             +{dayBookings.length - 3}
                           </span>
                         )}
@@ -243,22 +253,22 @@ export default function CalendarView() {
           )}
 
           {/* Legend */}
-          <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t">
+          <div className="flex items-center justify-center gap-5 mt-5 pt-4 border-t border-[#1f1f2e]">
             <div className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
-              <span className="text-xs text-muted-foreground">مؤكد</span>
+              <span className="text-xs text-[#8a8690]">مؤكد</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-              <span className="text-xs text-muted-foreground">معلق</span>
+              <span className="text-xs text-[#8a8690]">معلق</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-              <span className="text-xs text-muted-foreground">ملغي</span>
+              <span className="text-xs text-[#8a8690]">ملغي</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-              <span className="text-xs text-muted-foreground">مكتمل</span>
+              <span className="text-xs text-[#8a8690]">مكتمل</span>
             </div>
           </div>
         </CardContent>
@@ -266,15 +276,16 @@ export default function CalendarView() {
 
       {/* Day Booking Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg glass-strong border-[#d4a853]/20">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-gold-gradient font-[Playfair_Display] text-lg flex items-center gap-2">
+              <CalendarDays className="h-5 w-5 text-[#d4a853]" />
               حجوزات يوم {selectedDay} {ARABIC_MONTHS[month]} {year}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {selectedBookings.length === 0 ? (
-              <div className="text-center py-6 text-muted-foreground">
+              <div className="text-center py-6 text-[#8a8690]">
                 <CalendarDays className="h-10 w-10 mx-auto mb-2 opacity-30" />
                 <p className="text-sm">لا توجد حجوزات في هذا اليوم</p>
               </div>
@@ -284,38 +295,38 @@ export default function CalendarView() {
                 return (
                   <div
                     key={booking.id}
-                    className="p-4 rounded-lg border border-border hover:bg-muted/30 transition-colors"
+                    className="p-4 rounded-lg border border-[#1f1f2e] hover:bg-[#1a1a25] transition-all duration-200 hover:border-[#d4a853]/20"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold">{booking.eventType}</span>
+                      <span className="font-semibold text-[#f5f0e8]">{booking.eventType}</span>
                       <Badge variant="outline" className={badge.className}>
                         {badge.label}
                       </Badge>
                     </div>
-                    <div className="space-y-1 text-sm text-muted-foreground">
+                    <div className="space-y-1 text-sm text-[#8a8690]">
                       <p>
-                        <span className="font-medium text-foreground">الزبون: </span>
+                        <span className="font-medium text-[#f5f0e8]">الزبون: </span>
                         {booking.customer.name}
                       </p>
                       <p>
-                        <span className="font-medium text-foreground">الهاتف: </span>
+                        <span className="font-medium text-[#f5f0e8]">الهاتف: </span>
                         <span dir="ltr">{booking.customer.phone}</span>
                       </p>
                       {booking.guests && (
                         <p>
-                          <span className="font-medium text-foreground">عدد الضيوف: </span>
+                          <span className="font-medium text-[#f5f0e8]">عدد الضيوف: </span>
                           {booking.guests}
                         </p>
                       )}
                       <p>
-                        <span className="font-medium text-foreground">السعر: </span>
-                        <span className="text-amber-600 font-semibold">
+                        <span className="font-medium text-[#f5f0e8]">السعر: </span>
+                        <span className="text-[#d4a853] font-semibold font-[DM_Mono]">
                           {booking.hallPrice.toLocaleString()} ر.س
                         </span>
                       </p>
                       {booking.notes && (
                         <p>
-                          <span className="font-medium text-foreground">ملاحظات: </span>
+                          <span className="font-medium text-[#f5f0e8]">ملاحظات: </span>
                           {booking.notes}
                         </p>
                       )}

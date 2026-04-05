@@ -104,17 +104,20 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <Card className="border border-border overflow-hidden">
-        <div className={`h-1 ${online ? 'bg-emerald-500' : 'bg-red-500'}`} />
-        <CardContent className="p-4">
+      <div className="glass-strong rounded-xl border-0 overflow-hidden border-r-4 border-r-[#d4a853]">
+        <CardContent className="p-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`flex size-10 items-center justify-center rounded-lg ${online ? 'bg-emerald-500/10' : 'bg-red-500/10'}`}>
-                <Cpu className={`size-5 ${online ? 'text-emerald-500' : 'text-red-500'}`} />
+            <div className="flex items-center gap-4">
+              <div className={`flex size-12 items-center justify-center rounded-xl ${
+                online
+                  ? 'bg-[#d4a853]/10 ring-1 ring-[#d4a853]/20'
+                  : 'bg-red-500/10 ring-1 ring-red-500/20'
+              }`}>
+                <Cpu className={`size-6 ${online ? 'text-[#d4a853]' : 'text-red-400'}`} />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-sm">ESP32</span>
+                <div className="flex items-center gap-2.5">
+                  <span className="font-bold text-base text-[#f5f0e8] font-[Playfair_Display]">ESP32</span>
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={online ? 'on' : 'off'}
@@ -124,24 +127,24 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
                       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                     >
                       {online ? (
-                        <Badge className="border-transparent bg-emerald-500/15 text-emerald-600 text-[10px] px-1.5">
+                        <Badge className="border border-green-500/20 bg-green-500/10 text-green-400 text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm">
                           متصل
                         </Badge>
                       ) : (
-                        <Badge className="border-transparent bg-red-500/15 text-red-600 text-[10px] px-1.5">
+                        <Badge className="border border-red-500/20 bg-red-500/10 text-red-400 text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm">
                           غير متصل
                         </Badge>
                       )}
                     </motion.div>
                   </AnimatePresence>
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-[#8a8690] mt-0.5">
                   {online ? formatRelativeTime(lastSeen) : 'في انتظار الاتصال...'}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={online ? 'wifi-on' : 'wifi-off'}
@@ -150,7 +153,7 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
                   exit={{ scale: 0.8, opacity: 0 }}
                 >
                   {online ? (
-                    <Wifi className="size-5 text-emerald-500" />
+                    <Wifi className="size-5 text-green-400" />
                   ) : (
                     <WifiOff className="size-5 text-red-400" />
                   )}
@@ -165,10 +168,10 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
                   exit={{ scale: 0 }}
                 >
                   <span
-                    className={`inline-block size-2 rounded-full ${
+                    className={`inline-block size-2.5 rounded-full ${
                       online
-                        ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
-                        : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'
+                        ? 'bg-green-400 shadow-[0_0_10px_rgba(34,197,94,0.6)]'
+                        : 'bg-red-400 shadow-[0_0_10px_rgba(239,68,68,0.6)]'
                     }`}
                     style={{
                       animation: online ? 'pulse-dot 2s ease-in-out infinite' : 'none',
@@ -180,13 +183,13 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
           </div>
 
           {lastSeen > 0 && (
-            <div className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground/60">
-              <Clock className="size-3" />
-              <span>آخر ظهور: {formatTimestamp(lastSeen)}</span>
+            <div className="mt-3 flex items-center gap-2 text-[11px] text-[#8a8690]/60">
+              <Clock className="size-3.5" />
+              <span>آخر ظهور: <span className="font-[DM_Mono] text-[#8a8690]">{formatTimestamp(lastSeen)}</span></span>
             </div>
           )}
         </CardContent>
-      </Card>
+      </div>
     </motion.div>
   )
 }
@@ -220,17 +223,23 @@ function GateDoorCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="border-r-4 border-r-amber-500">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
+      <div className={`glass rounded-xl overflow-hidden transition-all duration-300 ${
+        isOpen ? 'ring-1 ring-green-500/20' : ''
+      }`}>
+        <div className="p-5 pb-4">
+          <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-amber-500/10">
-                <Icon className="size-5 text-amber-600" />
+              <div className={`flex size-11 items-center justify-center rounded-xl transition-colors ${
+                isOpen
+                  ? 'bg-green-500/15 ring-1 ring-green-500/25'
+                  : 'bg-white/5 ring-1 ring-white/10'
+              }`}>
+                <Icon className={`size-5 transition-colors ${isOpen ? 'text-green-400' : 'text-[#8a8690]'}`} />
               </div>
               <div>
-                <CardTitle className="text-base">{title}</CardTitle>
+                <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">{title}</h3>
                 {description && (
-                  <CardDescription className="mt-0.5 text-xs">{description}</CardDescription>
+                  <p className="text-[11px] text-[#8a8690]/70 mt-0.5 leading-relaxed">{description}</p>
                 )}
               </div>
             </div>
@@ -242,10 +251,10 @@ function GateDoorCard({
                 exit={{ scale: 0.8, opacity: 0 }}
               >
                 <Badge
-                  className={`text-xs ${
+                  className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${
                     isOpen
-                      ? 'border-transparent bg-emerald-500/15 text-emerald-600'
-                      : 'border-transparent bg-red-500/15 text-red-600'
+                      ? 'border border-green-500/25 bg-green-500/10 text-green-400'
+                      : 'border border-white/10 bg-white/5 text-[#8a8690]'
                   }`}
                 >
                   {isOpen ? 'مفتوحة' : 'مغلقة'}
@@ -253,38 +262,43 @@ function GateDoorCard({
               </motion.div>
             </AnimatePresence>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex gap-3">
-            <Button
-              onClick={onOpen}
-              disabled={disabled || isLoading}
-              className="flex-1 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
-              size="lg"
-            >
-              {isLoading && isOpen === false ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <DoorOpen className="size-4" />
-              )}
-              فتح
-            </Button>
-            <Button
-              onClick={onClose}
-              disabled={disabled || isLoading}
-              className="flex-1 bg-red-600 text-white shadow-sm hover:bg-red-700"
-              size="lg"
-            >
-              {isLoading && isOpen === true ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <DoorClosed className="size-4" />
-              )}
-              إغلاق
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        <div className="px-5 pb-5 space-y-3">
+          <button
+            onClick={onOpen}
+            disabled={disabled || isLoading}
+            className={`w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
+              isOpen
+                ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/20 ring-1 ring-green-400/30'
+                : 'bg-white/[0.04] text-[#8a8690] hover:bg-white/[0.07] hover:text-[#f5f0e8] border border-white/[0.06]'
+            } disabled:opacity-40 disabled:cursor-not-allowed`}
+          >
+            {isLoading && isOpen === false ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <DoorOpen className="size-4" />
+            )}
+            فتح
+          </button>
+          <button
+            onClick={onClose}
+            disabled={disabled || isLoading}
+            className={`w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
+              !isOpen
+                ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#8a8690] ring-1 ring-white/[0.06]'
+                : 'bg-red-500/10 text-red-400 hover:bg-red-500/15 border border-red-500/20'
+            } disabled:opacity-40 disabled:cursor-not-allowed`}
+          >
+            {isLoading && isOpen === true ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <DoorClosed className="size-4" />
+            )}
+            إغلاق
+          </button>
+        </div>
+      </div>
     </motion.div>
   )
 }
@@ -314,18 +328,24 @@ function SeatCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.15 }}
     >
-      <Card className="border-r-4 border-r-violet-500">
-        <CardHeader className="pb-3">
+      <div className={`glass rounded-xl overflow-hidden border-r-4 transition-all duration-300 ${
+        active ? 'border-r-violet-500 ring-1 ring-violet-500/20' : 'border-r-violet-500/40'
+      }`}>
+        <div className="p-5 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className={`flex size-10 items-center justify-center rounded-lg transition-colors ${active ? 'bg-violet-500/20' : 'bg-violet-500/10'}`}>
-                <Armchair className={`size-5 transition-colors ${active ? 'text-violet-500' : 'text-violet-400'}`} />
+              <div className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
+                active
+                  ? 'bg-violet-500/15 ring-1 ring-violet-500/25'
+                  : 'bg-violet-500/5 ring-1 ring-violet-500/10'
+              }`}>
+                <Armchair className={`size-5 transition-colors ${active ? 'text-violet-400' : 'text-violet-400/50'}`} />
               </div>
               <div>
-                <CardTitle className="text-base">جلوس العريس</CardTitle>
-                <CardDescription className="mt-0.5 text-xs">
+                <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">جلوس العريس</h3>
+                <p className="text-[11px] text-[#8a8690]/70 mt-0.5">
                   تراسونيك داخلي - تفعيل / إعادة تعيين
-                </CardDescription>
+                </p>
               </div>
             </div>
             <AnimatePresence mode="wait">
@@ -336,10 +356,10 @@ function SeatCard({
                 exit={{ scale: 0.8, opacity: 0 }}
               >
                 <Badge
-                  className={`text-xs ${
+                  className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${
                     active
-                      ? 'border-transparent bg-violet-500/15 text-violet-600'
-                      : 'border-transparent bg-muted text-muted-foreground'
+                      ? 'border border-violet-500/25 bg-violet-500/10 text-violet-400'
+                      : 'border border-white/10 bg-white/5 text-[#8a8690]'
                   }`}
                 >
                   {active ? 'مفعّل' : 'غير مفعّل'}
@@ -347,36 +367,38 @@ function SeatCard({
               </motion.div>
             </AnimatePresence>
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-3">
-            <Button
-              onClick={onToggle}
-              disabled={disabled || isLoading}
-              variant={active ? 'outline' : 'default'}
-              className={`flex-1 gap-2 ${active ? 'text-violet-600 border-violet-300 hover:bg-violet-50' : 'bg-violet-600 hover:bg-violet-700 text-white'}`}
-            >
-              {isLoading ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <Armchair className="size-4" />
-              )}
-              {active ? 'إيقاف' : 'تفعيل'}
-            </Button>
-            {canCtrl && active && (
-              <Button
-                onClick={onReset}
-                disabled={disabled || isLoading}
-                variant="outline"
-                className="gap-2 text-muted-foreground hover:text-foreground"
-              >
-                <RotateCcw className="size-4" />
-                إعادة تعيين
-              </Button>
+        </div>
+
+        <div className="px-5 pb-5 space-y-3">
+          <button
+            onClick={onToggle}
+            disabled={disabled || isLoading}
+            className={`w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
+              active
+                ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/20 ring-1 ring-violet-400/30'
+                : 'bg-white/[0.04] text-[#8a8690] hover:bg-white/[0.07] hover:text-[#f5f0e8] border border-white/[0.06]'
+            } disabled:opacity-40 disabled:cursor-not-allowed`}
+          >
+            {isLoading ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Armchair className="size-4" />
             )}
-          </div>
-        </CardContent>
-      </Card>
+            {active ? 'إيقاف' : 'تفعيل'}
+          </button>
+
+          {canCtrl && active && (
+            <button
+              onClick={onReset}
+              disabled={disabled || isLoading}
+              className="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 bg-white/[0.03] text-[#8a8690] hover:bg-white/[0.06] hover:text-[#f5f0e8] border border-white/[0.06] disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <RotateCcw className="size-4" />
+              إعادة تعيين
+            </button>
+          )}
+        </div>
+      </div>
     </motion.div>
   )
 }
@@ -408,32 +430,37 @@ function LightsCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.3 }}
     >
-      <Card className="border-r-4 border-r-yellow-500">
-        <CardHeader className="pb-3">
+      <div className="glass rounded-xl overflow-hidden border-0">
+        <div className="p-5 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-yellow-500/10">
-                <Lightbulb className="size-5 text-yellow-600" />
+              <div className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
+                activeCount > 0
+                  ? 'bg-[#d4a853]/10 ring-1 ring-[#d4a853]/20'
+                  : 'bg-white/5 ring-1 ring-white/10'
+              }`}>
+                <Lightbulb className={`size-5 transition-colors ${activeCount > 0 ? 'text-[#d4a853]' : 'text-[#8a8690]'}`} />
               </div>
               <div>
-                <CardTitle className="text-base">الإضاءة</CardTitle>
-                <CardDescription className="mt-0.5 text-xs">
+                <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">الإضاءة</h3>
+                <p className="text-[11px] text-[#8a8690]/70 mt-0.5">
                   6 مناطق إضاءة - ريليه ثنائي (LOW) + رباعي (HIGH)
-                </CardDescription>
+                </p>
               </div>
             </div>
             <Badge
-              className={`text-xs ${
+              className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm font-[DM_Mono] ${
                 activeCount > 0
-                  ? 'border-transparent bg-yellow-500/15 text-yellow-600'
-                  : 'border-transparent bg-muted text-muted-foreground'
+                  ? 'border border-[#d4a853]/25 bg-[#d4a853]/10 text-[#d4a853]'
+                  : 'border border-white/10 bg-white/5 text-[#8a8690]'
               }`}
             >
               {activeCount} / 6
             </Badge>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+
+        <div className="px-5 pb-5 space-y-4">
           {/* شبكة المفاتيح */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {LIGHT_DEFINITIONS.map((def) => {
@@ -445,10 +472,10 @@ function LightsCard({
                 <motion.div
                   key={def.key}
                   layout
-                  className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors ${
+                  className={`flex items-center justify-between rounded-xl px-4 py-3.5 transition-all duration-300 ${
                     isOn
-                      ? 'border-yellow-500/30 bg-yellow-500/5'
-                      : 'border-border bg-muted/30'
+                      ? 'bg-[#d4a853]/5 border border-[#d4a853]/20 shadow-[0_0_15px_rgba(212,168,83,0.08)]'
+                      : 'bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -459,16 +486,18 @@ function LightsCard({
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                        className={`flex size-8 items-center justify-center rounded-md transition-colors ${
-                          isOn ? 'bg-yellow-500/20' : 'bg-muted'
+                        className={`flex size-9 items-center justify-center rounded-lg transition-all duration-300 ${
+                          isOn
+                            ? 'bg-[#d4a853]/15 ring-1 ring-[#d4a853]/25 shadow-[0_0_10px_rgba(212,168,83,0.15)]'
+                            : 'bg-white/5'
                         }`}
                       >
                         {isLoading ? (
-                          <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                          <Loader2 className="size-4 animate-spin text-[#8a8690]" />
                         ) : (
                           <Icon
                             className={`size-4 transition-colors ${
-                              isOn ? 'text-yellow-500' : 'text-muted-foreground'
+                              isOn ? 'text-[#d4a853]' : 'text-[#8a8690]'
                             }`}
                           />
                         )}
@@ -477,13 +506,13 @@ function LightsCard({
                     <div className="flex flex-col">
                       <span
                         className={`text-sm font-medium transition-colors ${
-                          isOn ? 'text-yellow-700 dark:text-yellow-400' : 'text-muted-foreground'
+                          isOn ? 'text-[#f0d48a]' : 'text-[#8a8690]'
                         }`}
                       >
                         {def.label}
                       </span>
-                      <span className="text-[10px] text-muted-foreground/60">
-                        {def.inverted ? 'ريليه ثنائي' : 'ريليه رباعي'}
+                      <span className="text-[9px] text-[#8a8690]/50 font-[DM_Mono]">
+                        {def.inverted ? 'ثنائي' : 'رباعي'}
                       </span>
                     </div>
                   </div>
@@ -491,21 +520,21 @@ function LightsCard({
                     checked={isOn}
                     onCheckedChange={() => onToggle(def.key)}
                     disabled={disabled || isLoading}
-                    className="data-[state=checked]:bg-yellow-500"
+                    className="data-[state=checked]:bg-[#d4a853] data-[state=checked]:border-[#d4a853]"
                   />
                 </motion.div>
               )
             })}
           </div>
 
-          <Separator />
+          <div className="divider-gold" />
 
           {/* أزرار التحكم بالجملة */}
           <div className="flex gap-3">
-            <Button
+            <button
               onClick={onAllOn}
               disabled={disabled || activeCount === 6 || loading === 'all'}
-              className="flex-1 gap-2 bg-yellow-500 text-white shadow-sm hover:bg-yellow-600"
+              className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 btn-gold disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {loading === 'all' ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -513,12 +542,11 @@ function LightsCard({
                 <Power className="size-4" />
               )}
               تشغيل الكل
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={onAllOff}
               disabled={disabled || activeCount === 0 || loading === 'all'}
-              variant="outline"
-              className="flex-1 gap-2 text-red-600 hover:bg-red-50 hover:text-red-700"
+              className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 bg-transparent text-red-400 border border-red-500/20 hover:bg-red-500/10 hover:border-red-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {loading === 'all' ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -526,10 +554,10 @@ function LightsCard({
                 <PowerOff className="size-4" />
               )}
               إطفاء الكل
-            </Button>
+            </button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </motion.div>
   )
 }
@@ -577,18 +605,24 @@ function Mp3Card({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.45 }}
     >
-      <Card className="border-r-4 border-r-pink-500">
-        <CardHeader className="pb-3">
+      <div className={`glass rounded-xl overflow-hidden border-0 transition-all duration-300 ${
+        playing ? 'ring-1 ring-pink-500/20' : ''
+      }`}>
+        <div className="p-5 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className={`flex size-10 items-center justify-center rounded-lg transition-colors ${playing ? 'bg-pink-500/20' : 'bg-pink-500/10'}`}>
-                <Music className={`size-5 transition-colors ${playing ? 'text-pink-500' : 'text-pink-400'}`} />
+              <div className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
+                playing
+                  ? 'bg-pink-500/15 ring-1 ring-pink-500/25'
+                  : 'bg-pink-500/5 ring-1 ring-pink-500/10'
+              }`}>
+                <Music className={`size-5 transition-colors ${playing ? 'text-pink-400' : 'text-pink-400/50'}`} />
               </div>
               <div>
-                <CardTitle className="text-base">مشغل الصوت</CardTitle>
-                <CardDescription className="mt-0.5 text-xs">
+                <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">مشغل الصوت</h3>
+                <p className="text-[11px] text-[#8a8690]/70 mt-0.5">
                   DFPlayer - التحكم بالمسارات الصوتية
-                </CardDescription>
+                </p>
               </div>
             </div>
             <AnimatePresence mode="wait">
@@ -599,10 +633,10 @@ function Mp3Card({
                 exit={{ scale: 0.8, opacity: 0 }}
               >
                 <Badge
-                  className={`text-xs ${
+                  className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${
                     playing
-                      ? 'border-transparent bg-pink-500/15 text-pink-600'
-                      : 'border-transparent bg-muted text-muted-foreground'
+                      ? 'border border-pink-500/25 bg-pink-500/10 text-pink-400'
+                      : 'border border-white/10 bg-white/5 text-[#8a8690]'
                   }`}
                 >
                   {playing ? 'يشغل' : 'متوقف'}
@@ -610,15 +644,16 @@ function Mp3Card({
               </motion.div>
             </AnimatePresence>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        </div>
+
+        <div className="px-5 pb-5 space-y-5">
           {/* معلومات المسار */}
-          <div className="flex items-center justify-between rounded-lg border border-border bg-muted/20 px-4 py-3">
+          <div className="flex items-center justify-between rounded-xl bg-white/[0.03] border border-white/[0.06] px-4 py-3.5">
             <div className="flex items-center gap-3">
-              <Volume2 className="size-4 text-muted-foreground" />
+              <Volume2 className="size-4 text-[#8a8690]" />
               <div>
-                <p className="text-xs text-muted-foreground">المسار الحالي</p>
-                <p className="text-sm font-semibold">#{track}</p>
+                <p className="text-[11px] text-[#8a8690]">المسار الحالي</p>
+                <p className="text-lg font-bold font-[DM_Mono] text-[#f5f0e8]">#{track}</p>
               </div>
             </div>
 
@@ -631,79 +666,74 @@ function Mp3Card({
                 onChange={(e) => setTrackInput(e.target.value)}
                 disabled={disabled}
                 dir="ltr"
-                className="w-16 h-8 text-center text-sm rounded-md border border-border bg-background px-2 focus:outline-none focus:ring-1 focus:ring-pink-500/30"
+                className="w-16 h-8 text-center text-sm font-[DM_Mono] rounded-lg border border-white/[0.08] bg-white/[0.03] text-[#f5f0e8] px-2 focus:outline-none focus:ring-1 focus:ring-pink-500/30 placeholder:text-[#8a8690]/40"
               />
-              <Button
+              <button
                 type="submit"
-                size="sm"
-                variant="outline"
                 disabled={disabled || isLoading}
-                className="h-8 px-2 text-xs"
+                className="h-8 px-3 text-xs font-medium rounded-lg bg-pink-500/10 text-pink-400 border border-pink-500/20 hover:bg-pink-500/15 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 تشغيل
-              </Button>
+              </button>
             </form>
           </div>
 
           {/* أزرار التحكم */}
-          <div className="flex items-center justify-center gap-3">
-            <Button
+          <div className="flex items-center justify-center gap-4">
+            <button
               onClick={onPrevTrack}
               disabled={disabled || isLoading}
-              variant="outline"
-              size="icon"
-              className="size-10 rounded-full"
+              className="size-11 rounded-full flex items-center justify-center bg-white/[0.04] border border-white/[0.08] text-[#8a8690] hover:bg-white/[0.08] hover:text-[#f5f0e8] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <SkipBack className="size-4" />
-            </Button>
+            </button>
 
-            <Button
+            <button
               onClick={onTogglePlay}
               disabled={disabled || isLoading}
-              className={`size-14 rounded-full shadow-lg ${
+              className={`size-16 rounded-full flex items-center justify-center shadow-xl transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${
                 playing
-                  ? 'bg-pink-600 hover:bg-pink-700 text-white'
-                  : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  ? 'bg-gradient-to-br from-pink-500 to-pink-600 text-white shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-105'
+                  : 'bg-gradient-to-br from-[#d4a853] to-[#b8912e] text-[#0a0a0f] shadow-[#d4a853]/25 hover:shadow-[#d4a853]/40 hover:scale-105'
               }`}
-              size="icon"
             >
               {isLoading ? (
-                <Loader2 className="size-5 animate-spin" />
+                <Loader2 className="size-6 animate-spin" />
               ) : playing ? (
-                <Pause className="size-5" />
+                <Pause className="size-6" />
               ) : (
-                <Play className="size-5" />
+                <Play className="size-6" />
               )}
-            </Button>
+            </button>
 
-            <Button
+            <button
               onClick={onNextTrack}
               disabled={disabled || isLoading}
-              variant="outline"
-              size="icon"
-              className="size-10 rounded-full"
+              className="size-11 rounded-full flex items-center justify-center bg-white/[0.04] border border-white/[0.08] text-[#8a8690] hover:bg-white/[0.08] hover:text-[#f5f0e8] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <SkipForward className="size-4" />
-            </Button>
+            </button>
           </div>
 
           {/* مسارات سريعة */}
           <div className="flex gap-2 flex-wrap">
             {[1, 2, 3, 4, 5].map((t) => (
-              <Button
+              <button
                 key={t}
                 onClick={() => onPlay(t)}
                 disabled={disabled || isLoading}
-                variant={track === t ? 'default' : 'outline'}
-                size="sm"
-                className={`h-7 px-3 text-xs ${track === t ? 'bg-pink-600 hover:bg-pink-700' : ''}`}
+                className={`h-8 px-3.5 text-xs font-medium rounded-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${
+                  track === t
+                    ? 'bg-pink-500/15 text-pink-400 border border-pink-500/25 shadow-[0_0_10px_rgba(236,72,153,0.1)]'
+                    : 'bg-white/[0.03] text-[#8a8690] border border-white/[0.06] hover:bg-white/[0.06] hover:text-[#f5f0e8]'
+                }`}
               >
                 {t}
-              </Button>
+              </button>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </motion.div>
   )
 }

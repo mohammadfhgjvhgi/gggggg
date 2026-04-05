@@ -61,10 +61,10 @@ const QUICK_USERS = [
     password: 'admin123',
     label: 'مدير النظام',
     icon: Crown,
-    color: 'from-amber-500 to-orange-600',
-    borderColor: 'border-amber-500/40 hover:border-amber-500/70 hover:bg-amber-500/10',
-    textColor: 'text-amber-300',
-    glowColor: 'shadow-amber-500/20',
+    color: 'from-[#d4a853] to-[#b8912e]',
+    borderColor: 'border-[rgba(212,168,83,0.25)] hover:border-[rgba(212,168,83,0.5)]',
+    textColor: 'text-[#f0d48a]',
+    glowColor: 'shadow-[0_0_15px_rgba(212,168,83,0.15)]',
   },
   {
     role: 'manager' as const,
@@ -72,10 +72,10 @@ const QUICK_USERS = [
     password: 'manager123',
     label: 'مدير',
     icon: UserCog,
-    color: 'from-purple-500 to-violet-600',
-    borderColor: 'border-purple-500/40 hover:border-purple-500/70 hover:bg-purple-500/10',
-    textColor: 'text-purple-300',
-    glowColor: 'shadow-purple-500/20',
+    color: 'from-[#c0a060] to-[#a08040]',
+    borderColor: 'border-[rgba(192,160,96,0.25)] hover:border-[rgba(192,160,96,0.5)]',
+    textColor: 'text-[#e0c878]',
+    glowColor: 'shadow-[0_0_15px_rgba(192,160,96,0.15)]',
   },
   {
     role: 'employee' as const,
@@ -83,10 +83,10 @@ const QUICK_USERS = [
     password: 'emp123',
     label: 'موظف',
     icon: UserCheck,
-    color: 'from-cyan-500 to-blue-600',
-    borderColor: 'border-cyan-500/40 hover:border-cyan-500/70 hover:bg-cyan-500/10',
-    textColor: 'text-cyan-300',
-    glowColor: 'shadow-cyan-500/20',
+    color: 'from-[#9090a0] to-[#707080]',
+    borderColor: 'border-[rgba(160,160,180,0.2)] hover:border-[rgba(160,160,180,0.4)]',
+    textColor: 'text-[#b0b0c0]',
+    glowColor: 'shadow-[0_0_15px_rgba(160,160,180,0.1)]',
   },
   {
     role: 'viewer' as const,
@@ -94,15 +94,15 @@ const QUICK_USERS = [
     password: 'view123',
     label: 'مشاهد',
     icon: Eye,
-    color: 'from-emerald-500 to-green-600',
-    borderColor: 'border-emerald-500/40 hover:border-emerald-500/70 hover:bg-emerald-500/10',
-    textColor: 'text-emerald-300',
-    glowColor: 'shadow-emerald-500/20',
+    color: 'from-[#708070] to-[#506050]',
+    borderColor: 'border-[rgba(130,150,130,0.2)] hover:border-[rgba(130,150,130,0.4)]',
+    textColor: 'text-[#a0b0a0]',
+    glowColor: 'shadow-[0_0_15px_rgba(130,150,130,0.1)]',
   },
 ]
 
 // ═══════════════════════════════════════════════════
-//   مكون تسجيل الدخول - نفس ستايل الكراج الذكي
+//   مكون تسجيل الدخول
 // ═══════════════════════════════════════════════════
 
 function LoginPage() {
@@ -139,48 +139,54 @@ function LoginPage() {
   }, [login, toast])
 
   return (
-    <div dir="rtl" className="min-h-screen relative overflow-hidden bg-[#0a0a0f]">
-      {/* خلفية متحركة */}
+    <div dir="rtl" className="min-h-screen relative overflow-hidden bg-[#0a0a0f] mesh-bg-login">
+      {/* Mesh gradient blobs */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-500/6 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-yellow-500/4 rounded-full blur-[150px]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[rgba(212,168,83,0.07)] rounded-full blur-[150px] animate-pulse" />
+        <div className="absolute bottom-[-15%] left-[-10%] w-[500px] h-[500px] bg-[rgba(212,168,83,0.05)] rounded-full blur-[130px] animate-pulse" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-[rgba(180,140,60,0.03)] rounded-full blur-[120px]" />
+        <div className="absolute bottom-[20%] right-[20%] w-[300px] h-[300px] bg-[rgba(240,212,138,0.03)] rounded-full blur-[100px]" style={{ animationDelay: '2.5s' }} />
       </div>
 
       <div className="relative min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-md">
 
-          {/* الشعار */}
-          <div className="text-center mb-8" style={{ animation: 'slideUp 0.5s ease-out' }}>
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-600 rounded-3xl shadow-2xl shadow-amber-500/30 mb-4 relative">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-600 animate-pulse opacity-30 blur-sm" />
-              <CalendarDays className="w-12 h-12 text-white relative z-10" />
+          {/* Logo */}
+          <div className="text-center mb-8 animate-fade-up">
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-[#d4a853] via-[#c49a48] to-[#b8912e] animate-glow mb-5 relative">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f0d48a] to-[#b8912e] opacity-20 blur-md animate-pulse" />
+              <CalendarDays className="w-11 h-11 text-[#0a0a0f] relative z-10" strokeWidth={1.8} />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-l from-amber-300 via-yellow-200 to-orange-300 bg-clip-text text-transparent mb-2">
+            <h1
+              className="text-5xl font-bold text-gold-gradient mb-2"
+              style={{ fontFamily: '"Playfair Display", serif' }}
+            >
               صالات الأفراح
             </h1>
-            <p className="text-slate-500 text-sm">Wedding Hall Management System</p>
+            <p
+              className="text-[#8a8690] text-sm tracking-wide"
+              style={{ fontFamily: '"Cormorant Garamond", serif' }}
+            >
+              Wedding Hall Management System
+            </p>
           </div>
 
-          {/* بطاقة تسجيل الدخول */}
-          <div
-            className="rounded-3xl p-8 border border-white/[0.06]"
-            style={{
-              animation: 'slideUp 0.5s ease-out 0.1s both',
-              background: 'rgba(20, 20, 30, 0.7)',
-              backdropFilter: 'blur(20px)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-            }}
-          >
+          {/* Login Card */}
+          <div className="glass-strong rounded-2xl p-8 animate-fade-up stagger-2">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-white mb-1">تسجيل الدخول</h2>
-              <p className="text-slate-500 text-sm">أدخل بياناتك أو استخدم الدخول السريع</p>
+              <h2
+                className="text-2xl font-bold text-[#f5f0e8] mb-1"
+                style={{ fontFamily: '"Playfair Display", serif' }}
+              >
+                تسجيل الدخول
+              </h2>
+              <p className="text-[#8a8690] text-sm">أدخل بياناتك أو استخدم الدخول السريع</p>
             </div>
 
-            {/* نموذج تسجيل الدخول */}
+            {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-slate-400 text-sm font-medium mb-2">
+                <label className="block text-[#8a8690] text-sm font-medium mb-2">
                   البريد الإلكتروني
                 </label>
                 <Input
@@ -189,11 +195,11 @@ function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@wedding.com"
                   dir="ltr"
-                  className="text-left bg-white/[0.04] border-white/[0.08] rounded-xl h-11 text-white placeholder-slate-600 focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20"
+                  className="text-left h-11 rounded-xl bg-[rgba(20,20,30,0.6)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder-[rgba(138,134,144,0.5)] focus:border-[rgba(212,168,83,0.4)] focus:ring-1 focus:ring-[rgba(212,168,83,0.15)] transition-colors duration-200"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-sm font-medium mb-2">
+                <label className="block text-[#8a8690] text-sm font-medium mb-2">
                   كلمة المرور
                 </label>
                 <Input
@@ -202,13 +208,13 @@ function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   dir="ltr"
-                  className="text-left bg-white/[0.04] border-white/[0.08] rounded-xl h-11 text-white placeholder-slate-600 focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20"
+                  className="text-left h-11 rounded-xl bg-[rgba(20,20,30,0.6)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder-[rgba(138,134,144,0.5)] focus:border-[rgba(212,168,83,0.4)] focus:ring-1 focus:ring-[rgba(212,168,83,0.15)] transition-colors duration-200"
                 />
               </div>
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-l from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold h-12 rounded-xl shadow-lg shadow-amber-600/20 transition-all hover:shadow-xl hover:shadow-amber-600/30 hover:-translate-y-0.5 active:translate-y-0"
+                className="btn-gold w-full h-12 rounded-xl text-base"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -224,20 +230,20 @@ function LoginPage() {
               </Button>
             </form>
 
-            {/* فاصل */}
+            {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/[0.06]" />
+                <div className="w-full divider-gold" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-3 text-xs text-slate-600 bg-transparent">أو</span>
+                <span className="px-3 text-xs text-[#8a8690] bg-transparent">أو</span>
               </div>
             </div>
 
-            {/* الدخول السريع */}
+            {/* Quick Login */}
             <div>
-              <p className="text-center text-slate-500 text-sm mb-4 flex items-center justify-center gap-2">
-                <Sparkles className="w-3.5 h-3.5" />
+              <p className="text-center text-[#8a8690] text-sm mb-4 flex items-center justify-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#d4a853]" />
                 دخول سريع - اضغط على الدور المطلوب
               </p>
               <div className="grid grid-cols-2 gap-3">
@@ -249,20 +255,20 @@ function LoginPage() {
                       key={user.role}
                       onClick={() => handleQuickLogin(user)}
                       disabled={!!quickLoading}
-                      className={`relative flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all duration-300 group ${user.borderColor} ${isLoading ? 'opacity-80 scale-95' : 'hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98]'}`}
+                      className={`relative flex flex-col items-center gap-2 p-4 rounded-2xl border glass transition-all duration-300 group ${user.borderColor} ${isLoading ? 'opacity-80 scale-95' : 'hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98]'}`}
                     >
                       {isLoading && (
-                        <div className="absolute inset-0 rounded-2xl bg-white/[0.03] flex items-center justify-center">
-                          <Loader2 className="w-5 h-5 animate-spin text-white/60" />
+                        <div className="absolute inset-0 rounded-2xl bg-[rgba(20,20,30,0.5)] flex items-center justify-center">
+                          <Loader2 className="w-5 h-5 animate-spin text-[#d4a853]" />
                         </div>
                       )}
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${user.color} flex items-center justify-center shadow-lg ${user.glowColor} group-hover:scale-110 transition-transform duration-300`}>
-                        <Icon className="w-6 h-6 text-white" />
+                      <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${user.color} flex items-center justify-center ${user.glowColor} group-hover:scale-110 transition-transform duration-300`}>
+                        <Icon className="w-5 h-5 text-[#0a0a0f]" strokeWidth={2} />
                       </div>
                       <span className={`text-xs font-semibold ${user.textColor}`}>
                         {user.label}
                       </span>
-                      <span className="text-[10px] text-slate-600 font-mono" dir="ltr">
+                      <span className="text-[10px] text-[#8a8690]" dir="ltr" style={{ fontFamily: '"DM Mono", monospace' }}>
                         {user.email}
                       </span>
                     </button>
@@ -272,49 +278,37 @@ function LoginPage() {
             </div>
           </div>
 
-          {/* مميزات */}
-          <div
-            className="grid grid-cols-3 gap-3 mt-6"
-            style={{ animation: 'slideUp 0.5s ease-out 0.2s both' }}
-          >
+          {/* Feature Icons */}
+          <div className="grid grid-cols-3 gap-3 mt-6 animate-fade-up stagger-4">
             {[
-              { icon: Shield, label: 'نظام صلاحيات', color: 'text-amber-400', bg: 'bg-amber-500/10' },
-              { icon: Gamepad2, label: 'تحكم بالأجهزة', color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
-              { icon: CreditCard, label: 'إدارة الفواتير', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+              { icon: Shield, label: 'نظام صلاحيات', color: 'text-[#d4a853]', bg: 'bg-[rgba(212,168,83,0.08)]' },
+              { icon: Gamepad2, label: 'تحكم بالأجهزة', color: 'text-[#d4a853]', bg: 'bg-[rgba(212,168,83,0.08)]' },
+              { icon: CreditCard, label: 'إدارة الفواتير', color: 'text-[#d4a853]', bg: 'bg-[rgba(212,168,83,0.08)]' },
             ].map((f) => (
               <div
                 key={f.label}
-                className="rounded-xl p-3 text-center border border-white/[0.04]"
-                style={{ background: 'rgba(20,20,30,0.5)', backdropFilter: 'blur(10px)' }}
+                className="glass rounded-xl p-3 text-center card-hover"
               >
                 <div className={`w-9 h-9 mx-auto mb-2 rounded-lg ${f.bg} flex items-center justify-center`}>
-                  <f.icon className={`w-4.5 h-4.5 ${f.color}`} />
+                  <f.icon className={`w-4 h-4 ${f.color}`} />
                 </div>
-                <p className="text-[10px] text-slate-500">{f.label}</p>
+                <p className="text-[10px] text-[#8a8690]">{f.label}</p>
               </div>
             ))}
           </div>
 
-          <p className="text-center text-slate-700 text-xs mt-6">
+          <p className="text-center text-[rgba(138,134,144,0.5)] text-xs mt-6 animate-fade-up stagger-5">
             © 2024 Wedding Hall System — All Rights Reserved
           </p>
         </div>
       </div>
-
-      {/* أنيميشن مخصص */}
-      <style jsx>{`
-        @keyframes slideUp {
-          from { transform: translateY(30px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-      `}</style>
     </div>
   )
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════
 //   عناصر القائمة الجانبية
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════
 
 interface NavItem {
   key: string
@@ -349,24 +343,31 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
   const userNavItems = NAV_ITEMS.filter((item) => item.roles.includes(user.role))
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="p-4 border-b border-border">
+    <div className="flex flex-col h-full bg-[#0d0d12]">
+      {/* Logo Header */}
+      <div className="p-4 pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-md">
-            <CalendarDays className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8912e] flex items-center justify-center shadow-lg shadow-[rgba(212,168,83,0.15)] shrink-0">
+            <CalendarDays className="w-5 h-5 text-[#0a0a0f]" strokeWidth={1.8} />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="font-bold text-sm truncate">صالات الأفراح</h2>
-            <p className="text-xs text-muted-foreground truncate">{user.name}</p>
+            <h2
+              className="font-bold text-sm truncate text-[#f5f0e8]"
+              style={{ fontFamily: '"Playfair Display", serif' }}
+            >
+              صالات الأفراح
+            </h2>
+            <p className="text-xs text-[#8a8690] truncate">{user.name}</p>
           </div>
           {onClose && (
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           )}
         </div>
       </div>
+
+      <div className="divider-gold mx-4" />
 
       {/* Navigation */}
       <ScrollArea className="flex-1 py-3 px-3">
@@ -378,13 +379,13 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
               <button
                 key={item.key}
                 onClick={() => handleNav(item.key)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-amber-600 text-white shadow-md shadow-amber-600/25'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    ? 'bg-[rgba(212,168,83,0.1)] text-[#d4a853] border-r-2 border-[#d4a853]'
+                    : 'text-[#8a8690] hover:bg-[rgba(212,168,83,0.05)] hover:text-[#f5f0e8]'
                 }`}
               >
-                <Icon className="h-4.5 w-4.5 shrink-0" />
+                <Icon className={`h-[18px] w-[18px] shrink-0 ${isActive ? 'text-[#d4a853]' : ''}`} />
                 {item.label}
               </button>
             )
@@ -393,25 +394,28 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
 
         {/* Permissions Card */}
         <div className="mt-4 px-1">
-          <Separator className="mb-3" />
+          <div className="divider-gold mb-3" />
           {user && <PermissionsCard role={user.role} />}
         </div>
       </ScrollArea>
 
       {/* Footer / User */}
-      <div className="p-3 border-t border-border">
-        <div className="flex items-center gap-2 px-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+      <div className="p-3 pt-2">
+        <div className="divider-gold mb-3" />
+        <div className="flex items-center gap-3 px-2 py-2">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8912e] flex items-center justify-center text-[#0a0a0f] text-xs font-bold shrink-0 shadow-md shadow-[rgba(212,168,83,0.15)]">
             {user.name.charAt(0)}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{user.name}</p>
-            <p className="text-xs text-muted-foreground truncate">{ROLE_LABELS[user.role]}</p>
+            <p className="text-sm font-medium truncate text-[#f5f0e8]">{user.name}</p>
+            <span className="inline-block text-[10px] px-1.5 py-0.5 rounded-md bg-[rgba(212,168,83,0.1)] text-[#d4a853] font-medium mt-0.5">
+              {ROLE_LABELS[user.role]}
+            </span>
           </div>
         </div>
         <Button
           variant="ghost"
-          className="w-full mt-1 justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-500/10 h-9 px-3"
+          className="w-full mt-1 justify-start gap-2 text-[#8a8690] hover:text-red-400 hover:bg-[rgba(239,68,68,0.06)] h-9 px-3 rounded-lg transition-colors duration-200"
           onClick={logout}
         >
           <LogOut className="h-4 w-4" />
@@ -422,9 +426,9 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
   )
 }
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════
 //   الصفحة الرئيسية
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════════════
 
 export default function Home() {
   const { isAuthenticated, loading, user, checkAuth } = useAuthStore()
@@ -439,14 +443,17 @@ export default function Home() {
       <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
         <div className="text-center space-y-4">
           <div className="relative w-20 h-20 mx-auto">
-            <div className="absolute inset-0 border-4 border-amber-500/20 rounded-full" />
-            <div className="absolute inset-0 border-4 border-transparent border-t-amber-500 rounded-full animate-spin" />
-            <div className="absolute inset-3 border-4 border-transparent border-t-orange-500 rounded-full animate-spin" style={{ animationDuration: '0.75s', animationDirection: 'reverse' }} />
+            <div className="absolute inset-0 border-2 border-[rgba(212,168,83,0.15)] rounded-full" />
+            <div className="absolute inset-0 border-2 border-transparent border-t-[#d4a853] rounded-full animate-spin" />
+            <div className="absolute inset-3 border-2 border-transparent border-t-[#b8912e] rounded-full animate-spin" style={{ animationDuration: '0.75s', animationDirection: 'reverse' }} />
           </div>
-          <h2 className="text-lg font-bold bg-gradient-to-l from-amber-300 to-orange-300 bg-clip-text text-transparent">
+          <h2
+            className="text-lg font-bold text-gold-gradient"
+            style={{ fontFamily: '"Playfair Display", serif' }}
+          >
             صالات الأفراح
           </h2>
-          <p className="text-sm text-slate-600">جاري التحميل...</p>
+          <p className="text-sm text-[#8a8690]">جاري التحميل...</p>
         </div>
       </div>
     )
@@ -499,15 +506,15 @@ export default function Home() {
   return (
     <div dir="rtl" className="min-h-screen bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:fixed lg:inset-y-0 lg:right-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-l border-border bg-card py-4">
+      <aside className="hidden lg:fixed lg:inset-y-0 lg:right-0 lg:z-50 lg:flex lg:w-64 lg:flex-col border-l border-[rgba(255,255,255,0.04)]">
+        <div className="flex grow flex-col overflow-y-auto bg-[#0d0d12]">
           <SidebarContent />
         </div>
       </aside>
 
       {/* Mobile Sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="right" className="w-72 p-0">
+        <SheetContent side="right" className="w-72 p-0 glass-strong border-l border-[rgba(255,255,255,0.04)]">
           <SheetTitle className="sr-only">القائمة الجانبية</SheetTitle>
           <SidebarContent onClose={() => setSidebarOpen(false)} />
         </SheetContent>
@@ -515,20 +522,23 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="lg:pr-64">
-        {/* Top Bar */}
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b border-border bg-card/80 backdrop-blur-sm px-4 lg:px-6">
+        {/* Header */}
+        <header className="sticky top-0 z-40 flex h-14 items-center gap-4 glass border-b border-[rgba(212,168,83,0.1)] px-4 lg:px-6">
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden h-9 w-9"
+            className="lg:hidden h-9 w-9 text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="h-5 w-5" />
           </Button>
 
           {/* Page Title */}
-          <h1 className="text-lg font-semibold">
+          <h1
+            className="text-lg font-semibold text-[#f5f0e8]"
+            style={{ fontFamily: '"Playfair Display", serif' }}
+          >
             {pageTitle[currentPage] || 'لوحة التحكم'}
           </h1>
 
@@ -539,13 +549,16 @@ export default function Home() {
           <NotificationBell />
 
           {/* User Info */}
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="hidden sm:flex gap-1 text-xs">
+          <div className="flex items-center gap-3">
+            <Badge
+              variant="outline"
+              className="hidden sm:flex gap-1 text-xs border-[rgba(212,168,83,0.25)] text-[#d4a853] bg-[rgba(212,168,83,0.06)] hover:bg-[rgba(212,168,83,0.1)] transition-colors duration-200"
+            >
               {ROLE_LABELS[user?.role || 'viewer']}
             </Badge>
             <button
               onClick={() => setCurrentPage('profile')}
-              className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold hover:scale-105 transition-transform"
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8912e] flex items-center justify-center text-[#0a0a0f] text-xs font-bold hover:scale-105 transition-all duration-200 shadow-md shadow-[rgba(212,168,83,0.15)]"
             >
               {user?.name?.charAt(0) || 'U'}
             </button>
@@ -553,7 +566,7 @@ export default function Home() {
         </header>
 
         {/* Page Content */}
-        <main className="p-4 lg:p-6 max-w-7xl mx-auto">
+        <main className="p-4 lg:p-6 max-w-7xl mx-auto mesh-bg min-h-[calc(100vh-3.5rem)]">
           {renderPage()}
         </main>
       </div>

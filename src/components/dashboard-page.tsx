@@ -62,11 +62,11 @@ interface DashboardData {
   }
 }
 
-const STATUS_BADGE: Record<string, { label: string; className: string }> = {
-  confirmed: { label: 'مؤكد', className: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' },
-  pending: { label: 'معلق', className: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' },
-  cancelled: { label: 'ملغي', className: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' },
-  completed: { label: 'مكتمل', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' },
+const STATUS_BADGE: Record<string, { label: string; dotColor: string; className: string }> = {
+  confirmed: { label: 'مؤكد', dotColor: 'bg-green-400', className: 'bg-green-500/10 text-green-400 border-green-500/20' },
+  pending: { label: 'معلق', dotColor: 'bg-yellow-400', className: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' },
+  cancelled: { label: 'ملغي', dotColor: 'bg-red-400', className: 'bg-red-500/10 text-red-400 border-red-500/20' },
+  completed: { label: 'مكتمل', dotColor: 'bg-blue-400', className: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
 }
 
 const PAYMENT_METHOD_LABELS: Record<string, string> = {
@@ -78,6 +78,7 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
 
 export default function DashboardPage() {
   const { toast } = useToast()
+  const user = useAuthStore((s) => s.user)
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -125,119 +126,124 @@ export default function DashboardPage() {
   const maxRevenue = data ? Math.max(...data.revenueChart.map((c) => c.revenue), 1) : 1
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <TrendingUp className="h-6 w-6 text-amber-600" />
-          لوحة المعلومات
+      <div className="animate-fade-up">
+        <h2 className="text-3xl font-bold font-[Playfair_Display] flex items-center gap-3">
+          مرحباً، <span className="text-gold-gradient">{user?.name || 'المستخدم'}</span>
         </h2>
-        <p className="text-muted-foreground text-sm mt-1">نظرة عامة على أداء صالة الأفراح</p>
+        <p className="text-[#8a8690] text-base mt-2 font-[Cormorant_Garamond] text-lg tracking-wide">
+          نظرة عامة على أداء صالة الأفراح
+        </p>
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Total Customers */}
         {loading ? (
-          <Skeleton className="h-24 rounded-lg" />
+          <Skeleton className="h-28 rounded-xl" />
         ) : (
-          <Card className="border-border">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-amber-100 dark:bg-amber-900/30">
-                <Users className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          <div className="animate-fade-up stagger-1 glass card-hover rounded-xl p-5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
+            <div className="relative flex items-center gap-4">
+              <div className="p-3.5 rounded-xl bg-amber-500/10 ring-1 ring-amber-500/20">
+                <Users className="h-6 w-6 text-amber-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">إجمالي الزبائن</p>
-                <p className="text-xl font-bold">{data?.totalCustomers ?? 0}</p>
+                <p className="text-sm text-[#8a8690] mb-1">إجمالي الزبائن</p>
+                <p className="text-2xl font-bold font-[DM_Mono] text-[#f5f0e8]">{data?.totalCustomers ?? 0}</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Monthly Bookings */}
         {loading ? (
-          <Skeleton className="h-24 rounded-lg" />
+          <Skeleton className="h-28 rounded-xl" />
         ) : (
-          <Card className="border-border">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/30">
-                <CalendarDays className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <div className="animate-fade-up stagger-2 glass card-hover rounded-xl p-5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent pointer-events-none" />
+            <div className="relative flex items-center gap-4">
+              <div className="p-3.5 rounded-xl bg-blue-500/10 ring-1 ring-blue-500/20">
+                <CalendarDays className="h-6 w-6 text-blue-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">حجوزات الشهر</p>
-                <p className="text-xl font-bold">{data?.monthlyBookings ?? 0}</p>
+                <p className="text-sm text-[#8a8690] mb-1">حجوزات الشهر</p>
+                <p className="text-2xl font-bold font-[DM_Mono] text-[#f5f0e8]">{data?.monthlyBookings ?? 0}</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Monthly Revenue */}
         {loading ? (
-          <Skeleton className="h-24 rounded-lg" />
+          <Skeleton className="h-28 rounded-xl" />
         ) : (
-          <Card className="border-border">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-green-100 dark:bg-green-900/30">
-                <DollarSign className="h-5 w-5 text-green-600 dark:text-green-400" />
+          <div className="animate-fade-up stagger-3 glass card-hover rounded-xl p-5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent pointer-events-none" />
+            <div className="relative flex items-center gap-4">
+              <div className="p-3.5 rounded-xl bg-green-500/10 ring-1 ring-green-500/20">
+                <DollarSign className="h-6 w-6 text-green-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">إيرادات الشهر</p>
-                <p className="text-xl font-bold text-green-600">
+                <p className="text-sm text-[#8a8690] mb-1">إيرادات الشهر</p>
+                <p className="text-2xl font-bold font-[DM_Mono] text-green-400">
                   {(data?.monthlyRevenue ?? 0).toLocaleString()}{' '}
-                  <span className="text-xs text-muted-foreground">ر.س</span>
+                  <span className="text-xs text-[#8a8690] font-[DM_Sans]">ر.س</span>
                 </p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Upcoming Bookings */}
         {loading ? (
-          <Skeleton className="h-24 rounded-lg" />
+          <Skeleton className="h-28 rounded-xl" />
         ) : (
-          <Card className="border-border">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30">
-                <Clock className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <div className="animate-fade-up stagger-4 glass card-hover rounded-xl p-5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent pointer-events-none" />
+            <div className="relative flex items-center gap-4">
+              <div className="p-3.5 rounded-xl bg-purple-500/10 ring-1 ring-purple-500/20">
+                <Clock className="h-6 w-6 text-purple-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">حجوزات قادمة</p>
-                <p className="text-xl font-bold">{data?.upcomingBookings ?? 0}</p>
+                <p className="text-sm text-[#8a8690] mb-1">حجوزات قادمة</p>
+                <p className="text-2xl font-bold font-[DM_Mono] text-[#f5f0e8]">{data?.upcomingBookings ?? 0}</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
       </div>
 
       {/* Revenue Chart + ESP32 Status */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Revenue Chart */}
-        <Card className="border-border lg:col-span-2">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-base flex items-center gap-2">
-              <ArrowUpLeft className="h-4 w-4 text-amber-600" />
+        <Card className="lg:col-span-2 glass rounded-xl border-0 overflow-hidden animate-fade-up stagger-3">
+          <CardHeader className="pb-4 border-b border-white/5">
+            <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
+              <ArrowUpLeft className="h-4 w-4 text-[#d4a853]" />
               الإيرادات - آخر 6 أشهر
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-5">
             {loading ? (
               <Skeleton className="h-48 w-full" />
             ) : (
-              <div className="flex items-end gap-3 h-48" dir="ltr">
+              <div className="flex items-end gap-3 h-52" dir="ltr">
                 {data?.revenueChart.map((item, idx) => {
                   const heightPercent = maxRevenue > 0 ? (item.revenue / maxRevenue) * 100 : 0
                   return (
-                    <div key={idx} className="flex-1 flex flex-col items-center gap-2">
-                      <span className="text-xs text-muted-foreground font-mono">
+                    <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
+                      <span className="text-xs text-[#8a8690] font-[DM_Mono] opacity-0 group-hover:opacity-100 transition-opacity">
                         {(item.revenue / 1000).toFixed(0)}K
                       </span>
-                      <div className="w-full relative group" style={{ height: '140px' }}>
+                      <div className="w-full relative" style={{ height: '160px' }}>
                         <div
-                          className="absolute bottom-0 w-full rounded-t-md bg-gradient-to-t from-amber-600 to-amber-400 transition-all duration-500 hover:from-amber-500 hover:to-amber-300 cursor-pointer min-h-[4px]"
+                          className="absolute bottom-0 w-full rounded-t-lg bg-gradient-to-t from-[#d4a853] to-[#f0d48a] transition-all duration-500 hover:from-[#f0d48a] hover:to-[#d4a853] cursor-pointer min-h-[4px] opacity-80 hover:opacity-100 group-hover:shadow-[0_0_20px_rgba(212,168,83,0.2)]"
                           style={{ height: `${Math.max(heightPercent, 3)}%` }}
                         />
                       </div>
-                      <span className="text-xs text-muted-foreground">{item.month}</span>
+                      <span className="text-xs text-[#8a8690] font-[DM_Mono]">{item.month}</span>
                     </div>
                   )
                 })}
@@ -247,15 +253,15 @@ export default function DashboardPage() {
         </Card>
 
         {/* ESP32 Real-time Status */}
-        <Card className="border-border">
+        <Card className="glass-gold rounded-xl border-0 overflow-hidden animate-fade-up stagger-4">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Cpu className="h-4 w-4 text-amber-600" />
+            <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
+              <Cpu className="h-4 w-4 text-[#d4a853]" />
               حالة ESP32
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+              <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium backdrop-blur-sm ${
                 firebaseStatus.online
-                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                  ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                  : 'bg-red-500/10 text-red-400 border border-red-500/20'
               }`}>
                 {firebaseStatus.online ? 'متصل' : 'غير متصل'}
               </span>
@@ -263,17 +269,22 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {/* Connection */}
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center gap-2">
-                {firebaseStatus.online ? (
-                  <Wifi className="h-4 w-4 text-green-500" />
-                ) : (
-                  <WifiOff className="h-4 w-4 text-red-400" />
-                )}
-                <span className="text-xs text-muted-foreground">الاتصال</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+              <div className="flex items-center gap-2.5">
+                <div className="relative">
+                  {firebaseStatus.online ? (
+                    <Wifi className="h-4 w-4 text-green-400" />
+                  ) : (
+                    <WifiOff className="h-4 w-4 text-red-400" />
+                  )}
+                  {firebaseStatus.online && (
+                    <span className="absolute -top-0.5 -right-0.5 inline-block size-1.5 rounded-full bg-green-400 animate-pulse-dot" />
+                  )}
+                </div>
+                <span className="text-xs text-[#8a8690]">الاتصال</span>
               </div>
-              <span className={`text-xs font-semibold ${
-                firebaseStatus.online ? 'text-green-600' : 'text-red-500'
+              <span className={`text-xs font-semibold font-[DM_Mono] ${
+                firebaseStatus.online ? 'text-green-400' : 'text-red-400'
               }`}>
                 {firebaseStatus.online
                   ? firebaseStatus.lastSeen
@@ -285,52 +296,52 @@ export default function DashboardPage() {
             </div>
 
             {/* Gate */}
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center gap-2">
-                <DoorOpen className="h-4 w-4 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">البوابة</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+              <div className="flex items-center gap-2.5">
+                <DoorOpen className="h-4 w-4 text-[#8a8690]" />
+                <span className="text-xs text-[#8a8690]">البوابة</span>
               </div>
               <span className={`text-xs font-semibold ${
-                data?.esp32Status?.gateOpen ? 'text-green-600' : 'text-muted-foreground'
+                data?.esp32Status?.gateOpen ? 'text-green-400' : 'text-[#8a8690]'
               }`}>
                 {data?.esp32Status?.gateOpen ? 'مفتوحة' : 'مغلقة'}
               </span>
             </div>
 
             {/* Door */}
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center gap-2">
-                <DoorOpen className="h-4 w-4 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">باب الصالة</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+              <div className="flex items-center gap-2.5">
+                <DoorOpen className="h-4 w-4 text-[#8a8690]" />
+                <span className="text-xs text-[#8a8690]">باب الصالة</span>
               </div>
               <span className={`text-xs font-semibold ${
-                data?.esp32Status?.doorOpen ? 'text-green-600' : 'text-muted-foreground'
+                data?.esp32Status?.doorOpen ? 'text-green-400' : 'text-[#8a8690]'
               }`}>
                 {data?.esp32Status?.doorOpen ? 'مفتوح' : 'مغلق'}
               </span>
             </div>
 
             {/* Lights */}
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center gap-2">
-                <Lightbulb className="h-4 w-4 text-amber-600" />
-                <span className="text-xs text-muted-foreground">الأضواء</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+              <div className="flex items-center gap-2.5">
+                <Lightbulb className="h-4 w-4 text-[#d4a853]" />
+                <span className="text-xs text-[#8a8690]">الأضواء</span>
               </div>
-              <span className={`text-xs font-bold ${
-                firebaseActiveLights > 0 ? 'text-amber-600' : 'text-muted-foreground'
+              <span className={`text-xs font-bold font-[DM_Mono] ${
+                firebaseActiveLights > 0 ? 'text-[#d4a853]' : 'text-[#8a8690]'
               }`}>
                 {firebaseActiveLights} / 6
               </span>
             </div>
 
             {/* MP3 */}
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
-              <div className="flex items-center gap-2">
-                <Music className="h-4 w-4 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">المشغل</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+              <div className="flex items-center gap-2.5">
+                <Music className="h-4 w-4 text-[#8a8690]" />
+                <span className="text-xs text-[#8a8690]">المشغل</span>
               </div>
               <span className={`text-xs font-semibold ${
-                data?.esp32Status?.mp3Playing ? 'text-pink-600' : 'text-muted-foreground'
+                data?.esp32Status?.mp3Playing ? 'text-pink-400' : 'text-[#8a8690]'
               }`}>
                 {data?.esp32Status?.mp3Playing ? 'يشغل' : 'متوقف'}
               </span>
@@ -342,51 +353,47 @@ export default function DashboardPage() {
       {/* Upcoming Bookings + Recent Payments */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Upcoming Bookings */}
-        <Card className="border-border">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-base flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-amber-600" />
+        <Card className="glass rounded-xl border-0 overflow-hidden animate-fade-up stagger-5">
+          <CardHeader className="pb-4 border-b border-white/5">
+            <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
+              <CalendarDays className="h-4 w-4 text-[#d4a853]" />
               الحجوزات القادمة (7 أيام)
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             {loading ? (
               <div className="space-y-3">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <Skeleton key={i} className="h-14 w-full" />
+                  <Skeleton key={i} className="h-14 w-full rounded-lg" />
                 ))}
               </div>
             ) : !data?.upcomingList?.length ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <CalendarDays className="h-10 w-10 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">لا توجد حجوزات قادمة</p>
+              <div className="text-center py-10">
+                <CalendarDays className="h-10 w-10 mx-auto mb-3 text-[#8a8690]/30" />
+                <p className="text-sm text-[#8a8690] font-[Cormorant_Garamond] text-base">لا توجد حجوزات قادمة</p>
               </div>
             ) : (
-              <div className="space-y-2 max-h-80 overflow-y-auto">
+              <div className="space-y-2 max-h-96 overflow-y-auto">
                 {data.upcomingList.map((booking) => {
                   const badge = STATUS_BADGE[booking.status] || STATUS_BADGE.pending
                   return (
                     <div
                       key={booking.id}
-                      className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/30 transition-colors"
+                      className="flex items-center justify-between p-4 rounded-xl glass card-hover"
                     >
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm truncate">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <span className={`shrink-0 inline-block size-2 rounded-full ${badge.dotColor}`} />
+                        <div className="min-w-0">
+                          <span className="font-medium text-sm text-[#f5f0e8] truncate block">
                             {booking.customer.name}
                           </span>
-                          <span
-                            className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${badge.className}`}
-                          >
-                            {badge.label}
-                          </span>
+                          <p className="text-xs text-[#8a8690] mt-0.5 truncate">
+                            {booking.eventType} — {formatFullDate(booking.eventDate)}
+                          </p>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {booking.eventType} — {formatFullDate(booking.eventDate)}
-                        </p>
                       </div>
-                      <span className="text-sm font-mono font-semibold text-amber-600 shrink-0 mr-3">
-                        {booking.hallPrice.toLocaleString()} ر.س
+                      <span className="text-sm font-semibold font-[DM_Mono] text-[#d4a853] shrink-0 mr-3">
+                        {booking.hallPrice.toLocaleString()} <span className="text-[10px] text-[#8a8690] font-[DM_Sans]">ر.س</span>
                       </span>
                     </div>
                   )
@@ -397,60 +404,54 @@ export default function DashboardPage() {
         </Card>
 
         {/* Recent Payments */}
-        <Card className="border-border">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-base flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-amber-600" />
+        <Card className="glass rounded-xl border-0 overflow-hidden animate-fade-up stagger-6">
+          <CardHeader className="pb-4 border-b border-white/5">
+            <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
+              <DollarSign className="h-4 w-4 text-[#d4a853]" />
               آخر المدفوعات
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             {loading ? (
               <div className="space-y-3">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <Skeleton key={i} className="h-14 w-full" />
+                  <Skeleton key={i} className="h-14 w-full rounded-lg" />
                 ))}
               </div>
             ) : !data?.recentPayments?.length ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <DollarSign className="h-10 w-10 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">لا توجد مدفوعات حديثة</p>
+              <div className="text-center py-10">
+                <DollarSign className="h-10 w-10 mx-auto mb-3 text-[#8a8690]/30" />
+                <p className="text-sm text-[#8a8690] font-[Cormorant_Garamond] text-base">لا توجد مدفوعات حديثة</p>
               </div>
             ) : (
-              <div className="space-y-2 max-h-80 overflow-y-auto">
+              <div className="space-y-2 max-h-96 overflow-y-auto">
                 {data.recentPayments.slice(0, 5).map((payment) => {
                   const statusBadge = STATUS_BADGE[payment.status]
                   return (
                     <div
                       key={payment.id}
-                      className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/30 transition-colors"
+                      className="flex items-center justify-between p-4 rounded-xl glass card-hover"
                     >
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm truncate">
-                            {payment.booking.customer.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground">—</span>
-                          <span className="text-xs text-muted-foreground truncate">
-                            {payment.booking.eventType}
-                          </span>
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <span className={`shrink-0 inline-block size-2 rounded-full ${statusBadge?.dotColor || 'bg-[#8a8690]'}`} />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-sm text-[#f5f0e8] truncate">
+                              {payment.booking.customer.name}
+                            </span>
+                            <span className="text-[#8a8690]/40 text-xs">—</span>
+                            <span className="text-xs text-[#8a8690] truncate">
+                              {payment.booking.eventType}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#8a8690] mt-0.5">
+                            {PAYMENT_METHOD_LABELS[payment.method] || payment.method} — {formatDate(payment.paidAt)}
+                          </p>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {PAYMENT_METHOD_LABELS[payment.method] || payment.method} — {formatDate(payment.paidAt)}
-                        </p>
                       </div>
-                      <div className="flex items-center gap-2 shrink-0 mr-3">
-                        {statusBadge && (
-                          <span
-                            className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${statusBadge.className}`}
-                          >
-                            {statusBadge.label}
-                          </span>
-                        )}
-                        <span className="text-sm font-mono font-semibold text-green-600">
-                          {payment.amount.toLocaleString()} ر.س
-                        </span>
-                      </div>
+                      <span className="text-sm font-semibold font-[DM_Mono] text-green-400 shrink-0 mr-3">
+                        {payment.amount.toLocaleString()} <span className="text-[10px] text-[#8a8690] font-[DM_Sans]">ر.س</span>
+                      </span>
                     </div>
                   )
                 })}

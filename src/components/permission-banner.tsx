@@ -68,19 +68,19 @@ const PERMISSIONS_TABLE: PermissionDetail[] = [
 
 export function ReadOnlyBanner({ message }: { message?: string }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-3">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/10">
-        <Eye className="h-4 w-4 text-amber-600" />
+    <div className="flex items-center gap-2.5 rounded-lg glass-gold border-s-2 border-s-[#d4a853]/40 px-4 py-3 animate-fade-in">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#d4a853]/15">
+        <Eye className="h-4 w-4 text-[#d4a853]" />
       </div>
       <div className="flex-1">
-        <p className="text-sm font-semibold text-amber-700 dark:text-amber-400">
+        <p className="text-sm font-semibold text-[#f0d48a]">
           وضع العرض فقط
         </p>
-        <p className="text-xs text-amber-600/80 dark:text-amber-500/70">
+        <p className="text-xs text-[#8a8690]">
           {message || 'ليس لديك صلاحية التعديل أو الحذف في هذه الصفحة. يمكنك فقط عرض البيانات.'}
         </p>
       </div>
-      <Badge variant="outline" className="shrink-0 border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 text-[10px]">
+      <Badge variant="outline" className="shrink-0 border-[#d4a853]/30 bg-[#d4a853]/10 text-[#d4a853] text-[10px]">
         <Lock className="h-3 w-3 ml-1" />
         مقيد
       </Badge>
@@ -100,15 +100,15 @@ export function PartialPermissionBanner({ canWrite, canDelete, resource }: { can
   if (restrictions.length === 0) return null
 
   return (
-    <div className="flex items-center gap-2.5 rounded-lg border border-blue-500/20 bg-blue-500/5 px-4 py-3">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
-        <Info className="h-4 w-4 text-blue-600" />
+    <div className="flex items-center gap-2.5 rounded-lg glass border-s-2 border-s-[#d4a853]/40 px-4 py-3 animate-fade-in">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#d4a853]/15">
+        <Info className="h-4 w-4 text-[#d4a853]" />
       </div>
       <div className="flex-1">
-        <p className="text-sm font-semibold text-blue-700 dark:text-blue-400">
+        <p className="text-sm font-semibold text-[#f0d48a]">
           صلاحيات محدودة
         </p>
-        <p className="text-xs text-blue-600/80 dark:text-blue-500/70">
+        <p className="text-xs text-[#8a8690]">
           {resource}: لا يمكنك {restrictions.join(' و ')}
         </p>
       </div>
@@ -124,8 +124,8 @@ export function PermissionsCard({ role }: { role: Role }) {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2 px-1">
-        <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-        <span className="text-xs font-semibold text-muted-foreground">صلاحياتي</span>
+        <ShieldCheck className="h-4 w-4 text-[#d4a853]" />
+        <span className="text-xs font-semibold text-[#8a8690]">صلاحياتي</span>
       </div>
       <div className="space-y-1">
         {PERMISSIONS_TABLE.map((perm) => {
@@ -136,21 +136,21 @@ export function PermissionsCard({ role }: { role: Role }) {
           if (!canRead) return null
 
           return (
-            <div key={perm.key} className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-muted/50 transition-colors">
-              <span className="text-xs text-muted-foreground">{perm.label}</span>
+            <div key={perm.key} className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-[#1a1a25]/50 transition-colors">
+              <span className="text-xs text-[#8a8690]">{perm.label}</span>
               <div className="flex items-center gap-1">
                 {canRead && (
-                  <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20">
+                  <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
                     قراءة
                   </Badge>
                 )}
                 {canWrite && (
-                  <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20">
+                  <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-blue-500/10 text-blue-400 border-blue-500/20">
                     تعديل
                   </Badge>
                 )}
                 {canDel && (
-                  <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20">
+                  <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-red-500/10 text-red-400 border-red-500/20">
                     حذف
                   </Badge>
                 )}

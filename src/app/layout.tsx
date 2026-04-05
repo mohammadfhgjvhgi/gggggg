@@ -26,7 +26,10 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="dark" suppressHydrationWarning>
       <body
-        className={`${notoArabic.variable} antialiased bg-background text-foreground font-[family-name:var(--font-arabic)]`}
+        className={`${notoArabic.variable} antialiased grain mesh-bg`}
+        style={{
+          fontFamily: '"DM Sans", var(--font-arabic), sans-serif',
+        }}
       >
         {children}
         <Toaster />

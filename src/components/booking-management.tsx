@@ -279,7 +279,15 @@ export default function BookingManagement() {
   const renderSkeleton = () => (
     <div className="space-y-3">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Skeleton key={i} className="h-12 w-full" />
+        <div key={i} className="flex items-center gap-4 p-3">
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-40 animate-shimmer" />
+            <Skeleton className="h-3 w-28 animate-shimmer" />
+          </div>
+          <Skeleton className="h-5 w-16 rounded-full animate-shimmer" />
+          <Skeleton className="h-4 w-14 animate-shimmer" />
+          <Skeleton className="h-8 w-8 rounded animate-shimmer" />
+        </div>
       ))}
     </div>
   )
@@ -292,29 +300,47 @@ export default function BookingManagement() {
     for (let i = start; i <= end; i++) pages.push(i)
 
     return (
-      <div className="flex items-center justify-between pt-4 border-t">
-        <span className="text-sm text-muted-foreground">
-          عرض {((page - 1) * pagination.limit) + 1} - {Math.min(page * pagination.limit, pagination.total)} من {pagination.total}
+      <div className="flex items-center justify-between pt-4">
+        <div className="divider-gold flex-1" />
+        <span className="text-xs px-4 text-[#8a8690] font-[family-name:var(--font-num)]" dir="ltr">
+          {((page - 1) * pagination.limit) + 1} - {Math.min(page * pagination.limit, pagination.total)} / {pagination.total}
         </span>
-        <div className="flex items-center gap-1">
-          <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+        <div className="flex items-center gap-1 px-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+          >
             السابق
           </Button>
           {pages.map((p) => (
             <Button
               key={p}
-              variant={p === page ? 'default' : 'outline'}
+              variant="ghost"
               size="sm"
-              className="w-8 h-8 p-0"
+              className={`w-8 h-8 p-0 text-xs font-[family-name:var(--font-num)] rounded-lg ${
+                p === page
+                  ? 'bg-gradient-to-b from-[#d4a853] to-[#b8912e] text-[#0a0a0f] font-semibold shadow-[0_2px_12px_rgba(212,168,83,0.3)]'
+                  : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]'
+              }`}
               onClick={() => setPage(p)}
             >
               {p}
             </Button>
           ))}
-          <Button variant="outline" size="sm" disabled={page >= pagination.totalPages} onClick={() => setPage(page + 1)}>
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={page >= pagination.totalPages}
+            onClick={() => setPage(page + 1)}
+            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+          >
             التالي
           </Button>
         </div>
+        <div className="divider-gold flex-1" />
       </div>
     )
   }
@@ -328,18 +354,20 @@ export default function BookingManagement() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <CalendarDays className="h-6 w-6" />
-            إدارة الحجوزات
+          <h2 className="text-2xl font-[family-name:var(--font-display)] font-bold flex items-center gap-3">
+            <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8912e] shadow-[0_2px_12px_rgba(212,168,83,0.25)]">
+              <CalendarDays className="h-5 w-5 text-[#0a0a0f]" />
+            </span>
+            <span className="text-gold-gradient">إدارة الحجوزات</span>
           </h2>
-          <p className="text-muted-foreground text-sm mt-1">
-            إجمالي {pagination.total} حجز
+          <p className="text-[#8a8690] text-sm mt-1.5 mr-[52px]">
+            إجمالي <span className="text-[#f5f0e8] font-[family-name:var(--font-num)]">{pagination.total}</span> حجز
           </p>
         </div>
         {canWrite && (
-          <Button onClick={openCreate} className="gap-2 bg-amber-600 hover:bg-amber-700">
+          <Button onClick={openCreate} className="btn-gold gap-2 rounded-xl px-5">
             <Plus className="h-4 w-4" />
             إضافة حجز
           </Button>
@@ -347,160 +375,207 @@ export default function BookingManagement() {
       </div>
 
       {/* Status Tabs */}
-      <Card className="border-border">
-        <CardContent className="p-2">
-          <div className="flex flex-wrap gap-2">
-            {STATUS_TABS.map((tab) => (
-              <Button
-                key={tab.key}
-                variant={statusFilter === tab.key ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setStatusFilter(tab.key)}
-                className={
-                  statusFilter === tab.key
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : ''
-                }
-              >
-                {tab.label}
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="glass rounded-2xl p-2 animate-fade-up stagger-1">
+        <div className="flex flex-wrap gap-1.5">
+          {STATUS_TABS.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setStatusFilter(tab.key)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                statusFilter === tab.key
+                  ? 'bg-gradient-to-b from-[#d4a853] to-[#b8912e] text-[#0a0a0f] shadow-[0_2px_12px_rgba(212,168,83,0.25)]'
+                  : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)] bg-[rgba(255,255,255,0.02)]'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Search & Filter */}
-      <Card className="border-border">
-        <CardContent className="p-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="بحث بالاسم أو نوع الحدث..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pr-10"
-              />
-            </div>
-            <div className="relative sm:w-56">
-              <Filter className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Select value={customerFilter} onValueChange={(v) => setCustomerFilter(v)}>
-                <SelectTrigger className="pr-10">
-                  <SelectValue placeholder="تصفية بالزبون" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__all__">جميع الزبائن</SelectItem>
-                  {customers.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      <div className="glass rounded-2xl p-4 animate-fade-up stagger-2">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8690]" />
+            <Input
+              placeholder="بحث بالاسم أو نوع الحدث..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.6)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] focus-visible:bg-[rgba(255,255,255,0.05)] rounded-xl h-11"
+            />
           </div>
-        </CardContent>
-      </Card>
+          <div className="relative sm:w-56">
+            <Filter className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8690] pointer-events-none" />
+            <Select value={customerFilter} onValueChange={(v) => setCustomerFilter(v)}>
+              <SelectTrigger className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+                <SelectValue placeholder="تصفية بالزبون" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
+                <SelectItem value="__all__">جميع الزبائن</SelectItem>
+                {customers.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
 
       {/* Table */}
-      <Card className="border-border">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="text-right font-semibold">الزبون</TableHead>
-                  <TableHead className="text-right font-semibold">تاريخ الحدث</TableHead>
-                  <TableHead className="text-right font-semibold">نوع الحدث</TableHead>
-                  <TableHead className="text-right font-semibold text-center">الضيوف</TableHead>
-                  <TableHead className="text-right font-semibold text-center">السعر</TableHead>
-                  <TableHead className="text-right font-semibold text-center">المدفوع</TableHead>
-                  <TableHead className="text-right font-semibold text-center">الحالة</TableHead>
-                  {showActions && <TableHead className="text-right font-semibold text-center">الإجراءات</TableHead>}
+      <div className="glass rounded-2xl overflow-hidden animate-fade-up stagger-3">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent border-b-[rgba(255,255,255,0.04)]">
+                <TableHead className="text-right font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">الزبون</TableHead>
+                <TableHead className="text-right font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">تاريخ الحدث</TableHead>
+                <TableHead className="text-right font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">نوع الحدث</TableHead>
+                <TableHead className="text-center font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">الضيوف</TableHead>
+                <TableHead className="text-center font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">السعر</TableHead>
+                <TableHead className="text-center font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">المدفوع</TableHead>
+                <TableHead className="text-center font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">الحالة</TableHead>
+                {showActions && <TableHead className="text-center font-semibold text-[#8a8690] text-xs uppercase tracking-wider py-3.5 px-4">الإجراءات</TableHead>}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={showActions ? 8 : 7} className="p-4">{renderSkeleton()}</TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={showActions ? 8 : 7}>{renderSkeleton()}</TableCell>
-                  </TableRow>
-                ) : bookings.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={showActions ? 8 : 7} className="text-center py-12 text-muted-foreground">
-                      <CalendarDays className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                      <p>لا يوجد حجوزات</p>
-                      <p className="text-sm mt-1">اضغط على &quot;إضافة حجز&quot; لبدء الإضافة</p>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  bookings.map((booking) => {
-                    const badge = STATUS_BADGE[booking.status] || STATUS_BADGE.pending
-                    const paidPercent = booking.hallPrice > 0
-                      ? Math.round((booking.totalPaid / booking.hallPrice) * 100)
-                      : 0
-                    return (
-                      <TableRow key={booking.id} className="hover:bg-muted/50">
-                        <TableCell className="font-medium">{booking.customer.name}</TableCell>
-                        <TableCell className="text-sm">{formatDate(booking.eventDate)}</TableCell>
-                        <TableCell>{booking.eventType}</TableCell>
-                        <TableCell className="text-center">{booking.guestCount}</TableCell>
-                        <TableCell className="text-center font-mono">{booking.hallPrice.toLocaleString()}</TableCell>
-                        <TableCell className="text-center">
-                          <div className="flex flex-col items-center">
-                            <span className="font-mono text-sm">{booking.totalPaid.toLocaleString()}</span>
-                            <span className="text-xs text-muted-foreground">({paidPercent}%)</span>
+              ) : bookings.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={showActions ? 8 : 7} className="text-center py-16">
+                    <div className="flex flex-col items-center gap-3 animate-fade-in">
+                      <div className="w-16 h-16 rounded-2xl bg-[rgba(212,168,83,0.06)] flex items-center justify-center animate-float">
+                        <CalendarDays className="h-7 w-7 text-[#d4a853] opacity-40" />
+                      </div>
+                      <div className="text-center">
+                        <p className="text-[#8a8690] text-sm">لا يوجد حجوزات</p>
+                        <p className="text-[rgba(138,134,144,0.5)] text-xs mt-1">اضغط على &quot;إضافة حجز&quot; لبدء الإضافة</p>
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                bookings.map((booking) => {
+                  const badge = STATUS_BADGE[booking.status] || STATUS_BADGE.pending
+                  const paidPercent = booking.hallPrice > 0
+                    ? Math.round((booking.totalPaid / booking.hallPrice) * 100)
+                    : 0
+                  return (
+                    <TableRow key={booking.id} className="table-row-hover border-b-[rgba(255,255,255,0.03)]">
+                      <TableCell className="py-3.5 px-4">
+                        <span className="font-medium text-[#f5f0e8]">{booking.customer.name}</span>
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4">
+                        <span className="text-sm text-[#f5f0e8]">
+                          {formatDate(booking.eventDate)}
+                        </span>
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4">
+                        <span className="text-[#f5f0e8]">{booking.eventType}</span>
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4 text-center">
+                        <span className="font-[family-name:var(--font-num)] text-sm text-[#f5f0e8]">{booking.guestCount}</span>
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4 text-center">
+                        <span className="font-[family-name:var(--font-num)] text-sm text-[#f5f0e8]">{booking.hallPrice.toLocaleString()}</span>
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4 text-center">
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="font-[family-name:var(--font-num)] text-sm text-[#f5f0e8]">{booking.totalPaid.toLocaleString()}</span>
+                          <div className="w-16 h-1 rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-l from-[#d4a853] to-[#b8912e] transition-all duration-500"
+                              style={{ width: `${Math.min(paidPercent, 100)}%` }}
+                            />
+                          </div>
+                          <span className="font-[family-name:var(--font-num)] text-[10px] text-[#8a8690]" dir="ltr">{paidPercent}%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4 text-center">
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                          booking.status === 'confirmed'
+                            ? 'bg-[rgba(34,197,94,0.1)] text-[#22c55e] border border-[rgba(34,197,94,0.15)]'
+                            : booking.status === 'pending'
+                            ? 'bg-[rgba(234,179,8,0.1)] text-[#eab308] border border-[rgba(234,179,8,0.15)]'
+                            : booking.status === 'cancelled'
+                            ? 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border border-[rgba(239,68,68,0.15)]'
+                            : booking.status === 'completed'
+                            ? 'bg-[rgba(59,130,246,0.1)] text-[#3b82f6] border border-[rgba(59,130,246,0.15)]'
+                            : 'bg-[rgba(255,255,255,0.04)] text-[#8a8690] border border-[rgba(255,255,255,0.06)]'
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            booking.status === 'confirmed' ? 'bg-[#22c55e]'
+                            : booking.status === 'pending' ? 'bg-[#eab308]'
+                            : booking.status === 'cancelled' ? 'bg-[#ef4444]'
+                            : booking.status === 'completed' ? 'bg-[#3b82f6]'
+                            : 'bg-[#8a8690]'
+                          }`} />
+                          {badge.label}
+                        </span>
+                      </TableCell>
+                      {showActions && (
+                        <TableCell className="py-3.5 px-4">
+                          <div className="flex items-center justify-center gap-1">
+                            {canWrite && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.08)] rounded-lg transition-colors"
+                                onClick={() => openEdit(booking)}
+                              >
+                                <Pencil className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
+                            {canDelete && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-[#8a8690] hover:text-[#ef4444] hover:bg-[rgba(239,68,68,0.08)] rounded-lg transition-colors"
+                                onClick={() => openDelete(booking)}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
                           </div>
                         </TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant={badge.variant} className={badge.className}>
-                            {badge.label}
-                          </Badge>
-                        </TableCell>
-                        {showActions && (
-                          <TableCell>
-                            <div className="flex items-center justify-center gap-1">
-                              {canWrite && (
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(booking)}>
-                                  <Pencil className="h-4 w-4 text-blue-600" />
-                                </Button>
-                              )}
-                              {canDelete && (
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openDelete(booking)}>
-                                  <Trash2 className="h-4 w-4 text-red-500" />
-                                </Button>
-                              )}
-                            </div>
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    )
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          {renderPagination()}
-        </CardContent>
-      </Card>
+                      )}
+                    </TableRow>
+                  )
+                })
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        {renderPagination()}
+      </div>
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editingItem ? 'تعديل الحجز' : 'إضافة حجز جديد'}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto glass-strong rounded-2xl border-[rgba(212,168,83,0.1)] p-0">
+          <div className="bg-gradient-to-l from-[rgba(212,168,83,0.08)] to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)] sticky top-0 z-10">
+            <DialogHeader>
+              <DialogTitle className="text-[#f5f0e8] font-[family-name:var(--font-display)] text-lg text-center">
+                {editingItem ? 'تعديل الحجز' : 'إضافة حجز جديد'}
+              </DialogTitle>
+            </DialogHeader>
+          </div>
+          <div className="space-y-4 p-6 pt-5">
             <div className="space-y-2">
-              <Label>الزبون *</Label>
+              <Label className="text-[#8a8690] text-xs uppercase tracking-wider">الزبون *</Label>
               <Select
                 value={formData.customerId}
                 onValueChange={(v) => setFormData({ ...formData, customerId: v })}
                 disabled={!!editingItem}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
                   <SelectValue placeholder="اختر الزبون" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
                   {customers.map((c) => (
                     <SelectItem key={c.id} value={c.id}>
                       {c.name}
@@ -511,55 +586,59 @@ export default function BookingManagement() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="bk-date">تاريخ الحدث *</Label>
+                <Label htmlFor="bk-date" className="text-[#8a8690] text-xs uppercase tracking-wider">تاريخ الحدث *</Label>
                 <Input
                   id="bk-date"
                   type="date"
                   value={formData.eventDate}
                   onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
+                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="bk-guests">عدد الضيوف *</Label>
+                <Label htmlFor="bk-guests" className="text-[#8a8690] text-xs uppercase tracking-wider">عدد الضيوف *</Label>
                 <Input
                   id="bk-guests"
                   type="number"
                   value={formData.guestCount}
                   onChange={(e) => setFormData({ ...formData, guestCount: e.target.value })}
                   placeholder="مثال: 200"
+                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="bk-type">نوع الحدث *</Label>
+              <Label htmlFor="bk-type" className="text-[#8a8690] text-xs uppercase tracking-wider">نوع الحدث *</Label>
               <Input
                 id="bk-type"
                 value={formData.eventType}
                 onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
                 placeholder="زفاف، خطوبة، حفل..."
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="bk-price">سعر الصالة *</Label>
+                <Label htmlFor="bk-price" className="text-[#8a8690] text-xs uppercase tracking-wider">سعر الصالة *</Label>
                 <Input
                   id="bk-price"
                   type="number"
                   value={formData.hallPrice}
                   onChange={(e) => setFormData({ ...formData, hallPrice: e.target.value })}
                   placeholder="0"
+                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
                 />
               </div>
               <div className="space-y-2">
-                <Label>الحالة</Label>
+                <Label className="text-[#8a8690] text-xs uppercase tracking-wider">الحالة</Label>
                 <Select
                   value={formData.status}
                   onValueChange={(v) => setFormData({ ...formData, status: v })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
                     <SelectItem value="pending">معلق</SelectItem>
                     <SelectItem value="confirmed">مؤكد</SelectItem>
                     <SelectItem value="completed">مكتمل</SelectItem>
@@ -569,44 +648,66 @@ export default function BookingManagement() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="bk-notes">ملاحظات</Label>
+              <Label htmlFor="bk-notes" className="text-[#8a8690] text-xs uppercase tracking-wider">ملاحظات</Label>
               <Textarea
                 id="bk-notes"
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="ملاحظات إضافية..."
                 rows={3}
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl resize-none"
               />
             </div>
           </div>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>إلغاء</Button>
-            <Button onClick={handleSubmit} disabled={submitting} className="bg-amber-600 hover:bg-amber-700">
+          <div className="p-6 pt-2 flex gap-2 justify-end border-t-[rgba(255,255,255,0.04)]">
+            <Button
+              variant="ghost"
+              onClick={() => setDialogOpen(false)}
+              className="text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)] rounded-xl"
+            >
+              إلغاء
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={submitting}
+              className="btn-gold rounded-xl px-6"
+            >
               {submitting ? 'جاري الحفظ...' : editingItem ? 'حفظ التعديلات' : 'إضافة الحجز'}
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
 
       {/* Delete Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
-            <AlertDialogDescription>
+        <AlertDialogContent className="glass-strong rounded-2xl border-[rgba(239,68,68,0.1)] p-0 overflow-hidden">
+          <div className="bg-gradient-to-l from-[rgba(239,68,68,0.06)] to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)]">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-[#f5f0e8] font-[family-name:var(--font-display)] text-lg text-center">
+                تأكيد الحذف
+              </AlertDialogTitle>
+            </AlertDialogHeader>
+          </div>
+          <div className="p-6 pt-5">
+            <AlertDialogDescription className="text-[#8a8690] text-center text-sm leading-relaxed">
               هل أنت متأكد من حذف هذا الحجز؟ لا يمكن التراجع عن هذا الإجراء.
             </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>إلغاء</AlertDialogCancel>
+          </div>
+          <div className="p-6 pt-2 flex gap-2 justify-center border-t-[rgba(255,255,255,0.04)]">
+            <AlertDialogCancel
+              disabled={deleting}
+              className="text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)] border-[rgba(255,255,255,0.06)] rounded-xl"
+            >
+              إلغاء
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deleting}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-gradient-to-b from-[#ef4444] to-[#dc2626] text-white hover:from-[#f87171] hover:to-[#ef4444] shadow-[0_2px_12px_rgba(239,68,68,0.25)] rounded-xl px-6"
             >
               {deleting ? 'جاري الحذف...' : 'حذف'}
             </AlertDialogAction>
-          </AlertDialogFooter>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>
