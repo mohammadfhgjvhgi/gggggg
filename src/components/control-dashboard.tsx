@@ -139,7 +139,7 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
                     </motion.div>
                   </AnimatePresence>
                 </div>
-                <p className="text-xs text-[#8a8690] mt-0.5">
+                <p className="text-xs text-[#b0acb8] mt-0.5">
                   {online ? formatRelativeTime(lastSeen) : 'في انتظار الاتصال...'}
                 </p>
               </div>
@@ -184,9 +184,9 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
           </div>
 
           {lastSeen > 0 && (
-            <div className="mt-3 flex items-center gap-2 text-[11px] text-[#8a8690]/60">
+            <div className="mt-3 flex items-center gap-2 text-[11px] text-[#b0acb8]">
               <Clock className="size-3.5" />
-              <span>آخر ظهور: <span className="font-[DM_Mono] text-[#8a8690]">{formatTimestamp(lastSeen)}</span></span>
+              <span>آخر ظهور: <span className="font-[DM_Mono] text-[#c8c4d0]">{formatTimestamp(lastSeen)}</span></span>
             </div>
           )}
         </CardContent>
@@ -235,12 +235,12 @@ function GateDoorCard({
                   ? 'bg-green-500/15 ring-1 ring-green-500/25'
                   : 'bg-white/5 ring-1 ring-white/10'
               }`}>
-                <Icon className={`size-5 transition-colors ${isOpen ? 'text-green-400' : 'text-[#8a8690]'}`} />
+                <Icon className={`size-5 transition-colors ${isOpen ? 'text-green-400' : 'text-[#b0acb8]'}`} />
               </div>
               <div>
                 <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">{title}</h3>
                 {description && (
-                  <p className="text-[11px] text-[#8a8690]/70 mt-0.5 leading-relaxed">{description}</p>
+                  <p className="text-[11px] text-[#b0acb8]/90 mt-0.5 leading-relaxed">{description}</p>
                 )}
               </div>
             </div>
@@ -255,7 +255,7 @@ function GateDoorCard({
                   className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${
                     isOpen
                       ? 'border border-green-500/25 bg-green-500/10 text-green-400'
-                      : 'border border-white/10 bg-white/5 text-[#8a8690]'
+                      : 'border border-white/10 bg-white/5 text-[#b0acb8]'
                   }`}
                 >
                   {isOpen ? 'مفتوحة' : 'مغلقة'}
@@ -273,7 +273,7 @@ function GateDoorCard({
               isOpen
                 ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/20 ring-1 ring-green-400/30'
                 : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]'
-            } disabled:cursor-not-allowed`}
+            } disabled:cursor-not-allowed disabled:opacity-100`}
           >
             {isLoading && isOpen === false ? (
               <Loader2 className="size-4 animate-spin" />
@@ -289,7 +289,7 @@ function GateDoorCard({
               !isOpen
                 ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#b0acb8] ring-1 ring-white/[0.1]'
                 : 'bg-red-500/10 text-red-400 hover:bg-red-500/15 border border-red-500/20'
-            } disabled:cursor-not-allowed`}
+            } disabled:cursor-not-allowed disabled:opacity-100`}
           >
             {isLoading && isOpen === true ? (
               <Loader2 className="size-4 animate-spin" />
@@ -344,7 +344,7 @@ function SeatCard({
               </div>
               <div>
                 <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">جلوس العريس</h3>
-                <p className="text-[11px] text-[#8a8690]/70 mt-0.5">
+                <p className="text-[11px] text-[#b0acb8]/90 mt-0.5">
                   تراسونيك داخلي - تفعيل / إعادة تعيين
                 </p>
               </div>
@@ -360,7 +360,7 @@ function SeatCard({
                   className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${
                     active
                       ? 'border border-violet-500/25 bg-violet-500/10 text-violet-400'
-                      : 'border border-white/10 bg-white/5 text-[#8a8690]'
+                      : 'border border-white/10 bg-white/5 text-[#b0acb8]'
                   }`}
                 >
                   {active ? 'مفعّل' : 'غير مفعّل'}
@@ -378,7 +378,7 @@ function SeatCard({
               active
                 ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/20 ring-1 ring-violet-400/30'
                 : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]'
-            } disabled:cursor-not-allowed`}
+            } disabled:cursor-not-allowed disabled:opacity-100`}
           >
             {isLoading ? (
               <Loader2 className="size-4 animate-spin" />
@@ -392,7 +392,7 @@ function SeatCard({
             <button
               onClick={onReset}
               disabled={disabled || isLoading}
-              className="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 bg-white/[0.06] text-[#b0acb8] hover:bg-white/[0.1] hover:text-[#f5f0e8] border border-white/[0.1] disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 bg-white/[0.06] text-[#b0acb8] hover:bg-white/[0.1] hover:text-[#f5f0e8] border border-white/[0.1] disabled:cursor-not-allowed disabled:opacity-100"
             >
               <RotateCcw className="size-4" />
               إعادة تعيين
@@ -440,11 +440,11 @@ function LightsCard({
                   ? 'bg-cyan-500/10 ring-1 ring-cyan-500/20'
                   : 'bg-white/5 ring-1 ring-white/10'
               }`}>
-                <Lightbulb className={`size-5 transition-colors ${activeCount > 0 ? 'text-cyan-400' : 'text-[#8a8690]'}`} />
+                <Lightbulb className={`size-5 transition-colors ${activeCount > 0 ? 'text-cyan-400' : 'text-[#b0acb8]'}`} />
               </div>
               <div>
                 <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">الإضاءة</h3>
-                <p className="text-[11px] text-[#8a8690]/70 mt-0.5">
+                <p className="text-[11px] text-[#b0acb8]/90 mt-0.5">
                   6 مناطق إضاءة - ريليه ثنائي (LOW) + رباعي (HIGH)
                 </p>
               </div>
@@ -453,7 +453,7 @@ function LightsCard({
               className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm font-[DM_Mono] ${
                 activeCount > 0
                   ? 'border border-cyan-500/25 bg-cyan-500/10 text-cyan-400'
-                  : 'border border-white/10 bg-white/5 text-[#8a8690]'
+                  : 'border border-white/10 bg-white/5 text-[#b0acb8]'
               }`}
             >
               {activeCount} / 6
@@ -494,11 +494,11 @@ function LightsCard({
                         }`}
                       >
                         {isLoading ? (
-                          <Loader2 className="size-4 animate-spin text-[#8a8690]" />
+                          <Loader2 className="size-4 animate-spin text-[#b0acb8]" />
                         ) : (
                           <Icon
                             className={`size-4 transition-colors ${
-                              isOn ? 'text-cyan-400' : 'text-[#8a8690]'
+                              isOn ? 'text-cyan-400' : 'text-[#b0acb8]'
                             }`}
                           />
                         )}
@@ -507,12 +507,12 @@ function LightsCard({
                     <div className="flex flex-col">
                       <span
                         className={`text-sm font-medium transition-colors ${
-                          isOn ? 'text-cyan-300' : 'text-[#8a8690]'
+                          isOn ? 'text-cyan-300' : 'text-[#b0acb8]'
                         }`}
                       >
                         {def.label}
                       </span>
-                      <span className="text-[9px] text-[#8a8690]/50 font-[DM_Mono]">
+                      <span className="text-[9px] text-[#b0acb8]/70 font-[DM_Mono]">
                         {def.inverted ? 'ثنائي' : 'رباعي'}
                       </span>
                     </div>
@@ -521,7 +521,7 @@ function LightsCard({
                     checked={isOn}
                     onCheckedChange={() => onToggle(def.key)}
                     disabled={disabled || isLoading}
-                    className="data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500"
+                    className="data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500 disabled:opacity-100"
                   />
                 </motion.div>
               )
@@ -535,7 +535,7 @@ function LightsCard({
             <button
               onClick={onAllOn}
               disabled={disabled || activeCount === 6 || loading === 'all'}
-              className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 btn-gold disabled:cursor-not-allowed"
+              className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 btn-gold disabled:cursor-not-allowed disabled:opacity-100"
             >
               {loading === 'all' ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -547,7 +547,7 @@ function LightsCard({
             <button
               onClick={onAllOff}
               disabled={disabled || activeCount === 0 || loading === 'all'}
-              className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 bg-transparent text-red-400 border border-red-500/20 hover:bg-red-500/10 hover:border-red-500/30 disabled:cursor-not-allowed"
+              className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 bg-transparent text-red-400 border border-red-500/20 hover:bg-red-500/10 hover:border-red-500/30 disabled:cursor-not-allowed disabled:opacity-100"
             >
               {loading === 'all' ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -621,7 +621,7 @@ function Mp3Card({
               </div>
               <div>
                 <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">مشغل الصوت</h3>
-                <p className="text-[11px] text-[#8a8690]/70 mt-0.5">
+                <p className="text-[11px] text-[#b0acb8]/90 mt-0.5">
                   DFPlayer - التحكم بالمسارات الصوتية
                 </p>
               </div>
@@ -637,7 +637,7 @@ function Mp3Card({
                   className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${
                     playing
                       ? 'border border-pink-500/25 bg-pink-500/10 text-pink-400'
-                      : 'border border-white/10 bg-white/5 text-[#8a8690]'
+                      : 'border border-white/10 bg-white/5 text-[#b0acb8]'
                   }`}
                 >
                   {playing ? 'يشغل' : 'متوقف'}
@@ -651,9 +651,9 @@ function Mp3Card({
           {/* معلومات المسار */}
           <div className="flex items-center justify-between rounded-xl bg-white/[0.06] border border-white/[0.1] px-4 py-3.5">
             <div className="flex items-center gap-3">
-              <Volume2 className="size-4 text-[#8a8690]" />
+              <Volume2 className="size-4 text-[#b0acb8]" />
               <div>
-                <p className="text-[11px] text-[#8a8690]">المسار الحالي</p>
+                <p className="text-[11px] text-[#b0acb8]">المسار الحالي</p>
                 <p className="text-lg font-bold font-[DM_Mono] text-[#f5f0e8]">#{track}</p>
               </div>
             </div>
@@ -667,12 +667,12 @@ function Mp3Card({
                 onChange={(e) => setTrackInput(e.target.value)}
                 disabled={disabled}
                 dir="ltr"
-                className="w-16 h-8 text-center text-sm font-[DM_Mono] rounded-lg border border-white/[0.12] bg-white/[0.06] text-[#f5f0e8] px-2 focus:outline-none focus:ring-1 focus:ring-pink-500/30 placeholder:text-[#8a8690]/40"
+                className="w-16 h-8 text-center text-sm font-[DM_Mono] rounded-lg border border-white/[0.12] bg-white/[0.06] text-[#f5f0e8] px-2 focus:outline-none focus:ring-1 focus:ring-pink-500/30 placeholder:text-[#b0acb8]/70 disabled:opacity-100"
               />
               <button
                 type="submit"
                 disabled={disabled || isLoading}
-                className="h-8 px-3 text-xs font-medium rounded-lg bg-pink-500/10 text-pink-400 border border-pink-500/20 hover:bg-pink-500/15 transition-colors disabled:cursor-not-allowed"
+                className="h-8 px-3 text-xs font-medium rounded-lg bg-pink-500/10 text-pink-400 border border-pink-500/20 hover:bg-pink-500/15 transition-colors disabled:cursor-not-allowed disabled:opacity-100"
               >
                 تشغيل
               </button>
@@ -684,7 +684,7 @@ function Mp3Card({
             <button
               onClick={onPrevTrack}
               disabled={disabled || isLoading}
-              className="size-11 rounded-full flex items-center justify-center bg-white/[0.07] border border-white/[0.12] text-[#b0acb8] hover:bg-white/[0.11] hover:text-[#f5f0e8] transition-all duration-200 disabled:cursor-not-allowed"
+              className="size-11 rounded-full flex items-center justify-center bg-white/[0.07] border border-white/[0.12] text-[#b0acb8] hover:bg-white/[0.11] hover:text-[#f5f0e8] transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-100"
             >
               <SkipBack className="size-4" />
             </button>
@@ -692,7 +692,7 @@ function Mp3Card({
             <button
               onClick={onTogglePlay}
               disabled={disabled || isLoading}
-              className={`size-16 rounded-full flex items-center justify-center shadow-xl transition-all duration-200 disabled:cursor-not-allowed ${
+              className={`size-16 rounded-full flex items-center justify-center shadow-xl transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-100 ${
                 playing
                   ? 'bg-gradient-to-br from-pink-500 to-pink-600 text-white shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-105'
                   : 'bg-gradient-to-br from-[#06b6d4] to-[#0891b2] text-[#0a0a0f] shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105'
@@ -710,7 +710,7 @@ function Mp3Card({
             <button
               onClick={onNextTrack}
               disabled={disabled || isLoading}
-              className="size-11 rounded-full flex items-center justify-center bg-white/[0.07] border border-white/[0.12] text-[#b0acb8] hover:bg-white/[0.11] hover:text-[#f5f0e8] transition-all duration-200 disabled:cursor-not-allowed"
+              className="size-11 rounded-full flex items-center justify-center bg-white/[0.07] border border-white/[0.12] text-[#b0acb8] hover:bg-white/[0.11] hover:text-[#f5f0e8] transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-100"
             >
               <SkipForward className="size-4" />
             </button>
@@ -723,7 +723,7 @@ function Mp3Card({
                 key={t}
                 onClick={() => onPlay(t)}
                 disabled={disabled || isLoading}
-                className={`h-8 px-3.5 text-xs font-medium rounded-lg transition-all duration-200 disabled:cursor-not-allowed ${
+                className={`h-8 px-3.5 text-xs font-medium rounded-lg transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-100 ${
                   track === t
                     ? 'bg-pink-500/15 text-pink-400 border border-pink-500/25 shadow-[0_0_10px_rgba(236,72,153,0.1)]'
                     : 'bg-white/[0.06] text-[#b0acb8] border border-white/[0.1] hover:bg-white/[0.09] hover:text-[#f5f0e8]'
