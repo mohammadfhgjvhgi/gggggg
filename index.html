@@ -836,10 +836,10 @@ function gateDoorCard(title, isOpen, path, icon, desc) {
         </div>
       </div>
       <div class="px-5 pb-5 space-y-3">
-        <button onclick="fbWrite('/wedding_hall/${path}/open', ${!isOpen})" ${!state.esp32.online ? 'disabled' : ''} class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ${isOpen ? 'bg-gradient-to-r from-green-600 to-green-500 text-white ring-1 ring-green-400/30' : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]'}" style="${isOpen ? 'box-shadow:0 4px 16px rgba(34,197,94,0.2);' : ''}">
+        <button onclick="fbWrite('/wedding_hall/${path}/open', true)" ${!state.esp32.online ? 'disabled' : ''} class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ${isOpen ? 'bg-gradient-to-r from-green-600 to-green-500 text-white ring-1 ring-green-400/30' : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]'}" style="${isOpen ? 'box-shadow:0 4px 16px rgba(34,197,94,0.2);' : ''}">
           <i data-lucide="door-open" class="size-4"></i> فتح
         </button>
-        <button onclick="fbWrite('/wedding_hall/${path}/open', ${!isOpen})" ${!state.esp32.online ? 'disabled' : ''} class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ${!isOpen ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#b0acb8] ring-1 ring-white/[0.1]' : 'bg-red-500/10 text-red-400 hover:bg-red-500/15 border border-red-500/20'}">
+        <button onclick="fbWrite('/wedding_hall/${path}/open', false)" ${!state.esp32.online ? 'disabled' : ''} class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ${!isOpen ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#b0acb8] ring-1 ring-white/[0.1]' : 'bg-red-500/10 text-red-400 hover:bg-red-500/15 border border-red-500/20'}">
           <i data-lucide="door-closed" class="size-4"></i> إغلاق
         </button>
       </div>
@@ -850,14 +850,12 @@ function gateDoorCard(title, isOpen, path, icon, desc) {
 function toggleSeat() { fbWrite('/wedding_hall/seat/active', !state.esp32.seatActive); }
 function resetSeat() { fbWrite('/wedding_hall/seat/active', false); }
 function toggleLight(key) {
-  const inv = ['street', 'ship'].includes(key);
-  const newVal = inv ? !state.esp32.lights[key] : !state.esp32.lights[key];
+  const newVal = !state.esp32.lights[key];
   fbWrite(`/wedding_hall/lights/${key}`, newVal);
 }
 function lightsAll(on) {
   ['street','ship','ceiling','floor','pillar_outer','pillar_inner'].forEach(k => {
-    const inv = ['street', 'ship'].includes(k);
-    fbWrite(`/wedding_hall/lights/${k}`, on ? (inv ? false : true) : false);
+    fbWrite(`/wedding_hall/lights/${k}`, on);
   });
 }
 function toggleMp3() { fbWrite('/wedding_hall/mp3/playing', !state.esp32.mp3Playing); }
