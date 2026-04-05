@@ -328,25 +328,10 @@
   z-index: 0;
 }
 
-/* Control: Real photo background — wedding entrance */
+/* Control: No background image — clean dark */
 .page-gradient-control {
   position: relative;
   background-color: #0f0f17;
-  background-image:
-    url('/images/backgrounds/control.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-.page-gradient-control::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    rgba(15, 15, 23, 0.96);
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* Customers: Real photo background — groom / formal */
