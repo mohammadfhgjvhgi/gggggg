@@ -299,3 +299,24 @@ Stage Summary:
 - Login page has mihrab arch pattern + gold border frame
 - Patterns are very subtle (opacity 0.03-0.05 effective) for readability
 - No external images, no human figures, no music elements
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Reduce background image opacity / strengthen dark overlay on ALL pages for better readability
+
+Work Log:
+- Analyzed current globals.css overlay values - found dark overlay opacity was too low (starting at 0.3-0.5)
+- Updated ALL 11 page gradient overlays (dashboard, control, customers, bookings, billing, calendar, activity, settings, profile, users, login)
+- Changed overlay gradient from `0.45-0.5 → 0.88 → 0.95` to `0.85 → 0.93 → 0.97`
+- Reduced radial gradient color opacity from 0.05-0.06 to 0.02-0.04
+- Reduced radial gradient spread from 50% to 30-40%
+- Login page overlay strengthened from `0.3 → 0.75 → 0.92` to `0.75 → 0.90 → 0.96`
+- Verified dev server compiles successfully (290ms)
+- Verified lint passes clean
+
+Stage Summary:
+- All page backgrounds now have significantly stronger dark overlays (85%+ opacity)
+- Background images are now very subtle (barely visible texture) instead of dominating the page
+- Content on all pages (cards, buttons, text) should now be clearly readable
+- Files modified: `src/app/globals.css`
