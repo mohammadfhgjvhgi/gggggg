@@ -184,7 +184,7 @@ function LoginPage() {
               className="text-[#9490a0] text-sm tracking-wide"
               style={{ fontFamily: '"Cormorant Garamond", serif' }}
             >
-              Wedding Hall Management System
+              نظام إدارة صالات الأفراح
             </p>
           </div>
 
@@ -315,7 +315,7 @@ function LoginPage() {
           </div>
 
           <p className="text-center text-[rgba(148,144,160,0.5)] text-xs mt-6 animate-fade-up stagger-5">
-            © 2025 Wedding Hall System — جميع الحقوق محفوظة
+            © 2025 نظام صالات الأفراح — جميع الحقوق محفوظة
           </p>
         </div>
       </div>

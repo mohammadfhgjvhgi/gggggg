@@ -235,7 +235,7 @@ export default function DashboardPage() {
                   return (
                     <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
                       <span className="text-xs text-[#8a8690] font-[DM_Mono] opacity-0 group-hover:opacity-100 transition-opacity">
-                        {(item.revenue / 1000).toFixed(0)}K
+                        {(item.revenue / 1000).toFixed(0)} ألف
                       </span>
                       <div className="w-full relative" style={{ height: '160px' }}>
                         <div

@@ -215,7 +215,7 @@ export default function SettingsPanel() {
                 </p>
                 <p className="text-xs text-muted-foreground font-mono" dir="ltr">
                   {isFirebaseConfigured
-                    ? `Project: ${firebaseConfig.projectId}`
+                    ? `المشروع: ${firebaseConfig.projectId}`
                     : 'يحتاج تهيئة'}
                 </p>
               </div>
@@ -231,11 +231,11 @@ export default function SettingsPanel() {
           {isFirebaseConfigured && (
             <div className="grid gap-2 text-xs text-muted-foreground font-mono" dir="ltr">
               <div className="flex items-center gap-2">
-                <span className="w-24 shrink-0">Database:</span>
+                <span className="w-24 shrink-0">قاعدة البيانات:</span>
                 <span className="text-foreground/80 truncate">{firebaseConfig.databaseURL}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-24 shrink-0">Auth Domain:</span>
+                <span className="w-24 shrink-0">نطاق المصادقة:</span>
                 <span className="text-foreground/80 truncate">{firebaseConfig.authDomain}</span>
               </div>
             </div>
