@@ -14,7 +14,6 @@ import {
   Settings,
   Save,
   Wifi,
-  WifiOff,
   Building2,
   Phone,
   MapPin,
@@ -23,8 +22,12 @@ import {
   CheckCircle2,
   XCircle,
   Flame,
+  RotateCcw,
+  Cpu,
+  ShieldAlert,
 } from 'lucide-react'
 import { ReadOnlyBanner } from '@/components/permission-banner'
+import { getFirebaseConfig } from '@/lib/firebase'
 
 const authHeaders = () => ({
   'Content-Type': 'application/json',
@@ -60,9 +63,16 @@ export default function SettingsPanel() {
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null)
+  const [resetting, setResetting] = useState(false)
+  const [confirmReset, setConfirmReset] = useState(false)
 
   const canWrite = user?.role === 'admin'
+  const canControl = user?.role === 'admin' || user?.role === 'manager'
   const canRead = user?.role === 'admin' || user?.role === 'manager' || user?.role === 'employee' || user?.role === 'viewer'
+
+  // Firebase config status
+  const firebaseConfig = getFirebaseConfig()
+  const isFirebaseConfigured = !!(firebaseConfig.apiKey && firebaseConfig.databaseURL)
 
   const fetchSettings = useCallback(async () => {
     setLoading(true)
@@ -116,22 +126,18 @@ export default function SettingsPanel() {
     setTesting(true)
     setTestResult(null)
     try {
-      // We test Firebase connection by calling the settings API with a test parameter
-      const res = await fetch('/api/settings', {
-        method: 'PUT',
+      const res = await fetch('/api/firebase/test', {
+        method: 'POST',
         headers: authHeaders(),
-        body: JSON.stringify({
-          settings,
-          testConnection: true,
-        }),
       })
       if (res.ok) {
         const data = await res.json()
-        if (data.connectionTest) {
-          setTestResult({ success: true, message: 'تم الاتصال بنجاح! Firebase يعمل بشكل صحيح.' })
-        } else {
-          setTestResult({ success: false, message: 'فشل الاتصال. تأكد من صحة بيانات Firebase.' })
-        }
+        setTestResult({ success: data.success, message: data.message })
+        toast({
+          title: data.success ? 'اتصال ناجح' : 'فشل الاتصال',
+          description: data.message,
+          variant: data.success ? 'default' : 'destructive',
+        })
       } else {
         setTestResult({ success: false, message: 'فشل في اختبار الاتصال' })
       }
@@ -142,9 +148,33 @@ export default function SettingsPanel() {
     }
   }
 
+  const handleResetDevices = async () => {
+    setResetting(true)
+    try {
+      const res = await fetch('/api/firebase/reset', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ resetAll: true }),
+      })
+      if (res.ok) {
+        toast({
+          title: 'تم بنجاح',
+          description: 'تم إعادة تعيين جميع الأجهزة (بوابة، باب، جلوس، إضاءة، MP3)',
+        })
+      } else {
+        const err = await res.json()
+        toast({ title: 'خطأ', description: err.error, variant: 'destructive' })
+      }
+    } catch {
+      toast({ title: 'خطأ', description: 'فشل إعادة تعيين الأجهزة', variant: 'destructive' })
+    } finally {
+      setResetting(false)
+      setConfirmReset(false)
+    }
+  }
+
   const updateField = (key: keyof SettingsData, value: string) => {
     setSettings((prev) => ({ ...prev, [key]: value }))
-    // Clear test result when settings change
     setTestResult(null)
   }
 
@@ -174,104 +204,203 @@ export default function SettingsPanel() {
           الإعدادات
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          إعدادات النظام والصالة
+          إعدادات النظام والصالة و Firebase
         </p>
       </div>
 
-      {/* Firebase Configuration */}
+      {/* Firebase Configuration Status */}
       <Card className="border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Flame className="h-5 w-5 text-orange-500" />
-            إعدادات Firebase
+            حالة Firebase
           </CardTitle>
           <CardDescription>
-            تكوين الاتصال بقاعدة بيانات Firebase لخدمة الإشعارات
+            حالة الاتصال بـ Firebase Realtime Database للتحكم بـ ESP32
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="fb-api-key">مفتاح API</Label>
-            <Input
-              id="fb-api-key"
-              value={settings.firebaseApiKey}
-              onChange={(e) => updateField('firebaseApiKey', e.target.value)}
-              placeholder="AIzaSy..."
-              dir="ltr"
-              disabled={!canWrite}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="fb-db-url">رابط قاعدة البيانات</Label>
-            <Input
-              id="fb-db-url"
-              value={settings.firebaseDatabaseUrl}
-              onChange={(e) => updateField('firebaseDatabaseUrl', e.target.value)}
-              placeholder="https://your-project.firebaseio.com"
-              dir="ltr"
-              disabled={!canWrite}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="fb-auth-domain">نطاق المصادقة</Label>
-            <Input
-              id="fb-auth-domain"
-              value={settings.firebaseAuthDomain}
-              onChange={(e) => updateField('firebaseAuthDomain', e.target.value)}
-              placeholder="your-project.firebaseapp.com"
-              dir="ltr"
-              disabled={!canWrite}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="fb-project-id">معرف المشروع</Label>
-            <Input
-              id="fb-project-id"
-              value={settings.firebaseProjectId}
-              onChange={(e) => updateField('firebaseProjectId', e.target.value)}
-              placeholder="your-project-id"
-              dir="ltr"
-              disabled={!canWrite}
-            />
-          </div>
-
-          {/* Test Result */}
-          {testResult && (
-            <div
-              className={`flex items-center gap-2 p-3 rounded-lg text-sm ${
-                testResult.success
-                  ? 'bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                  : 'bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-400'
-              }`}
-            >
-              {testResult.success ? (
-                <CheckCircle2 className="h-4 w-4 shrink-0" />
-              ) : (
-                <XCircle className="h-4 w-4 shrink-0" />
-              )}
-              {testResult.message}
+          {/* Current Status */}
+          <div className="flex items-center justify-between rounded-lg border border-border bg-muted/20 px-4 py-3">
+            <div className="flex items-center gap-3">
+              <Cpu className={`h-5 w-5 ${isFirebaseConfigured ? 'text-emerald-500' : 'text-red-400'}`} />
+              <div>
+                <p className="text-sm font-medium">
+                  {isFirebaseConfigured ? 'Firebase مُعد ومتصل' : 'Firebase غير مُعد'}
+                </p>
+                <p className="text-xs text-muted-foreground" dir="ltr">
+                  {isFirebaseConfigured ? `Project: ${firebaseConfig.projectId}` : 'يحتاج تهيئة'}
+                </p>
+              </div>
             </div>
-          )}
-
-          <div className="flex items-center gap-3 pt-2">
-            {canWrite && (
-              <Button
-                variant="outline"
-                onClick={handleTestConnection}
-                disabled={testing || !settings.firebaseApiKey}
-                className="gap-2"
-              >
-                {testing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Wifi className="h-4 w-4" />
-                )}
-                {testing ? 'جاري الاختبار...' : 'اختبار الاتصال'}
-              </Button>
+            {isFirebaseConfigured ? (
+              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+            ) : (
+              <XCircle className="h-5 w-5 text-red-400" />
             )}
           </div>
+
+          {/* Test Connection */}
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={handleTestConnection}
+              disabled={testing}
+              className="gap-2"
+            >
+              {testing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Wifi className="h-4 w-4" />
+              )}
+              {testing ? 'جاري الاختبار...' : 'اختبار الاتصال'}
+            </Button>
+
+            {testResult && (
+              <div className="flex items-center gap-1.5 text-xs">
+                {testResult.success ? (
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                ) : (
+                  <XCircle className="h-3.5 w-3.5 text-red-500" />
+                )}
+                <span className={testResult.success ? 'text-emerald-600' : 'text-red-600'}>
+                  {testResult.message}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <Separator />
+
+          {/* Config Fields (Admin Only) */}
+          {canWrite && (
+            <>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="fb-project-id">معرف المشروع (Project ID)</Label>
+                  <Input
+                    id="fb-project-id"
+                    value={settings.firebaseProjectId}
+                    onChange={(e) => updateField('firebaseProjectId', e.target.value)}
+                    placeholder="your-project-id"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="fb-db-url">رابط قاعدة البيانات</Label>
+                  <Input
+                    id="fb-db-url"
+                    value={settings.firebaseDatabaseUrl}
+                    onChange={(e) => updateField('firebaseDatabaseUrl', e.target.value)}
+                    placeholder="https://your-project.firebaseio.com"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="fb-api-key">مفتاح API</Label>
+                  <Input
+                    id="fb-api-key"
+                    value={settings.firebaseApiKey}
+                    onChange={(e) => updateField('firebaseApiKey', e.target.value)}
+                    placeholder="AIzaSy..."
+                    dir="ltr"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="fb-auth-domain">نطاق المصادقة</Label>
+                  <Input
+                    id="fb-auth-domain"
+                    value={settings.firebaseAuthDomain}
+                    onChange={(e) => updateField('firebaseAuthDomain', e.target.value)}
+                    placeholder="your-project.firebaseapp.com"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <Button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="gap-2 bg-amber-600 hover:bg-amber-700"
+                >
+                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                  {saving ? 'جاري الحفظ...' : 'حفظ إعدادات Firebase'}
+                </Button>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
+
+      {/* Device Reset */}
+      {canControl && (
+        <Card className="border-border">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <RotateCcw className="h-5 w-5 text-amber-600" />
+              إعادة تعيين الأجهزة
+            </CardTitle>
+            <CardDescription>
+              إعادة جميع الأجهزة المتصلة بـ ESP32 إلى حالتها الافتراضية
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-2 sm:grid-cols-3 text-sm">
+              <div className="flex items-center gap-2 rounded-lg border border-border px-3 py-2">
+                <div className="h-2 w-2 rounded-full bg-red-400" />
+                <span>إغلاق البوابة والباب</span>
+              </div>
+              <div className="flex items-center gap-2 rounded-lg border border-border px-3 py-2">
+                <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                <span>إطفاء كل الأضواء</span>
+              </div>
+              <div className="flex items-center gap-2 rounded-lg border border-border px-3 py-2">
+                <div className="h-2 w-2 rounded-full bg-violet-400" />
+                <span>إيقاف جلوس + MP3</span>
+              </div>
+            </div>
+
+            {!confirmReset ? (
+              <Button
+                onClick={() => setConfirmReset(true)}
+                disabled={resetting}
+                variant="outline"
+                className="gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+              >
+                <RotateCcw className="h-4 w-4" />
+                إعادة تعيين كل الأجهزة
+              </Button>
+            ) : (
+              <div className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/10 p-3">
+                <ShieldAlert className="h-5 w-5 text-red-500 shrink-0" />
+                <p className="text-sm text-red-700 dark:text-red-400 flex-1">
+                  هل أنت متأكد؟ سيتم إغلاق كل الأبواب وإطفاء كل الأضواء وإيقاف كل الأجهزة.
+                </p>
+                <div className="flex gap-2 shrink-0">
+                  <Button
+                    onClick={handleResetDevices}
+                    disabled={resetting}
+                    size="sm"
+                    className="gap-1.5 bg-red-600 hover:bg-red-700"
+                  >
+                    {resetting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />}
+                    تأكيد
+                  </Button>
+                  <Button
+                    onClick={() => setConfirmReset(false)}
+                    variant="outline"
+                    size="sm"
+                    disabled={resetting}
+                  >
+                    إلغاء
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Hall Information */}
       <Card className="border-border">
@@ -357,10 +486,10 @@ export default function SettingsPanel() {
             <div className="space-y-1">
               <h3 className="font-semibold">حول النظام</h3>
               <p className="text-sm text-muted-foreground">
-                نظام إدارة صالات الأفراح - الإصدار 1.0.0
+                نظام إدارة صالات الأفراح - الإصدار 2.0.0
               </p>
               <p className="text-xs text-muted-foreground">
-                نظام متكامل لإدارة الحجوزات والزبائن والمدفوعات
+                نظام متكامل لإدارة الحجوزات والزبائن والمدفوعات مع التحكم بـ ESP32 عبر Firebase
               </p>
             </div>
           </div>

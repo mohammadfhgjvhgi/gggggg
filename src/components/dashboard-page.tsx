@@ -11,10 +11,16 @@ import {
   DollarSign,
   Clock,
   Wifi,
+  WifiOff,
   Lightbulb,
   TrendingUp,
   ArrowUpLeft,
+  Cpu,
+  DoorOpen,
+  Music,
 } from 'lucide-react'
+import { useFirebaseStatus } from '@/hooks/useFirebaseStatus'
+import { useFirebaseLights } from '@/hooks/useFirebaseLights'
 
 const authHeaders = () => ({
   'Content-Type': 'application/json',
@@ -49,6 +55,10 @@ interface DashboardData {
   esp32Status: {
     connected: boolean
     activeLights: number
+    gateOpen: boolean
+    doorOpen: boolean
+    seatActive: boolean
+    mp3Playing: boolean
   }
 }
 
@@ -70,6 +80,10 @@ export default function DashboardPage() {
   const { toast } = useToast()
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
+
+  // Real-time ESP32 data from Firebase
+  const firebaseStatus = useFirebaseStatus()
+  const { activeCount: firebaseActiveLights } = useFirebaseLights()
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -232,55 +246,95 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* ESP32 Quick Status */}
+        {/* ESP32 Real-time Status */}
         <Card className="border-border">
-          <CardHeader className="pb-4">
+          <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <Wifi className="h-4 w-4 text-amber-600" />
+              <Cpu className="h-4 w-4 text-amber-600" />
               حالة ESP32
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                firebaseStatus.online
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+              }`}>
+                {firebaseStatus.online ? 'متصل' : 'غير متصل'}
+              </span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="space-y-4">
-                <Skeleton className="h-12 w-full" />
-                <Skeleton className="h-12 w-full" />
+          <CardContent className="space-y-2">
+            {/* Connection */}
+            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
+              <div className="flex items-center gap-2">
+                {firebaseStatus.online ? (
+                  <Wifi className="h-4 w-4 text-green-500" />
+                ) : (
+                  <WifiOff className="h-4 w-4 text-red-400" />
+                )}
+                <span className="text-xs text-muted-foreground">الاتصال</span>
               </div>
-            ) : (
-              <div className="space-y-4">
-                {/* Connection */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`h-2.5 w-2.5 rounded-full ${
-                        data?.esp32Status?.connected
-                          ? 'bg-green-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]'
-                          : 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.5)]'
-                      }`}
-                    />
-                    <span className="text-sm font-medium">حالة الاتصال</span>
-                  </div>
-                  <span
-                    className={`text-sm font-semibold ${
-                      data?.esp32Status?.connected ? 'text-green-600' : 'text-red-600'
-                    }`}
-                  >
-                    {data?.esp32Status?.connected ? 'متصل' : 'غير متصل'}
-                  </span>
-                </div>
+              <span className={`text-xs font-semibold ${
+                firebaseStatus.online ? 'text-green-600' : 'text-red-500'
+              }`}>
+                {firebaseStatus.online
+                  ? firebaseStatus.lastSeen
+                    ? `منذ ${Math.max(0, Math.floor((Date.now() - firebaseStatus.lastSeen) / 1000))}ث`
+                    : 'متصل'
+                  : 'غير متصل'
+                }
+              </span>
+            </div>
 
-                {/* Active Lights */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                  <div className="flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4 text-amber-600" />
-                    <span className="text-sm font-medium">الأضواء المفعّلة</span>
-                  </div>
-                  <span className="text-sm font-bold text-amber-600">
-                    {data?.esp32Status?.activeLights ?? 0} / 6
-                  </span>
-                </div>
+            {/* Gate */}
+            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
+              <div className="flex items-center gap-2">
+                <DoorOpen className="h-4 w-4 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">البوابة</span>
               </div>
-            )}
+              <span className={`text-xs font-semibold ${
+                data?.esp32Status?.gateOpen ? 'text-green-600' : 'text-muted-foreground'
+              }`}>
+                {data?.esp32Status?.gateOpen ? 'مفتوحة' : 'مغلقة'}
+              </span>
+            </div>
+
+            {/* Door */}
+            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
+              <div className="flex items-center gap-2">
+                <DoorOpen className="h-4 w-4 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">باب الصالة</span>
+              </div>
+              <span className={`text-xs font-semibold ${
+                data?.esp32Status?.doorOpen ? 'text-green-600' : 'text-muted-foreground'
+              }`}>
+                {data?.esp32Status?.doorOpen ? 'مفتوح' : 'مغلق'}
+              </span>
+            </div>
+
+            {/* Lights */}
+            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
+              <div className="flex items-center gap-2">
+                <Lightbulb className="h-4 w-4 text-amber-600" />
+                <span className="text-xs text-muted-foreground">الأضواء</span>
+              </div>
+              <span className={`text-xs font-bold ${
+                firebaseActiveLights > 0 ? 'text-amber-600' : 'text-muted-foreground'
+              }`}>
+                {firebaseActiveLights} / 6
+              </span>
+            </div>
+
+            {/* MP3 */}
+            <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/50">
+              <div className="flex items-center gap-2">
+                <Music className="h-4 w-4 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">المشغل</span>
+              </div>
+              <span className={`text-xs font-semibold ${
+                data?.esp32Status?.mp3Playing ? 'text-pink-600' : 'text-muted-foreground'
+              }`}>
+                {data?.esp32Status?.mp3Playing ? 'يشغل' : 'متوقف'}
+              </span>
+            </div>
           </CardContent>
         </Card>
       </div>

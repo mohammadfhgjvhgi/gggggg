@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
-import { ref, onValue, set, get } from 'firebase/database'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   DoorOpen,
@@ -18,6 +17,14 @@ import {
   PowerOff,
   RotateCcw,
   Clock,
+  Music,
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  Volume2,
+  Cpu,
+  Loader2,
 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -26,16 +33,16 @@ import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
 import { ReadOnlyBanner } from '@/components/permission-banner'
+import { useToast } from '@/hooks/use-toast'
 
-import {
-  initializeFirebase,
-  DEFAULT_HALL_STATE,
-  type GateStatus,
-  type HallDoorStatus,
-  type SeatingStatus,
-  type LightsStatus,
-} from '@/lib/firebase'
 import { useAuthStore, type Role } from '@/store/auth-store'
+import { useFirebaseStatus } from '@/hooks/useFirebaseStatus'
+import { useFirebaseGate } from '@/hooks/useFirebaseGate'
+import { useFirebaseDoor } from '@/hooks/useFirebaseDoor'
+import { useFirebaseSeat } from '@/hooks/useFirebaseSeat'
+import { useFirebaseLights } from '@/hooks/useFirebaseLights'
+import { useFirebaseMp3 } from '@/hooks/useFirebaseMp3'
+import { LIGHT_DEFINITIONS } from '@/lib/firebase'
 
 // ═══════════════════════════════════════════════════════════════
 //   التحقق من الصلاحيات
@@ -52,8 +59,8 @@ function hasControlPermission(role: Role | undefined): boolean {
 //   تنسيق الوقت
 // ═══════════════════════════════════════════════════════════════
 
-function formatTimestamp(timestamp: number | undefined): string {
-  if (!timestamp) return '—'
+function formatTimestamp(timestamp: number): string {
+  if (!timestamp) return '--:--:--'
   const date = new Date(timestamp)
   return date.toLocaleTimeString('ar-EG', {
     hour: '2-digit',
@@ -62,57 +69,124 @@ function formatTimestamp(timestamp: number | undefined): string {
   })
 }
 
+function formatRelativeTime(timestamp: number): string {
+  if (!timestamp) return 'غير متصل'
+  const now = Date.now()
+  const diffSec = Math.floor((now - timestamp) / 1000)
+
+  if (diffSec < 10) return 'الآن'
+  if (diffSec < 60) return `منذ ${diffSec} ثانية`
+  if (diffSec < 3600) return `منذ ${Math.floor(diffSec / 60)} دقيقة`
+  if (diffSec < 86400) return `منذ ${Math.floor(diffSec / 3600)} ساعة`
+  return `منذ ${Math.floor(diffSec / 86400)} يوم`
+}
+
 // ═══════════════════════════════════════════════════════════════
-//   مكون حالة الاتصال
+//   أيقونات الإضاءة
 // ═══════════════════════════════════════════════════════════════
 
-function ConnectionStatus({ connected, lastUpdate }: { connected: boolean; lastUpdate: number }) {
+const LIGHT_ICONS: Record<string, React.ElementType> = {
+  street: LampDesk,
+  ship: Ship,
+  ceiling: Lightbulb,
+  floor: Square,
+  pillar_outer: Columns3,
+  pillar_inner: Columns3,
+}
+
+// ═══════════════════════════════════════════════════════════════
+//   مكون حالة ESP32
+// ═══════════════════════════════════════════════════════════════
+
+function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3"
     >
-      <div className="flex items-center gap-3">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={connected ? 'on' : 'off'}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-          >
-            {connected ? (
-              <Wifi className="size-5 text-emerald-500" />
-            ) : (
-              <WifiOff className="size-5 text-red-500" />
-            )}
-          </motion.div>
-        </AnimatePresence>
-        <span className="text-sm font-medium">
-          {connected ? 'متصل بـ ESP32' : 'غير متصل'}
-        </span>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={connected ? 'green' : 'red'}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-          >
-            <span
-              className={`inline-block size-2 rounded-full ${
-                connected ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]' : 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.5)]'
-              }`}
-            />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      {lastUpdate > 0 && (
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Clock className="size-3.5" />
-          <span>آخر تحديث: {formatTimestamp(lastUpdate)}</span>
-        </div>
-      )}
+      <Card className="border border-border overflow-hidden">
+        <div className={`h-1 ${online ? 'bg-emerald-500' : 'bg-red-500'}`} />
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className={`flex size-10 items-center justify-center rounded-lg ${online ? 'bg-emerald-500/10' : 'bg-red-500/10'}`}>
+                <Cpu className={`size-5 ${online ? 'text-emerald-500' : 'text-red-500'}`} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sm">ESP32</span>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={online ? 'on' : 'off'}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    >
+                      {online ? (
+                        <Badge className="border-transparent bg-emerald-500/15 text-emerald-600 text-[10px] px-1.5">
+                          متصل
+                        </Badge>
+                      ) : (
+                        <Badge className="border-transparent bg-red-500/15 text-red-600 text-[10px] px-1.5">
+                          غير متصل
+                        </Badge>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {online ? formatRelativeTime(lastSeen) : 'في انتظار الاتصال...'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={online ? 'wifi-on' : 'wifi-off'}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                >
+                  {online ? (
+                    <Wifi className="size-5 text-emerald-500" />
+                  ) : (
+                    <WifiOff className="size-5 text-red-400" />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={online ? 'dot-green' : 'dot-red'}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                >
+                  <span
+                    className={`inline-block size-2 rounded-full ${
+                      online
+                        ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
+                        : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'
+                    }`}
+                    style={{
+                      animation: online ? 'pulse-dot 2s ease-in-out infinite' : 'none',
+                    }}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {lastSeen > 0 && (
+            <div className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground/60">
+              <Clock className="size-3" />
+              <span>آخر ظهور: {formatTimestamp(lastSeen)}</span>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </motion.div>
   )
 }
@@ -121,42 +195,44 @@ function ConnectionStatus({ connected, lastUpdate }: { connected: boolean; lastU
 //   مكون البوابة / الباب
 // ═══════════════════════════════════════════════════════════════
 
-function DoorControlCard({
+function GateDoorCard({
   title,
-  status,
-  command,
-  lastUpdate,
+  isOpen,
+  isLoading,
   onOpen,
   onClose,
   disabled,
   icon: Icon,
+  description,
 }: {
   title: string
-  status: 'open' | 'closed' | undefined
-  command: 'open' | 'close' | 'none' | undefined
-  lastUpdate: number
+  isOpen: boolean
+  isLoading: boolean
   onOpen: () => void
   onClose: () => void
   disabled: boolean
   icon: React.ElementType
+  description?: string
 }) {
-  const isOpen = status === 'open'
-  const isCommanding = command && command !== 'none'
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="border-r-4 border-r-yellow-500">
+      <Card className="border-r-4 border-r-amber-500">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-yellow-500/10">
-                <Icon className="size-5 text-yellow-600" />
+              <div className="flex size-10 items-center justify-center rounded-lg bg-amber-500/10">
+                <Icon className="size-5 text-amber-600" />
               </div>
-              <CardTitle className="text-base">{title}</CardTitle>
+              <div>
+                <CardTitle className="text-base">{title}</CardTitle>
+                {description && (
+                  <CardDescription className="mt-0.5 text-xs">{description}</CardDescription>
+                )}
+              </div>
             </div>
             <AnimatePresence mode="wait">
               <motion.div
@@ -172,34 +248,39 @@ function DoorControlCard({
                       : 'border-transparent bg-red-500/15 text-red-600'
                   }`}
                 >
-                  {isOpen ? 'مفتوحة' : 'مسكرة'}
+                  {isOpen ? 'مفتوحة' : 'مغلقة'}
                 </Badge>
               </motion.div>
             </AnimatePresence>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Clock className="size-3" />
-            <span>آخر تحديث: {formatTimestamp(lastUpdate)}</span>
-          </div>
-
+        <CardContent className="space-y-3">
           <div className="flex gap-3">
             <Button
               onClick={onOpen}
-              disabled={disabled || isCommanding}
+              disabled={disabled || isLoading}
               className="flex-1 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700"
+              size="lg"
             >
-              <DoorOpen className="size-4" />
-              {isCommanding && command === 'open' ? 'جاري التنفيذ...' : 'فتح البوابة'}
+              {isLoading && isOpen === false ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <DoorOpen className="size-4" />
+              )}
+              فتح
             </Button>
             <Button
               onClick={onClose}
-              disabled={disabled || isCommanding}
+              disabled={disabled || isLoading}
               className="flex-1 bg-red-600 text-white shadow-sm hover:bg-red-700"
+              size="lg"
             >
-              <DoorClosed className="size-4" />
-              {isCommanding && command === 'close' ? 'جاري التنفيذ...' : 'إغلاق البوابة'}
+              {isLoading && isOpen === true ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <DoorClosed className="size-4" />
+              )}
+              إغلاق
             </Button>
           </div>
         </CardContent>
@@ -209,79 +290,87 @@ function DoorControlCard({
 }
 
 // ═══════════════════════════════════════════════════════════════
-//   مكون حالة الجلوس
+//   مكون جلوس العريس
 // ═══════════════════════════════════════════════════════════════
 
-function SeatingCard({
-  triggered,
-  lastUpdate,
-  canReset,
+function SeatCard({
+  active,
+  isLoading,
+  onToggle,
   onReset,
   disabled,
+  canControl: canCtrl,
 }: {
-  triggered: boolean | undefined
-  lastUpdate: number
-  canReset: boolean
+  active: boolean
+  isLoading: boolean
+  onToggle: () => void
   onReset: () => void
   disabled: boolean
+  canControl: boolean
 }) {
-  const isTriggered = triggered === true
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.15 }}
     >
-      <Card className="border-r-4 border-r-yellow-500">
+      <Card className="border-r-4 border-r-violet-500">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-yellow-500/10">
-                <Armchair className="size-5 text-yellow-600" />
+              <div className={`flex size-10 items-center justify-center rounded-lg transition-colors ${active ? 'bg-violet-500/20' : 'bg-violet-500/10'}`}>
+                <Armchair className={`size-5 transition-colors ${active ? 'text-violet-500' : 'text-violet-400'}`} />
               </div>
               <div>
                 <CardTitle className="text-base">جلوس العريس</CardTitle>
                 <CardDescription className="mt-0.5 text-xs">
-                  حالة تشغيل نظام جلوس العريس
+                  تراسونيك داخلي - تفعيل / إعادة تعيين
                 </CardDescription>
               </div>
             </div>
             <AnimatePresence mode="wait">
               <motion.div
-                key={isTriggered ? 'active' : 'inactive'}
+                key={active ? 'active' : 'inactive'}
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
               >
                 <Badge
                   className={`text-xs ${
-                    isTriggered
-                      ? 'border-transparent bg-emerald-500/15 text-emerald-600'
+                    active
+                      ? 'border-transparent bg-violet-500/15 text-violet-600'
                       : 'border-transparent bg-muted text-muted-foreground'
                   }`}
                 >
-                  {isTriggered ? 'تم التفعيل' : 'لم يتم التفعيل'}
+                  {active ? 'مفعّل' : 'غير مفعّل'}
                 </Badge>
               </motion.div>
             </AnimatePresence>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Clock className="size-3" />
-              <span>آخر تحديث: {formatTimestamp(lastUpdate)}</span>
-            </div>
-            {canReset && (
+          <div className="flex gap-3">
+            <Button
+              onClick={onToggle}
+              disabled={disabled || isLoading}
+              variant={active ? 'outline' : 'default'}
+              className={`flex-1 gap-2 ${active ? 'text-violet-600 border-violet-300 hover:bg-violet-50' : 'bg-violet-600 hover:bg-violet-700 text-white'}`}
+            >
+              {isLoading ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Armchair className="size-4" />
+              )}
+              {active ? 'إيقاف' : 'تفعيل'}
+            </Button>
+            {canCtrl && active && (
               <Button
-                variant="outline"
-                size="sm"
                 onClick={onReset}
-                disabled={disabled}
-                className="gap-1.5 text-xs"
+                disabled={disabled || isLoading}
+                variant="outline"
+                className="gap-2 text-muted-foreground hover:text-foreground"
               >
-                <RotateCcw className="size-3.5" />
+                <RotateCcw className="size-4" />
                 إعادة تعيين
               </Button>
             )}
@@ -293,43 +382,26 @@ function SeatingCard({
 }
 
 // ═══════════════════════════════════════════════════════════════
-//   تعريفات الإضاءة
-// ═══════════════════════════════════════════════════════════════
-
-interface LightItem {
-  key: keyof LightsStatus
-  label: string
-  icon: React.ElementType
-}
-
-const LIGHT_ITEMS: LightItem[] = [
-  { key: 'street', label: 'إضاءة الشارع', icon: LampDesk },
-  { key: 'ship', label: 'إضاءة السفينة', icon: Ship },
-  { key: 'ceiling', label: 'سقف الصالة', icon: Lightbulb },
-  { key: 'floor', label: 'أرضية الصالة', icon: Square },
-  { key: 'pillar_out', label: 'عمود خارجي', icon: Columns3 },
-  { key: 'pillar_in', label: 'عمود داخلي', icon: Columns3 },
-]
-
-// ═══════════════════════════════════════════════════════════════
 //   مكون الإضاءة
 // ═══════════════════════════════════════════════════════════════
 
 function LightsCard({
   lights,
-  disabled,
+  loading,
   onToggle,
   onAllOn,
   onAllOff,
+  activeCount,
+  disabled,
 }: {
-  lights: LightsStatus
-  disabled: boolean
-  onToggle: (key: keyof LightsStatus, value: boolean) => void
+  lights: Record<string, boolean>
+  loading: string | null
+  onToggle: (key: string) => void
   onAllOn: () => void
   onAllOff: () => void
+  activeCount: number
+  disabled: boolean
 }) {
-  const activeCount = Object.values(lights).filter(Boolean).length
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -346,30 +418,32 @@ function LightsCard({
               <div>
                 <CardTitle className="text-base">الإضاءة</CardTitle>
                 <CardDescription className="mt-0.5 text-xs">
-                  التحكم في إضاءة قاعة الأفراح
+                  6 مناطق إضاءة - ريليه ثنائي (LOW) + رباعي (HIGH)
                 </CardDescription>
               </div>
             </div>
             <Badge
               className={`text-xs ${
                 activeCount > 0
-                  ? 'border-transparent bg-amber-500/15 text-amber-600'
+                  ? 'border-transparent bg-yellow-500/15 text-yellow-600'
                   : 'border-transparent bg-muted text-muted-foreground'
               }`}
             >
-              {activeCount} من 6 مفعّل
+              {activeCount} / 6
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* شبكة المفاتيح */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {LIGHT_ITEMS.map((item) => {
-              const isOn = lights[item.key] === true
-              const Icon = item.icon
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {LIGHT_DEFINITIONS.map((def) => {
+              const isOn = lights[def.key] === true
+              const Icon = LIGHT_ICONS[def.key] || Lightbulb
+              const isLoading = loading === def.key || loading === 'all'
+
               return (
                 <motion.div
-                  key={item.key}
+                  key={def.key}
                   layout
                   className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors ${
                     isOn
@@ -385,29 +459,38 @@ function LightsCard({
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.5, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                        className={`flex size-8 items-center justify-center rounded-md ${
+                        className={`flex size-8 items-center justify-center rounded-md transition-colors ${
                           isOn ? 'bg-yellow-500/20' : 'bg-muted'
                         }`}
                       >
-                        <Icon
-                          className={`size-4 ${
-                            isOn ? 'text-yellow-500' : 'text-muted-foreground'
-                          }`}
-                        />
+                        {isLoading ? (
+                          <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                        ) : (
+                          <Icon
+                            className={`size-4 transition-colors ${
+                              isOn ? 'text-yellow-500' : 'text-muted-foreground'
+                            }`}
+                          />
+                        )}
                       </motion.div>
                     </AnimatePresence>
-                    <span
-                      className={`text-sm font-medium ${
-                        isOn ? 'text-yellow-700' : 'text-muted-foreground'
-                      }`}
-                    >
-                      {item.label}
-                    </span>
+                    <div className="flex flex-col">
+                      <span
+                        className={`text-sm font-medium transition-colors ${
+                          isOn ? 'text-yellow-700 dark:text-yellow-400' : 'text-muted-foreground'
+                        }`}
+                      >
+                        {def.label}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground/60">
+                        {def.inverted ? 'ريليه ثنائي' : 'ريليه رباعي'}
+                      </span>
+                    </div>
                   </div>
                   <Switch
                     checked={isOn}
-                    onCheckedChange={(checked) => onToggle(item.key, checked)}
-                    disabled={disabled}
+                    onCheckedChange={() => onToggle(def.key)}
+                    disabled={disabled || isLoading}
                     className="data-[state=checked]:bg-yellow-500"
                   />
                 </motion.div>
@@ -421,21 +504,203 @@ function LightsCard({
           <div className="flex gap-3">
             <Button
               onClick={onAllOn}
-              disabled={disabled || activeCount === 6}
+              disabled={disabled || activeCount === 6 || loading === 'all'}
               className="flex-1 gap-2 bg-yellow-500 text-white shadow-sm hover:bg-yellow-600"
             >
-              <Power className="size-4" />
+              {loading === 'all' ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Power className="size-4" />
+              )}
               تشغيل الكل
             </Button>
             <Button
               onClick={onAllOff}
-              disabled={disabled || activeCount === 0}
+              disabled={disabled || activeCount === 0 || loading === 'all'}
               variant="outline"
               className="flex-1 gap-2 text-red-600 hover:bg-red-50 hover:text-red-700"
             >
-              <PowerOff className="size-4" />
+              {loading === 'all' ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <PowerOff className="size-4" />
+              )}
               إطفاء الكل
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  )
+}
+
+// ═══════════════════════════════════════════════════════════════
+//   مكون تشغيل MP3
+// ═══════════════════════════════════════════════════════════════
+
+function Mp3Card({
+  playing,
+  track,
+  isLoading,
+  onTogglePlay,
+  onNextTrack,
+  onPrevTrack,
+  onPlay,
+  disabled,
+}: {
+  playing: boolean
+  track: number
+  isLoading: boolean
+  onTogglePlay: () => void
+  onNextTrack: () => void
+  onPrevTrack: () => void
+  onPlay: (track: number) => void
+  disabled: boolean
+}) {
+  const [trackInput, setTrackInput] = useState(track.toString())
+
+  useEffect(() => {
+    setTrackInput(track.toString())
+  }, [track])
+
+  const handleTrackSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const num = parseInt(trackInput)
+    if (!isNaN(num) && num >= 0) {
+      onPlay(num)
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.45 }}
+    >
+      <Card className="border-r-4 border-r-pink-500">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className={`flex size-10 items-center justify-center rounded-lg transition-colors ${playing ? 'bg-pink-500/20' : 'bg-pink-500/10'}`}>
+                <Music className={`size-5 transition-colors ${playing ? 'text-pink-500' : 'text-pink-400'}`} />
+              </div>
+              <div>
+                <CardTitle className="text-base">مشغل الصوت</CardTitle>
+                <CardDescription className="mt-0.5 text-xs">
+                  DFPlayer - التحكم بالمسارات الصوتية
+                </CardDescription>
+              </div>
+            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={playing ? 'playing' : 'stopped'}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+              >
+                <Badge
+                  className={`text-xs ${
+                    playing
+                      ? 'border-transparent bg-pink-500/15 text-pink-600'
+                      : 'border-transparent bg-muted text-muted-foreground'
+                  }`}
+                >
+                  {playing ? 'يشغل' : 'متوقف'}
+                </Badge>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* معلومات المسار */}
+          <div className="flex items-center justify-between rounded-lg border border-border bg-muted/20 px-4 py-3">
+            <div className="flex items-center gap-3">
+              <Volume2 className="size-4 text-muted-foreground" />
+              <div>
+                <p className="text-xs text-muted-foreground">المسار الحالي</p>
+                <p className="text-sm font-semibold">#{track}</p>
+              </div>
+            </div>
+
+            {/* اختيار المسار */}
+            <form onSubmit={handleTrackSubmit} className="flex items-center gap-2">
+              <input
+                type="number"
+                min="0"
+                value={trackInput}
+                onChange={(e) => setTrackInput(e.target.value)}
+                disabled={disabled}
+                dir="ltr"
+                className="w-16 h-8 text-center text-sm rounded-md border border-border bg-background px-2 focus:outline-none focus:ring-1 focus:ring-pink-500/30"
+              />
+              <Button
+                type="submit"
+                size="sm"
+                variant="outline"
+                disabled={disabled || isLoading}
+                className="h-8 px-2 text-xs"
+              >
+                تشغيل
+              </Button>
+            </form>
+          </div>
+
+          {/* أزرار التحكم */}
+          <div className="flex items-center justify-center gap-3">
+            <Button
+              onClick={onPrevTrack}
+              disabled={disabled || isLoading}
+              variant="outline"
+              size="icon"
+              className="size-10 rounded-full"
+            >
+              <SkipBack className="size-4" />
+            </Button>
+
+            <Button
+              onClick={onTogglePlay}
+              disabled={disabled || isLoading}
+              className={`size-14 rounded-full shadow-lg ${
+                playing
+                  ? 'bg-pink-600 hover:bg-pink-700 text-white'
+                  : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+              }`}
+              size="icon"
+            >
+              {isLoading ? (
+                <Loader2 className="size-5 animate-spin" />
+              ) : playing ? (
+                <Pause className="size-5" />
+              ) : (
+                <Play className="size-5" />
+              )}
+            </Button>
+
+            <Button
+              onClick={onNextTrack}
+              disabled={disabled || isLoading}
+              variant="outline"
+              size="icon"
+              className="size-10 rounded-full"
+            >
+              <SkipForward className="size-4" />
+            </Button>
+          </div>
+
+          {/* مسارات سريعة */}
+          <div className="flex gap-2 flex-wrap">
+            {[1, 2, 3, 4, 5].map((t) => (
+              <Button
+                key={t}
+                onClick={() => onPlay(t)}
+                disabled={disabled || isLoading}
+                variant={track === t ? 'default' : 'outline'}
+                size="sm"
+                className={`h-7 px-3 text-xs ${track === t ? 'bg-pink-600 hover:bg-pink-700' : ''}`}
+              >
+                {t}
+              </Button>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -449,153 +714,84 @@ function LightsCard({
 
 export default function ControlDashboard() {
   const user = useAuthStore((s) => s.user)
+  const { toast } = useToast()
   const canControl = hasControlPermission(user?.role)
 
-  // حالة الاتصال
-  const [connected, setConnected] = useState(false)
-  const [lastUpdate, setLastUpdate] = useState(0)
+  // Firebase Hooks
+  const status = useFirebaseStatus()
+  const gate = useFirebaseGate()
+  const door = useFirebaseDoor()
+  const seat = useFirebaseSeat()
+  const { lights, loading: lightsLoading, toggle: toggleLight, allOn, allOff, activeCount } = useFirebaseLights()
+  const { mp3, loading: mp3Loading, togglePlay, play, stop, nextTrack, prevTrack } = useFirebaseMp3()
 
-  // حالة الأجهزة
-  const [gateStatus, setGateStatus] = useState<GateStatus>(DEFAULT_HALL_STATE.gate)
-  const [doorStatus, setDoorStatus] = useState<HallDoorStatus>(DEFAULT_HALL_STATE.hall_door)
-  const [seatingStatus, setSeatingStatus] = useState<SeatingStatus>(DEFAULT_HALL_STATE.seating)
-  const [lightsStatus, setLightsStatus] = useState<LightsStatus>(DEFAULT_HALL_STATE.lights)
+  // تتبع الحالة السابقة للإشعارات
+  const prevOnlineRef = useRef(status.online)
+  const prevGateRef = useRef(gate.gate.open)
+  const prevDoorRef = useRef(door.door.open)
+  const prevSeatRef = useRef(seat.seat.active)
 
-  // ═══════════════════════════════════════════════════
-  //   إرسال الأوامر إلى Firebase
-  // ═══════════════════════════════════════════════════
-
-  const sendCommand = useCallback(async (path: string, value: string | boolean) => {
-    const { database } = initializeFirebase()
-    if (!database) return
-    await set(ref(database, path), value)
-  }, [])
+  const connected = status.online
+  const disabled = !connected
 
   // ═══════════════════════════════════════════════════
-  //   أوامر البوابة
-  // ═══════════════════════════════════════════════════
-
-  const openGate = useCallback(async () => {
-    await sendCommand('/wedding_hall/gate/command', 'open')
-    setTimeout(() => {
-      sendCommand('/wedding_hall/gate/command', 'none')
-    }, 3000)
-  }, [sendCommand])
-
-  const closeGate = useCallback(async () => {
-    await sendCommand('/wedding_hall/gate/command', 'close')
-    setTimeout(() => {
-      sendCommand('/wedding_hall/gate/command', 'none')
-    }, 3000)
-  }, [sendCommand])
-
-  // ═══════════════════════════════════════════════════
-  //   أوامر باب الصالة
-  // ═══════════════════════════════════════════════════
-
-  const openDoor = useCallback(async () => {
-    await sendCommand('/wedding_hall/hall_door/command', 'open')
-    setTimeout(() => {
-      sendCommand('/wedding_hall/hall_door/command', 'none')
-    }, 3000)
-  }, [sendCommand])
-
-  const closeDoor = useCallback(async () => {
-    await sendCommand('/wedding_hall/hall_door/command', 'close')
-    setTimeout(() => {
-      sendCommand('/wedding_hall/hall_door/command', 'none')
-    }, 3000)
-  }, [sendCommand])
-
-  // ═══════════════════════════════════════════════════
-  //   إعادة تعيين الجلوس
-  // ═══════════════════════════════════════════════════
-
-  const resetSeating = useCallback(async () => {
-    await sendCommand('/wedding_hall/seating/triggered', false)
-    await sendCommand('/wedding_hall/seating/last_update', Date.now())
-  }, [sendCommand])
-
-  // ═══════════════════════════════════════════════════
-  //   التحكم بالإضاءة
-  // ═══════════════════════════════════════════════════
-
-  const toggleLight = useCallback(
-    (key: keyof LightsStatus, value: boolean) => {
-      sendCommand(`/wedding_hall/lights/${key}`, value)
-    },
-    [sendCommand]
-  )
-
-  const allLightsOn = useCallback(() => {
-    LIGHT_ITEMS.forEach((item) => {
-      sendCommand(`/wedding_hall/lights/${item.key}`, true)
-    })
-  }, [sendCommand])
-
-  const allLightsOff = useCallback(() => {
-    LIGHT_ITEMS.forEach((item) => {
-      sendCommand(`/wedding_hall/lights/${item.key}`, false)
-    })
-  }, [sendCommand])
-
-  // ═══════════════════════════════════════════════════
-  //   الاستماع للتغييرات في الوقت الحقيقي
+  //   إشعارات التغييرات
   // ═══════════════════════════════════════════════════
 
   useEffect(() => {
-    const { database } = initializeFirebase()
-    if (!database) return
-
-    // مستمع البوابة
-    const gateRef = ref(database, '/wedding_hall/gate')
-    const unsubGate = onValue(gateRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        setGateStatus(data)
-        if (data.last_update) setLastUpdate(data.last_update)
-      }
-    })
-
-    // مستمع باب الصالة
-    const doorRef = ref(database, '/wedding_hall/hall_door')
-    const unsubDoor = onValue(doorRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        setDoorStatus(data)
-        if (data.last_update) setLastUpdate(data.last_update)
-      }
-    })
-
-    // مستمع الجلوس
-    const seatingRef = ref(database, '/wedding_hall/seating')
-    const unsubSeating = onValue(seatingRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        setSeatingStatus(data)
-        if (data.last_update) setLastUpdate(data.last_update)
-      }
-    })
-
-    // مستمع الإضاءة
-    const lightsRef = ref(database, '/wedding_hall/lights')
-    const unsubLights = onValue(lightsRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
-        setLightsStatus(data)
-        setLastUpdate(Date.now())
-      }
-      // التحقق من الاتصال عند أول استقبال للبيانات
-      setConnected(true)
-    })
-
-    return () => {
-      unsubGate()
-      unsubDoor()
-      unsubSeating()
-      unsubLights()
+    // إشعار قطع الاتصال
+    if (prevOnlineRef.current && !status.online) {
+      toast({
+        title: 'قطع الاتصال',
+        description: 'ESP32 غير متصل حالياً',
+        variant: 'destructive',
+      })
     }
-  }, [])
+
+    // إشعار عودة الاتصال
+    if (!prevOnlineRef.current && status.online) {
+      toast({
+        title: 'تم الاتصال',
+        description: 'ESP32 متصل الآن',
+      })
+    }
+
+    prevOnlineRef.current = status.online
+  }, [status.online, toast])
+
+  useEffect(() => {
+    if (prevGateRef.current !== gate.gate.open) {
+      const action = gate.gate.open ? 'فتح' : 'إغلاق'
+      toast({
+        title: `بوابة الشارع - ${action}`,
+        description: `تم ${action} بوابة الشارع${gate.gate.open ? '' : ''}`,
+        variant: gate.gate.open ? 'default' : 'destructive',
+      })
+    }
+    prevGateRef.current = gate.gate.open
+  }, [gate.gate.open, toast])
+
+  useEffect(() => {
+    if (prevDoorRef.current !== door.door.open) {
+      const action = door.door.open ? 'فتح' : 'إغلاق'
+      toast({
+        title: `باب الصالة - ${action}`,
+        description: `تم ${action} باب الصالة`,
+        variant: door.door.open ? 'default' : 'destructive',
+      })
+    }
+    prevDoorRef.current = door.door.open
+  }, [door.door.open, toast])
+
+  useEffect(() => {
+    if (prevSeatRef.current !== seat.seat.active && seat.seat.active) {
+      toast({
+        title: 'جلوس العريس',
+        description: 'تم تفعيل نظام جلوس العريس',
+      })
+    }
+    prevSeatRef.current = seat.seat.active
+  }, [seat.seat.active, toast])
 
   // ═══════════════════════════════════════════════════
   //   عرض لوحة التحكم
@@ -608,49 +804,64 @@ export default function ControlDashboard() {
         <ReadOnlyBanner message="يمكنك فقط مشاهدة حالة الأجهزة. للتحكم بالبوابات والأبواب والإضاءة، تواصل مع المدير." />
       )}
 
-      {/* مؤشر حالة الاتصال */}
-      <ConnectionStatus connected={connected} lastUpdate={lastUpdate} />
+      {/* حالة ESP32 */}
+      <Esp32StatusCard online={status.online} lastSeen={status.lastSeen} />
 
       {/* بطاقات الأبواب */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <DoorControlCard
+        <GateDoorCard
           title="بوابة الشارع"
-          status={gateStatus.status}
-          command={gateStatus.command}
-          lastUpdate={gateStatus.last_update}
-          onOpen={openGate}
-          onClose={closeGate}
-          disabled={!connected || !canControl}
+          isOpen={gate.gate.open}
+          isLoading={gate.loading}
+          onOpen={gate.open}
+          onClose={gate.close}
+          disabled={disabled || !canControl}
           icon={DoorOpen}
+          description="كبسة toggle + حساس IR + إغلاق تلقائي 10 ثواني"
         />
-        <DoorControlCard
+        <GateDoorCard
           title="باب الصالة"
-          status={doorStatus.status}
-          command={doorStatus.command}
-          lastUpdate={doorStatus.last_update}
-          onOpen={openDoor}
-          onClose={closeDoor}
-          disabled={!connected || !canControl}
+          isOpen={door.door.open}
+          isLoading={door.loading}
+          onOpen={door.open}
+          onClose={door.close}
+          disabled={disabled || !canControl}
           icon={DoorClosed}
+          description="تراسونيك خارجي + إغلاق تلقائي 20 ثانية"
         />
       </div>
 
-      {/* بطاقة الجلوس */}
-      <SeatingCard
-        triggered={seatingStatus.triggered}
-        lastUpdate={seatingStatus.last_update}
-        canReset={canControl}
-        onReset={resetSeating}
-        disabled={!connected}
+      {/* بطاقة جلوس العريس */}
+      <SeatCard
+        active={seat.seat.active}
+        isLoading={seat.loading}
+        onToggle={seat.toggle}
+        onReset={seat.reset}
+        disabled={disabled}
+        canControl={canControl}
       />
 
       {/* بطاقة الإضاءة */}
       <LightsCard
-        lights={lightsStatus}
-        disabled={!connected || !canControl}
-        onToggle={toggleLight}
-        onAllOn={allLightsOn}
-        onAllOff={allLightsOff}
+        lights={lights}
+        loading={lightsLoading}
+        onToggle={(key) => toggleLight(key as keyof typeof lights)}
+        onAllOn={allOn}
+        onAllOff={allOff}
+        activeCount={activeCount}
+        disabled={disabled || !canControl}
+      />
+
+      {/* بطاقة مشغل الصوت */}
+      <Mp3Card
+        playing={mp3.playing}
+        track={mp3.track}
+        isLoading={mp3Loading}
+        onTogglePlay={togglePlay}
+        onNextTrack={nextTrack}
+        onPrevTrack={prevTrack}
+        onPlay={play}
+        disabled={disabled || !canControl}
       />
     </div>
   )
