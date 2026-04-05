@@ -311,7 +311,7 @@ export default function BookingManagement() {
             size="sm"
             disabled={page <= 1}
             onClick={() => setPage(page - 1)}
-            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+            className="text-[#8a8690] hover:text-purple-400 hover:bg-purple-500/10 text-xs"
           >
             السابق
           </Button>
@@ -322,7 +322,7 @@ export default function BookingManagement() {
               size="sm"
               className={`w-8 h-8 p-0 text-xs font-[family-name:var(--font-num)] rounded-lg ${
                 p === page
-                  ? 'bg-gradient-to-b from-[#d4a853] to-[#b8912e] text-[#0a0a0f] font-semibold shadow-[0_2px_12px_rgba(212,168,83,0.3)]'
+                  ? 'bg-gradient-to-b from-purple-500 to-purple-600 text-[#0a0a0f] font-semibold shadow-[0_2px_12px_rgba(168,85,247,0.3)]'
                   : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]'
               }`}
               onClick={() => setPage(p)}
@@ -335,7 +335,7 @@ export default function BookingManagement() {
             size="sm"
             disabled={page >= pagination.totalPages}
             onClick={() => setPage(page + 1)}
-            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+            className="text-[#8a8690] hover:text-purple-400 hover:bg-purple-500/10 text-xs"
           >
             التالي
           </Button>
@@ -357,17 +357,17 @@ export default function BookingManagement() {
       <div className="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-[family-name:var(--font-display)] font-bold flex items-center gap-3">
-            <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8912e] shadow-[0_2px_12px_rgba(212,168,83,0.25)]">
+            <span className="flex items-center justify-center w-10 h-10 rounded-xl page-icon page-icon-bookings">
               <CalendarDays className="h-5 w-5 text-[#0a0a0f]" />
             </span>
-            <span className="text-gold-gradient">إدارة الحجوزات</span>
+            <span className="text-gradient-bookings">إدارة الحجوزات</span>
           </h2>
           <p className="text-[#8a8690] text-sm mt-1.5 mr-[52px]">
             إجمالي <span className="text-[#f5f0e8] font-[family-name:var(--font-num)]">{pagination.total}</span> حجز
           </p>
         </div>
         {canWrite && (
-          <Button onClick={openCreate} className="btn-gold gap-2 rounded-xl px-5">
+          <Button onClick={openCreate} className="btn-bookings gap-2 rounded-xl px-5">
             <Plus className="h-4 w-4" />
             إضافة حجز
           </Button>
@@ -383,7 +383,7 @@ export default function BookingManagement() {
               onClick={() => setStatusFilter(tab.key)}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                 statusFilter === tab.key
-                  ? 'bg-gradient-to-b from-[#d4a853] to-[#b8912e] text-[#0a0a0f] shadow-[0_2px_12px_rgba(212,168,83,0.25)]'
+                  ? 'bg-gradient-to-b from-purple-500 to-purple-600 text-[#0a0a0f] shadow-[0_2px_12px_rgba(168,85,247,0.3)]'
                   : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)] bg-[rgba(255,255,255,0.02)]'
               }`}
             >
@@ -402,13 +402,13 @@ export default function BookingManagement() {
               placeholder="بحث بالاسم أو نوع الحدث..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.6)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] focus-visible:bg-[rgba(255,255,255,0.05)] rounded-xl h-11"
+              className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.6)] focus-visible:ring-purple-500 focus-visible:border-purple-500/30 focus-visible:bg-[rgba(255,255,255,0.05)] rounded-xl h-11"
             />
           </div>
           <div className="relative sm:w-56">
             <Filter className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8690] pointer-events-none" />
             <Select value={customerFilter} onValueChange={(v) => setCustomerFilter(v)}>
-              <SelectTrigger className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+              <SelectTrigger className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-purple-500">
                 <SelectValue placeholder="تصفية بالزبون" />
               </SelectTrigger>
               <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
@@ -449,8 +449,8 @@ export default function BookingManagement() {
                 <TableRow>
                   <TableCell colSpan={showActions ? 8 : 7} className="text-center py-16">
                     <div className="flex flex-col items-center gap-3 animate-fade-in">
-                      <div className="w-16 h-16 rounded-2xl bg-[rgba(212,168,83,0.06)] flex items-center justify-center animate-float">
-                        <CalendarDays className="h-7 w-7 text-[#d4a853] opacity-40" />
+                      <div className="w-16 h-16 rounded-2xl bg-purple-500/8 flex items-center justify-center animate-float">
+                        <CalendarDays className="h-7 w-7 text-purple-500 opacity-40" />
                       </div>
                       <div className="text-center">
                         <p className="text-[#8a8690] text-sm">لا يوجد حجوزات</p>
@@ -489,7 +489,7 @@ export default function BookingManagement() {
                           <span className="font-[family-name:var(--font-num)] text-sm text-[#f5f0e8]">{booking.totalPaid.toLocaleString()}</span>
                           <div className="w-16 h-1 rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden">
                             <div
-                              className="h-full rounded-full bg-gradient-to-l from-[#d4a853] to-[#b8912e] transition-all duration-500"
+                              className="h-full rounded-full bg-gradient-to-l from-purple-500 to-purple-300 transition-all duration-500"
                               style={{ width: `${Math.min(paidPercent, 100)}%` }}
                             />
                           </div>
@@ -525,7 +525,7 @@ export default function BookingManagement() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.08)] rounded-lg transition-colors"
+                                className="h-8 w-8 text-[#8a8690] hover:text-purple-400 hover:bg-purple-500/10 rounded-lg transition-colors"
                                 onClick={() => openEdit(booking)}
                               >
                                 <Pencil className="h-3.5 w-3.5" />
@@ -556,8 +556,8 @@ export default function BookingManagement() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto glass-strong rounded-2xl border-[rgba(212,168,83,0.1)] p-0">
-          <div className="bg-gradient-to-l from-[rgba(212,168,83,0.08)] to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)] sticky top-0 z-10">
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto glass-strong rounded-2xl border-purple-500/15 p-0">
+          <div className="bg-gradient-to-l from-purple-500/8 to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)] sticky top-0 z-10">
             <DialogHeader>
               <DialogTitle className="text-[#f5f0e8] font-[family-name:var(--font-display)] text-lg text-center">
                 {editingItem ? 'تعديل الحجز' : 'إضافة حجز جديد'}
@@ -572,7 +572,7 @@ export default function BookingManagement() {
                 onValueChange={(v) => setFormData({ ...formData, customerId: v })}
                 disabled={!!editingItem}
               >
-                <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+                <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-purple-500">
                   <SelectValue placeholder="اختر الزبون" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
@@ -592,7 +592,7 @@ export default function BookingManagement() {
                   type="date"
                   value={formData.eventDate}
                   onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
-                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] focus-visible:ring-purple-500 focus-visible:border-purple-500/30 rounded-xl h-11"
                 />
               </div>
               <div className="space-y-2">
@@ -603,7 +603,7 @@ export default function BookingManagement() {
                   value={formData.guestCount}
                   onChange={(e) => setFormData({ ...formData, guestCount: e.target.value })}
                   placeholder="مثال: 200"
-                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-purple-500 focus-visible:border-purple-500/30 rounded-xl h-11"
                 />
               </div>
             </div>
@@ -614,7 +614,7 @@ export default function BookingManagement() {
                 value={formData.eventType}
                 onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
                 placeholder="زفاف، خطوبة، حفل..."
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-purple-500 focus-visible:border-purple-500/30 rounded-xl h-11"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -626,7 +626,7 @@ export default function BookingManagement() {
                   value={formData.hallPrice}
                   onChange={(e) => setFormData({ ...formData, hallPrice: e.target.value })}
                   placeholder="0"
-                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                  className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-purple-500 focus-visible:border-purple-500/30 rounded-xl h-11"
                 />
               </div>
               <div className="space-y-2">
@@ -635,7 +635,7 @@ export default function BookingManagement() {
                   value={formData.status}
                   onValueChange={(v) => setFormData({ ...formData, status: v })}
                 >
-                  <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+                  <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-purple-500">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
@@ -655,7 +655,7 @@ export default function BookingManagement() {
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="ملاحظات إضافية..."
                 rows={3}
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl resize-none"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-purple-500 focus-visible:border-purple-500/30 rounded-xl resize-none"
               />
             </div>
           </div>
@@ -670,7 +670,7 @@ export default function BookingManagement() {
             <Button
               onClick={handleSubmit}
               disabled={submitting}
-              className="btn-gold rounded-xl px-6"
+              className="btn-bookings rounded-xl px-6"
             >
               {submitting ? 'جاري الحفظ...' : editingItem ? 'حفظ التعديلات' : 'إضافة الحجز'}
             </Button>

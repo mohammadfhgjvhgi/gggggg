@@ -104,16 +104,16 @@ function Esp32StatusCard({ online, lastSeen }: { online: boolean; lastSeen: numb
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className="glass-strong rounded-xl border-0 overflow-hidden border-r-4 border-r-[#d4a853]">
+      <div className="glass-strong rounded-xl border-0 overflow-hidden border-r-4 border-r-cyan-400">
         <CardContent className="p-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className={`flex size-12 items-center justify-center rounded-xl ${
                 online
-                  ? 'bg-[#d4a853]/10 ring-1 ring-[#d4a853]/20'
+                  ? 'bg-cyan-500/10 ring-1 ring-cyan-500/20'
                   : 'bg-red-500/10 ring-1 ring-red-500/20'
               }`}>
-                <Cpu className={`size-6 ${online ? 'text-[#d4a853]' : 'text-red-400'}`} />
+                <Cpu className={`size-6 ${online ? 'text-cyan-400' : 'text-red-400'}`} />
               </div>
               <div>
                 <div className="flex items-center gap-2.5">
@@ -436,10 +436,10 @@ function LightsCard({
             <div className="flex items-center gap-3">
               <div className={`flex size-11 items-center justify-center rounded-xl transition-all duration-300 ${
                 activeCount > 0
-                  ? 'bg-[#d4a853]/10 ring-1 ring-[#d4a853]/20'
+                  ? 'bg-cyan-500/10 ring-1 ring-cyan-500/20'
                   : 'bg-white/5 ring-1 ring-white/10'
               }`}>
-                <Lightbulb className={`size-5 transition-colors ${activeCount > 0 ? 'text-[#d4a853]' : 'text-[#8a8690]'}`} />
+                <Lightbulb className={`size-5 transition-colors ${activeCount > 0 ? 'text-cyan-400' : 'text-[#8a8690]'}`} />
               </div>
               <div>
                 <h3 className="text-base font-bold text-[#f5f0e8] font-[Playfair_Display]">الإضاءة</h3>
@@ -451,7 +451,7 @@ function LightsCard({
             <Badge
               className={`text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm font-[DM_Mono] ${
                 activeCount > 0
-                  ? 'border border-[#d4a853]/25 bg-[#d4a853]/10 text-[#d4a853]'
+                  ? 'border border-cyan-500/25 bg-cyan-500/10 text-cyan-400'
                   : 'border border-white/10 bg-white/5 text-[#8a8690]'
               }`}
             >
@@ -474,7 +474,7 @@ function LightsCard({
                   layout
                   className={`flex items-center justify-between rounded-xl px-4 py-3.5 transition-all duration-300 ${
                     isOn
-                      ? 'bg-[#d4a853]/5 border border-[#d4a853]/20 shadow-[0_0_15px_rgba(212,168,83,0.08)]'
+                      ? 'bg-cyan-500/5 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.08)]'
                       : 'bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04]'
                   }`}
                 >
@@ -488,7 +488,7 @@ function LightsCard({
                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                         className={`flex size-9 items-center justify-center rounded-lg transition-all duration-300 ${
                           isOn
-                            ? 'bg-[#d4a853]/15 ring-1 ring-[#d4a853]/25 shadow-[0_0_10px_rgba(212,168,83,0.15)]'
+                            ? 'bg-cyan-500/15 ring-1 ring-cyan-500/25 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
                             : 'bg-white/5'
                         }`}
                       >
@@ -497,7 +497,7 @@ function LightsCard({
                         ) : (
                           <Icon
                             className={`size-4 transition-colors ${
-                              isOn ? 'text-[#d4a853]' : 'text-[#8a8690]'
+                              isOn ? 'text-cyan-400' : 'text-[#8a8690]'
                             }`}
                           />
                         )}
@@ -506,7 +506,7 @@ function LightsCard({
                     <div className="flex flex-col">
                       <span
                         className={`text-sm font-medium transition-colors ${
-                          isOn ? 'text-[#f0d48a]' : 'text-[#8a8690]'
+                          isOn ? 'text-cyan-300' : 'text-[#8a8690]'
                         }`}
                       >
                         {def.label}
@@ -520,7 +520,7 @@ function LightsCard({
                     checked={isOn}
                     onCheckedChange={() => onToggle(def.key)}
                     disabled={disabled || isLoading}
-                    className="data-[state=checked]:bg-[#d4a853] data-[state=checked]:border-[#d4a853]"
+                    className="data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500"
                   />
                 </motion.div>
               )
@@ -694,7 +694,7 @@ function Mp3Card({
               className={`size-16 rounded-full flex items-center justify-center shadow-xl transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${
                 playing
                   ? 'bg-gradient-to-br from-pink-500 to-pink-600 text-white shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-105'
-                  : 'bg-gradient-to-br from-[#d4a853] to-[#b8912e] text-[#0a0a0f] shadow-[#d4a853]/25 hover:shadow-[#d4a853]/40 hover:scale-105'
+                  : 'bg-gradient-to-br from-[#06b6d4] to-[#0891b2] text-[#0a0a0f] shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105'
               }`}
             >
               {isLoading ? (

@@ -124,19 +124,19 @@ export default function ProfilePage() {
     <div className="space-y-6 max-w-2xl mx-auto animate-fade-up">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
-          <User className="h-6 w-6 text-[#d4a853]" />
+        <h2 className="text-2xl font-bold flex items-center gap-3 text-gradient-profile font-[Playfair_Display]">
+          <User className="h-6 w-6 text-fuchsia-400" />
           الملف الشخصي
         </h2>
         <p className="text-[#8a8690] text-sm mt-1">إدارة بياناتك الشخصية وكلمة المرور</p>
       </div>
 
       {/* User Info Card */}
-      <Card className="glass border-[#d4a853]/10 card-hover">
+      <Card className="glass border-fuchsia-500/12 card-hover">
         <CardContent className="p-6">
           <div className="flex items-center gap-4">
             {/* Avatar */}
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#d4a853] to-[#a07c3a] flex items-center justify-center text-[#0a0a0f] text-3xl font-bold shadow-[0_0_20px_rgba(212,168,83,0.3)] ring-2 ring-[#d4a853]/30 ring-offset-2 ring-offset-[#0a0a0f]">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-b from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-[#0a0a0f] text-3xl font-bold shadow-[0_0_20px_rgba(232,121,249,0.3)] ring-2 ring-fuchsia-500/30 ring-offset-[#0f0f17]">
               {user?.name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1">
@@ -151,12 +151,12 @@ export default function ProfilePage() {
               </div>
               <div className="flex items-center gap-4 mt-2 text-sm text-[#8a8690]">
                 <div className="flex items-center gap-1.5">
-                  <Mail className="h-3.5 w-3.5 text-[#d4a853]" />
+                  <Mail className="h-3.5 w-3.5 text-fuchsia-400" />
                   <span dir="ltr">{user?.email}</span>
                 </div>
                 {user?.phone && (
                   <div className="flex items-center gap-1.5">
-                    <Phone className="h-3.5 w-3.5 text-[#d4a853]" />
+                    <Phone className="h-3.5 w-3.5 text-fuchsia-400" />
                     <span dir="ltr">{user.phone}</span>
                   </div>
                 )}
@@ -167,10 +167,10 @@ export default function ProfilePage() {
       </Card>
 
       {/* Edit Profile Form */}
-      <Card className="glass border-[#d4a853]/10 card-hover">
+      <Card className="glass border-fuchsia-500/12 card-hover">
         <CardHeader className="pb-4">
           <CardTitle className="text-base flex items-center gap-2 text-[#f5f0e8]">
-            <User className="h-4 w-4 text-[#d4a853]" />
+            <User className="h-4 w-4 text-fuchsia-400" />
             تعديل البيانات الشخصية
           </CardTitle>
         </CardHeader>
@@ -182,7 +182,7 @@ export default function ProfilePage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="أدخل اسمك"
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-fuchsia-500/50 focus:ring-fuchsia-500/20"
             />
           </div>
           <div className="space-y-2">
@@ -193,7 +193,7 @@ export default function ProfilePage() {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="أدخل رقم الهاتف"
               dir="ltr"
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20 font-[DM_Mono]"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-fuchsia-500/50 focus:ring-fuchsia-500/20 font-[DM_Mono]"
             />
           </div>
           <div className="space-y-2">
@@ -210,7 +210,7 @@ export default function ProfilePage() {
           <Button
             onClick={handleSaveProfile}
             disabled={saving}
-            className="btn-gold gap-2"
+            className="bg-gradient-to-b from-fuchsia-500 to-fuchsia-600 text-white hover:from-fuchsia-400 hover:to-fuchsia-500 shadow-[0_2px_12px_rgba(232,121,249,0.3)] gap-2"
           >
             <Save className="h-4 w-4" />
             {saving ? 'جاري الحفظ...' : 'حفظ التعديلات'}
@@ -219,10 +219,10 @@ export default function ProfilePage() {
       </Card>
 
       {/* Change Password Form */}
-      <Card className="glass border-[#d4a853]/10 card-hover">
+      <Card className="glass border-fuchsia-500/12 card-hover">
         <CardHeader className="pb-4">
           <CardTitle className="text-base flex items-center gap-2 text-[#f5f0e8]">
-            <Lock className="h-4 w-4 text-[#d4a853]" />
+            <Lock className="h-4 w-4 text-fuchsia-400" />
             تغيير كلمة المرور
           </CardTitle>
         </CardHeader>
@@ -235,7 +235,7 @@ export default function ProfilePage() {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="أدخل كلمة المرور الحالية"
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-fuchsia-500/50 focus:ring-fuchsia-500/20"
             />
           </div>
           <Separator className="bg-[#1f1f2e]" />
@@ -247,7 +247,7 @@ export default function ProfilePage() {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="أدخل كلمة المرور الجديدة (6 أحرف على الأقل)"
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-fuchsia-500/50 focus:ring-fuchsia-500/20"
             />
           </div>
           <div className="space-y-2">
@@ -258,13 +258,13 @@ export default function ProfilePage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="أعد إدخال كلمة المرور الجديدة"
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-fuchsia-500/50 focus:ring-fuchsia-500/20"
             />
           </div>
           <Button
             onClick={handleChangePassword}
             disabled={changingPassword}
-            className="btn-gold gap-2"
+            className="bg-gradient-to-b from-fuchsia-500 to-fuchsia-600 text-white hover:from-fuchsia-400 hover:to-fuchsia-500 shadow-[0_2px_12px_rgba(232,121,249,0.3)] gap-2"
           >
             <Shield className="h-4 w-4" />
             {changingPassword ? 'جاري التغيير...' : 'تغيير كلمة المرور'}

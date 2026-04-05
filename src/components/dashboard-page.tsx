@@ -144,9 +144,9 @@ export default function DashboardPage() {
           <Skeleton className="h-28 rounded-xl" />
         ) : (
           <div className="animate-fade-up stagger-1 glass card-hover rounded-xl p-5 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/8 to-transparent pointer-events-none" />
             <div className="relative flex items-center gap-4">
-              <div className="p-3.5 rounded-xl bg-amber-500/10 ring-1 ring-amber-500/20">
+              <div className="p-3.5 rounded-xl bg-amber-500/15 ring-1 ring-amber-500/25">
                 <Users className="h-6 w-6 text-amber-400" />
               </div>
               <div>
@@ -162,10 +162,10 @@ export default function DashboardPage() {
           <Skeleton className="h-28 rounded-xl" />
         ) : (
           <div className="animate-fade-up stagger-2 glass card-hover rounded-xl p-5 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/8 to-transparent pointer-events-none" />
             <div className="relative flex items-center gap-4">
-              <div className="p-3.5 rounded-xl bg-blue-500/10 ring-1 ring-blue-500/20">
-                <CalendarDays className="h-6 w-6 text-blue-400" />
+              <div className="p-3.5 rounded-xl bg-cyan-500/15 ring-1 ring-cyan-500/25">
+                <CalendarDays className="h-6 w-6 text-cyan-400" />
               </div>
               <div>
                 <p className="text-sm text-[#8a8690] mb-1">حجوزات الشهر</p>
@@ -180,10 +180,10 @@ export default function DashboardPage() {
           <Skeleton className="h-28 rounded-xl" />
         ) : (
           <div className="animate-fade-up stagger-3 glass card-hover rounded-xl p-5 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/8 to-transparent pointer-events-none" />
             <div className="relative flex items-center gap-4">
-              <div className="p-3.5 rounded-xl bg-green-500/10 ring-1 ring-green-500/20">
-                <DollarSign className="h-6 w-6 text-green-400" />
+              <div className="p-3.5 rounded-xl bg-emerald-500/15 ring-1 ring-emerald-500/25">
+                <DollarSign className="h-6 w-6 text-emerald-400" />
               </div>
               <div>
                 <p className="text-sm text-[#8a8690] mb-1">إيرادات الشهر</p>
@@ -201,9 +201,9 @@ export default function DashboardPage() {
           <Skeleton className="h-28 rounded-xl" />
         ) : (
           <div className="animate-fade-up stagger-4 glass card-hover rounded-xl p-5 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 to-transparent pointer-events-none" />
             <div className="relative flex items-center gap-4">
-              <div className="p-3.5 rounded-xl bg-purple-500/10 ring-1 ring-purple-500/20">
+              <div className="p-3.5 rounded-xl bg-purple-500/15 ring-1 ring-purple-500/25">
                 <Clock className="h-6 w-6 text-purple-400" />
               </div>
               <div>
@@ -220,8 +220,8 @@ export default function DashboardPage() {
         {/* Revenue Chart */}
         <Card className="lg:col-span-2 glass rounded-xl border-0 overflow-hidden animate-fade-up stagger-3">
           <CardHeader className="pb-4 border-b border-white/5">
-            <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
-              <ArrowUpLeft className="h-4 w-4 text-[#d4a853]" />
+            <CardTitle className="text-base flex items-center gap-2 text-gradient-dashboard font-[Playfair_Display]">
+              <ArrowUpLeft className="h-4 w-4 text-amber-400" />
               الإيرادات - آخر 6 أشهر
             </CardTitle>
           </CardHeader>
@@ -239,7 +239,7 @@ export default function DashboardPage() {
                       </span>
                       <div className="w-full relative" style={{ height: '160px' }}>
                         <div
-                          className="absolute bottom-0 w-full rounded-t-lg bg-gradient-to-t from-[#d4a853] to-[#f0d48a] transition-all duration-500 hover:from-[#f0d48a] hover:to-[#d4a853] cursor-pointer min-h-[4px] opacity-80 hover:opacity-100 group-hover:shadow-[0_0_20px_rgba(212,168,83,0.2)]"
+                          className="absolute bottom-0 w-full rounded-t-lg bg-gradient-to-t from-amber-500 to-amber-300 transition-all duration-500 hover:from-amber-300 hover:to-amber-500 cursor-pointer min-h-[4px] opacity-80 hover:opacity-100 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.3)]"
                           style={{ height: `${Math.max(heightPercent, 3)}%` }}
                         />
                       </div>
@@ -256,7 +256,7 @@ export default function DashboardPage() {
         <Card className="glass-gold rounded-xl border-0 overflow-hidden animate-fade-up stagger-4">
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
-              <Cpu className="h-4 w-4 text-[#d4a853]" />
+              <Cpu className="h-4 w-4 text-amber-400" />
               حالة ESP32
               <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium backdrop-blur-sm ${
                 firebaseStatus.online
@@ -302,7 +302,7 @@ export default function DashboardPage() {
                 <span className="text-xs text-[#8a8690]">البوابة</span>
               </div>
               <span className={`text-xs font-semibold ${
-                data?.esp32Status?.gateOpen ? 'text-green-400' : 'text-[#8a8690]'
+                data?.esp32Status?.gateOpen ? 'text-green-400' : 'text-[#9490a0]'
               }`}>
                 {data?.esp32Status?.gateOpen ? 'مفتوحة' : 'مغلقة'}
               </span>
@@ -315,7 +315,7 @@ export default function DashboardPage() {
                 <span className="text-xs text-[#8a8690]">باب الصالة</span>
               </div>
               <span className={`text-xs font-semibold ${
-                data?.esp32Status?.doorOpen ? 'text-green-400' : 'text-[#8a8690]'
+                data?.esp32Status?.doorOpen ? 'text-green-400' : `text-[#9490a0]'`
               }`}>
                 {data?.esp32Status?.doorOpen ? 'مفتوح' : 'مغلق'}
               </span>
@@ -324,11 +324,11 @@ export default function DashboardPage() {
             {/* Lights */}
             <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
               <div className="flex items-center gap-2.5">
-                <Lightbulb className="h-4 w-4 text-[#d4a853]" />
+                <Lightbulb className="h-4 w-4 text-amber-400" />
                 <span className="text-xs text-[#8a8690]">الأضواء</span>
               </div>
               <span className={`text-xs font-bold font-[DM_Mono] ${
-                firebaseActiveLights > 0 ? 'text-[#d4a853]' : 'text-[#8a8690]'
+                firebaseActiveLights > 0 ? 'text-amber-400' : `text-[#9490a0]'`
               }`}>
                 {firebaseActiveLights} / 6
               </span>
@@ -341,7 +341,7 @@ export default function DashboardPage() {
                 <span className="text-xs text-[#8a8690]">المشغل</span>
               </div>
               <span className={`text-xs font-semibold ${
-                data?.esp32Status?.mp3Playing ? 'text-pink-400' : 'text-[#8a8690]'
+                data?.esp32Status?.mp3Playing ? 'text-pink-400' : `text-[#9490a0]'`
               }`}>
                 {data?.esp32Status?.mp3Playing ? 'يشغل' : 'متوقف'}
               </span>
@@ -356,7 +356,7 @@ export default function DashboardPage() {
         <Card className="glass rounded-xl border-0 overflow-hidden animate-fade-up stagger-5">
           <CardHeader className="pb-4 border-b border-white/5">
             <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
-              <CalendarDays className="h-4 w-4 text-[#d4a853]" />
+              <CalendarDays className="h-4 w-4 text-amber-400" />
               الحجوزات القادمة (7 أيام)
             </CardTitle>
           </CardHeader>
@@ -392,7 +392,7 @@ export default function DashboardPage() {
                           </p>
                         </div>
                       </div>
-                      <span className="text-sm font-semibold font-[DM_Mono] text-[#d4a853] shrink-0 mr-3">
+                      <span className="text-sm font-semibold font-[DM_Mono] text-amber-400 shrink-0 mr-3">
                         {booking.hallPrice.toLocaleString()} <span className="text-[10px] text-[#8a8690] font-[DM_Sans]">ر.س</span>
                       </span>
                     </div>
@@ -407,7 +407,7 @@ export default function DashboardPage() {
         <Card className="glass rounded-xl border-0 overflow-hidden animate-fade-up stagger-6">
           <CardHeader className="pb-4 border-b border-white/5">
             <CardTitle className="text-base flex items-center gap-2 text-gold-gradient-light font-[Playfair_Display]">
-              <DollarSign className="h-4 w-4 text-[#d4a853]" />
+              <DollarSign className="h-4 w-4 text-amber-400" />
               آخر المدفوعات
             </CardTitle>
           </CardHeader>

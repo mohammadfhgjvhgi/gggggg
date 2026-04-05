@@ -133,8 +133,8 @@ export default function CalendarView() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
-            <CalendarDays className="h-6 w-6 text-[#d4a853]" />
+          <h2 className="text-2xl font-bold flex items-center gap-3 text-gradient-calendar font-[Playfair_Display]">
+            <CalendarDays className="h-6 w-6 text-pink-400" />
             التقويم
           </h2>
           <p className="text-[#8a8690] text-sm mt-1">عرض الحجوزات الشهرية</p>
@@ -142,7 +142,7 @@ export default function CalendarView() {
       </div>
 
       {/* Calendar Card */}
-      <Card className="glass border-[#d4a853]/10 card-hover">
+      <Card className="glass border-pink-500/12 card-hover">
         <CardContent className="p-4 sm:p-6">
           {/* Month Navigation */}
           <div className="flex items-center justify-between mb-6">
@@ -150,19 +150,19 @@ export default function CalendarView() {
               variant="ghost"
               size="sm"
               onClick={nextMonth}
-              className="gap-1.5 text-[#d4a853] hover:text-[#f0d48a] hover:bg-[#d4a853]/10 btn-ghost-gold"
+              className="gap-1.5 text-pink-400 hover:text-pink-300 hover:bg-pink-500/10 btn-ghost-gold"
             >
               <ChevronRight className="h-4 w-4" />
               السابق
             </Button>
-            <h3 className="text-xl font-bold text-gold-gradient font-[Playfair_Display] tracking-wide">
+            <h3 className="text-xl font-bold text-gradient-calendar font-[Playfair_Display] tracking-wide">
               {ARABIC_MONTHS[month]} {year}
             </h3>
             <Button
               variant="ghost"
               size="sm"
               onClick={prevMonth}
-              className="gap-1.5 text-[#d4a853] hover:text-[#f0d48a] hover:bg-[#d4a853]/10 btn-ghost-gold"
+              className="gap-1.5 text-pink-400 hover:text-pink-300 hover:bg-pink-500/10 btn-ghost-gold"
             >
               التالي
               <ChevronLeft className="h-4 w-4" />
@@ -208,16 +208,16 @@ export default function CalendarView() {
                     onClick={() => handleDayClick(day)}
                     className={`h-16 rounded-lg text-center transition-all duration-200 relative ${
                       isToday
-                        ? 'border-2 border-[#d4a853] bg-[#d4a853]/10 shadow-[0_0_12px_rgba(212,168,83,0.15)]'
+                        ? 'border-2 border-pink-400 bg-pink-500/10 shadow-[0_0_12px_rgba(244,114,182,0.15)]'
                         : hasBookings
-                        ? 'border border-[#1f1f2e] hover:bg-[#1a1a25] hover:border-[#d4a853]/30 cursor-pointer'
+                        ? 'border border-[#1f1f2e] hover:bg-[#1a1a25] hover:border-pink-500/30 cursor-pointer'
                         : 'border border-transparent hover:bg-[#1a1a25]/50'
                     }`}
                   >
                     <span
                       className={`text-sm font-medium font-[DM_Sans] ${
                         isToday
-                          ? 'text-[#d4a853] font-bold'
+                          ? 'text-pink-400 font-bold'
                           : 'text-[#f5f0e8]'
                       }`}
                     >
@@ -276,10 +276,10 @@ export default function CalendarView() {
 
       {/* Day Booking Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-lg glass-strong border-[#d4a853]/20">
+        <DialogContent className="sm:max-w-lg glass-strong border-pink-500/20">
           <DialogHeader>
-            <DialogTitle className="text-gold-gradient font-[Playfair_Display] text-lg flex items-center gap-2">
-              <CalendarDays className="h-5 w-5 text-[#d4a853]" />
+            <DialogTitle className="text-gradient-calendar font-[Playfair_Display] text-lg flex items-center gap-2">
+              <CalendarDays className="h-5 w-5 text-pink-400" />
               حجوزات يوم {selectedDay} {ARABIC_MONTHS[month]} {year}
             </DialogTitle>
           </DialogHeader>
@@ -295,7 +295,7 @@ export default function CalendarView() {
                 return (
                   <div
                     key={booking.id}
-                    className="p-4 rounded-lg border border-[#1f1f2e] hover:bg-[#1a1a25] transition-all duration-200 hover:border-[#d4a853]/20"
+                    className="p-4 rounded-lg border border-[#1f1f2e] hover:bg-[#1a1a25] transition-all duration-200 hover:border-pink-500/20"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-semibold text-[#f5f0e8]">{booking.eventType}</span>
@@ -320,7 +320,7 @@ export default function CalendarView() {
                       )}
                       <p>
                         <span className="font-medium text-[#f5f0e8]">السعر: </span>
-                        <span className="text-[#d4a853] font-semibold font-[DM_Mono]">
+                        <span className="text-pink-400 font-semibold font-[DM_Mono]">
                           {booking.hallPrice.toLocaleString()} ر.س
                         </span>
                       </p>

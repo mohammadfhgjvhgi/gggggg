@@ -335,7 +335,7 @@ export default function BillingManagement() {
             size="sm"
             disabled={page <= 1}
             onClick={() => setPage(page - 1)}
-            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+            className="text-[#8a8690] hover:text-emerald-400 hover:bg-emerald-500/10 text-xs"
           >
             السابق
           </Button>
@@ -346,7 +346,7 @@ export default function BillingManagement() {
               size="sm"
               className={`w-8 h-8 p-0 text-xs font-[family-name:var(--font-num)] rounded-lg ${
                 p === page
-                  ? 'bg-gradient-to-b from-[#d4a853] to-[#b8912e] text-[#0a0a0f] font-semibold shadow-[0_2px_12px_rgba(212,168,83,0.3)]'
+                  ? 'bg-gradient-to-b from-emerald-500 to-emerald-600 text-[#0a0a0f] font-semibold shadow-[0_2px_12px_rgba(16,185,129,0.3)]'
                   : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]'
               }`}
               onClick={() => setPage(p)}
@@ -359,7 +359,7 @@ export default function BillingManagement() {
             size="sm"
             disabled={page >= pagination.totalPages}
             onClick={() => setPage(page + 1)}
-            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+            className="text-[#8a8690] hover:text-emerald-400 hover:bg-emerald-500/10 text-xs"
           >
             التالي
           </Button>
@@ -378,17 +378,17 @@ export default function BillingManagement() {
       <div className="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-[family-name:var(--font-display)] font-bold flex items-center gap-3">
-            <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8912e] shadow-[0_2px_12px_rgba(212,168,83,0.25)]">
+            <span className="page-icon page-icon-billing">
               <CreditCard className="h-5 w-5 text-[#0a0a0f]" />
             </span>
-            <span className="text-gold-gradient">إدارة الفواتير والمدفوعات</span>
+            <span className="text-gradient-billing">إدارة الفواتير والمدفوعات</span>
           </h2>
           <p className="text-[#8a8690] text-sm mt-1.5 mr-[52px]">
             متابعة المدفوعات والفواتير
           </p>
         </div>
         {canWrite && (
-          <Button onClick={openCreate} className="btn-gold gap-2 rounded-xl px-5">
+          <Button onClick={openCreate} className="btn-billing gap-2 rounded-xl px-5">
             <Plus className="h-4 w-4" />
             إضافة دفعة
           </Button>
@@ -441,8 +441,8 @@ export default function BillingManagement() {
         </div>
         <div className="glass card-hover rounded-2xl p-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-[rgba(212,168,83,0.1)]">
-              <CreditCard className="h-5 w-5 text-[#d4a853]" />
+            <div className="p-3 rounded-xl bg-emerald-500/10">
+              <CreditCard className="h-5 w-5 text-emerald-400" />
             </div>
             <div>
               <p className="text-xs text-[#8a8690]">حجوزات نشطة</p>
@@ -459,7 +459,7 @@ export default function BillingManagement() {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
             <Select value={bookingFilter || '__all__'} onValueChange={(v) => setBookingFilter(v === '__all__' ? '' : v)}>
-              <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+              <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-emerald-500">
                 <SelectValue placeholder="تصفية بالحجز" />
               </SelectTrigger>
               <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl max-h-64 overflow-y-auto">
@@ -474,7 +474,7 @@ export default function BillingManagement() {
           </div>
           <div className="flex-1">
             <Select value={statusFilter || '__all__'} onValueChange={(v) => setStatusFilter(v === '__all__' ? '' : v)}>
-              <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+              <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-emerald-500">
                 <SelectValue placeholder="تصفية بحالة الدفع" />
               </SelectTrigger>
               <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
@@ -514,8 +514,8 @@ export default function BillingManagement() {
                 <TableRow>
                   <TableCell colSpan={showActions ? 8 : 7} className="text-center py-16">
                     <div className="flex flex-col items-center gap-3 animate-fade-in">
-                      <div className="w-16 h-16 rounded-2xl bg-[rgba(212,168,83,0.06)] flex items-center justify-center animate-float">
-                        <CreditCard className="h-7 w-7 text-[#d4a853] opacity-40" />
+                      <div className="w-16 h-16 rounded-2xl bg-emerald-500/8 flex items-center justify-center animate-float">
+                        <CreditCard className="h-7 w-7 text-emerald-500 opacity-40" />
                       </div>
                       <div className="text-center">
                         <p className="text-[#8a8690] text-sm">لا يوجد مدفوعات</p>
@@ -585,7 +585,7 @@ export default function BillingManagement() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.08)] rounded-lg transition-colors"
+                                className="h-8 w-8 text-[#8a8690] hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors"
                                 onClick={() => openEdit(payment)}
                               >
                                 <Pencil className="h-3.5 w-3.5" />
@@ -616,8 +616,8 @@ export default function BillingManagement() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-md glass-strong rounded-2xl border-[rgba(212,168,83,0.1)] p-0 overflow-hidden">
-          <div className="bg-gradient-to-l from-[rgba(212,168,83,0.08)] to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)]">
+        <DialogContent className="sm:max-w-md glass-strong rounded-2xl border-emerald-500/15 p-0 overflow-hidden">
+          <div className="bg-gradient-to-l from-emerald-500/8 to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)]">
             <DialogHeader>
               <DialogTitle className="text-[#f5f0e8] font-[family-name:var(--font-display)] text-lg text-center">
                 {editingItem ? 'تعديل الدفعة' : 'إضافة دفعة جديدة'}
@@ -632,7 +632,7 @@ export default function BillingManagement() {
                 onValueChange={(v) => setFormData({ ...formData, bookingId: v })}
                 disabled={!!editingItem}
               >
-                <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+                <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-emerald-500">
                   <SelectValue placeholder="اختر الحجز" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl max-h-64 overflow-y-auto">
@@ -652,14 +652,14 @@ export default function BillingManagement() {
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                 placeholder="أدخل المبلغ"
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-emerald-500 focus-visible:border-emerald-500/30 rounded-xl h-11"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-[#8a8690] text-xs uppercase tracking-wider">طريقة الدفع</Label>
                 <Select value={formData.method} onValueChange={(v) => setFormData({ ...formData, method: v })}>
-                  <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+                  <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-emerald-500">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
@@ -673,7 +673,7 @@ export default function BillingManagement() {
               <div className="space-y-2">
                 <Label className="text-[#8a8690] text-xs uppercase tracking-wider">الحالة</Label>
                 <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                  <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-[#d4a853]">
+                  <SelectTrigger className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] rounded-xl h-11 focus:ring-emerald-500">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-[#14141e] border-[rgba(255,255,255,0.08)] rounded-xl">
@@ -693,7 +693,7 @@ export default function BillingManagement() {
                 onChange={(e) => setFormData({ ...formData, receiptNumber: e.target.value })}
                 placeholder="رقم الإيصال (اختياري)"
                 dir="ltr"
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-emerald-500 focus-visible:border-emerald-500/30 rounded-xl h-11"
               />
             </div>
             <div className="space-y-2">
@@ -704,7 +704,7 @@ export default function BillingManagement() {
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="ملاحظات إضافية..."
                 rows={2}
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl resize-none"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-emerald-500 focus-visible:border-emerald-500/30 rounded-xl resize-none"
               />
             </div>
           </div>
@@ -719,7 +719,7 @@ export default function BillingManagement() {
             <Button
               onClick={handleSubmit}
               disabled={submitting}
-              className="btn-gold rounded-xl px-6"
+              className="btn-billing rounded-xl px-6"
             >
               {submitting ? 'جاري الحفظ...' : editingItem ? 'حفظ التعديلات' : 'إضافة الدفعة'}
             </Button>

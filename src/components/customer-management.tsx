@@ -236,7 +236,7 @@ export default function CustomerManagement() {
             size="sm"
             disabled={page <= 1}
             onClick={() => setPage(page - 1)}
-            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+            className="text-[#8a8690] hover:text-orange-400 hover:bg-orange-500/10 text-xs"
           >
             السابق
           </Button>
@@ -247,7 +247,7 @@ export default function CustomerManagement() {
               size="sm"
               className={`w-8 h-8 p-0 text-xs font-[family-name:var(--font-num)] rounded-lg ${
                 p === page
-                  ? 'bg-gradient-to-b from-[#d4a853] to-[#b8912e] text-[#0a0a0f] font-semibold shadow-[0_2px_12px_rgba(212,168,83,0.3)]'
+                  ? 'bg-gradient-to-b from-orange-500 to-orange-600 text-[#0a0a0f] font-semibold shadow-[0_2px_12px_rgba(249,115,22,0.3)]'
                   : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]'
               }`}
               onClick={() => setPage(p)}
@@ -260,7 +260,7 @@ export default function CustomerManagement() {
             size="sm"
             disabled={page >= pagination.totalPages}
             onClick={() => setPage(page + 1)}
-            className="text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.06)] text-xs"
+            className="text-[#8a8690] hover:text-orange-400 hover:bg-orange-500/10 text-xs"
           >
             التالي
           </Button>
@@ -282,17 +282,17 @@ export default function CustomerManagement() {
       <div className="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-[family-name:var(--font-display)] font-bold flex items-center gap-3">
-            <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8912e] shadow-[0_2px_12px_rgba(212,168,83,0.25)]">
+            <span className="flex items-center justify-center w-10 h-10 rounded-xl page-icon page-icon-customers">
               <Users className="h-5 w-5 text-[#0a0a0f]" />
             </span>
-            <span className="text-gold-gradient">إدارة الزبائن</span>
+            <span className="text-gradient-customers">إدارة الزبائن</span>
           </h2>
           <p className="text-[#8a8690] text-sm mt-1.5 mr-[52px]">
             إجمالي <span className="text-[#f5f0e8] font-[family-name:var(--font-num)]">{pagination.total}</span> زبون مسجل
           </p>
         </div>
         {canWrite && (
-          <Button onClick={openCreate} className="btn-gold gap-2 rounded-xl px-5">
+          <Button onClick={openCreate} className="btn-customers gap-2 rounded-xl px-5">
             <Plus className="h-4 w-4" />
             إضافة زبون
           </Button>
@@ -307,7 +307,7 @@ export default function CustomerManagement() {
             placeholder="بحث بالاسم أو الهاتف أو البريد..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.6)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] focus-visible:bg-[rgba(255,255,255,0.05)] rounded-xl h-11"
+            className="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.6)] focus-visible:ring-orange-500 focus-visible:border-orange-500/30 focus-visible:bg-[rgba(255,255,255,0.05)] rounded-xl h-11"
           />
         </div>
       </div>
@@ -334,8 +334,8 @@ export default function CustomerManagement() {
                 <TableRow>
                   <TableCell colSpan={showActions ? 5 : 4} className="text-center py-16">
                     <div className="flex flex-col items-center gap-3 animate-fade-in">
-                      <div className="w-16 h-16 rounded-2xl bg-[rgba(212,168,83,0.06)] flex items-center justify-center animate-float">
-                        <Users className="h-7 w-7 text-[#d4a853] opacity-40" />
+                      <div className="w-16 h-16 rounded-2xl bg-orange-500/8 flex items-center justify-center animate-float">
+                        <Users className="h-7 w-7 text-orange-500 opacity-40" />
                       </div>
                       <div className="text-center">
                         <p className="text-[#8a8690] text-sm">لا يوجد زبائن</p>
@@ -349,7 +349,7 @@ export default function CustomerManagement() {
                   <TableRow key={customer.id} className="table-row-hover border-b-[rgba(255,255,255,0.03)]">
                     <TableCell className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8912e] flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(212,168,83,0.15)]">
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(249,115,22,0.15)]">
                           <span className="text-[#0a0a0f] font-bold text-sm font-[family-name:var(--font-display)]">
                             {customer.name.charAt(0)}
                           </span>
@@ -360,7 +360,7 @@ export default function CustomerManagement() {
                     <TableCell className="py-3.5 px-4 font-[family-name:var(--font-num)] text-sm text-[#f5f0e8]" dir="ltr">{customer.phone}</TableCell>
                     <TableCell className="py-3.5 px-4 text-[#8a8690] text-sm">{customer.email || '—'}</TableCell>
                     <TableCell className="py-3.5 px-4 text-center">
-                      <span className="inline-flex items-center justify-center bg-[rgba(212,168,83,0.08)] text-[#d4a853] px-2.5 py-0.5 rounded-full text-xs font-semibold font-[family-name:var(--font-num)]">
+                      <span className="inline-flex items-center justify-center bg-orange-500/10 text-orange-400 px-2.5 py-0.5 rounded-full text-xs font-semibold font-[family-name:var(--font-num)]">
                         {customer._count.bookings}
                       </span>
                     </TableCell>
@@ -371,7 +371,7 @@ export default function CustomerManagement() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-[#8a8690] hover:text-[#d4a853] hover:bg-[rgba(212,168,83,0.08)] rounded-lg transition-colors"
+                              className="h-8 w-8 text-[#8a8690] hover:text-orange-400 hover:bg-orange-500/10 rounded-lg transition-colors"
                               onClick={() => openEdit(customer)}
                             >
                               <Pencil className="h-3.5 w-3.5" />
@@ -401,8 +401,8 @@ export default function CustomerManagement() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-md glass-strong rounded-2xl border-[rgba(212,168,83,0.1)] p-0 overflow-hidden">
-          <div className="bg-gradient-to-l from-[rgba(212,168,83,0.08)] to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)]">
+        <DialogContent className="sm:max-w-md glass-strong rounded-2xl border-orange-500/15 p-0 overflow-hidden">
+          <div className="bg-gradient-to-l from-orange-500/8 to-transparent p-6 pb-4 border-b-[rgba(255,255,255,0.04)]">
             <DialogHeader>
               <DialogTitle className="text-[#f5f0e8] font-[family-name:var(--font-display)] text-lg text-center">
                 {editingItem ? 'تعديل بيانات الزبون' : 'إضافة زبون جديد'}
@@ -417,7 +417,7 @@ export default function CustomerManagement() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="أدخل اسم الزبون"
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-orange-500 focus-visible:border-orange-500/30 rounded-xl h-11"
               />
             </div>
             <div className="space-y-2">
@@ -428,7 +428,7 @@ export default function CustomerManagement() {
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="أدخل رقم الهاتف"
                 dir="ltr"
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] font-[family-name:var(--font-num)] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-orange-500 focus-visible:border-orange-500/30 rounded-xl h-11"
               />
             </div>
             <div className="space-y-2">
@@ -440,7 +440,7 @@ export default function CustomerManagement() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="أدخل البريد الإلكتروني"
                 dir="ltr"
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl h-11"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-orange-500 focus-visible:border-orange-500/30 rounded-xl h-11"
               />
             </div>
             <div className="space-y-2">
@@ -451,7 +451,7 @@ export default function CustomerManagement() {
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="ملاحظات إضافية..."
                 rows={3}
-                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-[#d4a853] focus-visible:border-[rgba(212,168,83,0.3)] rounded-xl resize-none"
+                className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.5)] focus-visible:ring-orange-500 focus-visible:border-orange-500/30 rounded-xl resize-none"
               />
             </div>
           </div>
@@ -466,7 +466,7 @@ export default function CustomerManagement() {
             <Button
               onClick={handleSubmit}
               disabled={submitting}
-              className="btn-gold rounded-xl px-6"
+              className="btn-customers rounded-xl px-6"
             >
               {submitting ? 'جاري الحفظ...' : editingItem ? 'حفظ التعديلات' : 'إضافة الزبون'}
             </Button>

@@ -51,6 +51,23 @@ import NotificationBell from '@/components/notification-bell'
 import { PermissionsCard } from '@/components/permission-banner'
 
 // ═══════════════════════════════════════════════════
+//   ألوان كل صفحة في القائمة الجانبية
+// ═══════════════════════════════════════════════════
+
+const PAGE_COLORS: Record<string, { accent: string; bg: string; border: string; shadow: string; gradient: string }> = {
+  home:        { accent: '#f59e0b', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.2)',  shadow: '0 2px 12px rgba(245,158,11,0.2)',  gradient: 'from-amber-500 to-amber-600' },
+  dashboard:   { accent: '#06b6d4', bg: 'rgba(6,182,212,0.08)',   border: 'rgba(6,182,212,0.2)',   shadow: '0 2px 12px rgba(6,182,212,0.2)',   gradient: 'from-cyan-500 to-cyan-600' },
+  customers:   { accent: '#f97316', bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.2)',  shadow: '0 2px 12px rgba(249,115,22,0.2)',  gradient: 'from-orange-500 to-orange-600' },
+  bookings:    { accent: '#a855f7', bg: 'rgba(168,85,247,0.08)',  border: 'rgba(168,85,247,0.2)',  shadow: '0 2px 12px rgba(168,85,247,0.2)',  gradient: 'from-purple-500 to-purple-600' },
+  billing:     { accent: '#10b981', bg: 'rgba(16,185,129,0.08)',  border: 'rgba(16,185,129,0.2)',  shadow: '0 2px 12px rgba(16,185,129,0.2)',  gradient: 'from-emerald-500 to-emerald-600' },
+  calendar:    { accent: '#ec4899', bg: 'rgba(236,72,153,0.08)',  border: 'rgba(236,72,153,0.2)',  shadow: '0 2px 12px rgba(236,72,153,0.2)',  gradient: 'from-pink-500 to-pink-600' },
+  activity:    { accent: '#6366f1', bg: 'rgba(99,102,241,0.08)',  border: 'rgba(99,102,241,0.2)',  shadow: '0 2px 12px rgba(99,102,241,0.2)',  gradient: 'from-indigo-500 to-indigo-600' },
+  users:       { accent: '#f43f5e', bg: 'rgba(244,63,94,0.08)',   border: 'rgba(244,63,94,0.2)',   shadow: '0 2px 12px rgba(244,63,94,0.2)',   gradient: 'from-rose-500 to-rose-600' },
+  settings:    { accent: '#64748b', bg: 'rgba(100,116,139,0.08)', border: 'rgba(100,116,139,0.2)', shadow: '0 2px 12px rgba(100,116,139,0.2)', gradient: 'from-slate-500 to-slate-600' },
+  profile:     { accent: '#e879f9', bg: 'rgba(232,121,249,0.08)', border: 'rgba(232,121,249,0.2)', shadow: '0 2px 12px rgba(232,121,249,0.2)', gradient: 'from-fuchsia-500 to-fuchsia-600' },
+}
+
+// ═══════════════════════════════════════════════════
 //   بيانات الدخول السريع
 // ═══════════════════════════════════════════════════
 
@@ -61,10 +78,10 @@ const QUICK_USERS = [
     password: 'admin123',
     label: 'مدير النظام',
     icon: Crown,
-    color: 'from-[#d4a853] to-[#b8912e]',
-    borderColor: 'border-[rgba(212,168,83,0.25)] hover:border-[rgba(212,168,83,0.5)]',
-    textColor: 'text-[#f0d48a]',
-    glowColor: 'shadow-[0_0_15px_rgba(212,168,83,0.15)]',
+    color: 'from-amber-500 to-amber-600',
+    borderColor: 'border-amber-500/25 hover:border-amber-500/50',
+    textColor: 'text-amber-400',
+    glowColor: 'shadow-[0_0_15px_rgba(245,158,11,0.2)]',
   },
   {
     role: 'manager' as const,
@@ -72,10 +89,10 @@ const QUICK_USERS = [
     password: 'manager123',
     label: 'مدير',
     icon: UserCog,
-    color: 'from-[#c0a060] to-[#a08040]',
-    borderColor: 'border-[rgba(192,160,96,0.25)] hover:border-[rgba(192,160,96,0.5)]',
-    textColor: 'text-[#e0c878]',
-    glowColor: 'shadow-[0_0_15px_rgba(192,160,96,0.15)]',
+    color: 'from-cyan-500 to-cyan-600',
+    borderColor: 'border-cyan-500/25 hover:border-cyan-500/50',
+    textColor: 'text-cyan-400',
+    glowColor: 'shadow-[0_0_15px_rgba(6,182,212,0.2)]',
   },
   {
     role: 'employee' as const,
@@ -83,10 +100,10 @@ const QUICK_USERS = [
     password: 'emp123',
     label: 'موظف',
     icon: UserCheck,
-    color: 'from-[#9090a0] to-[#707080]',
-    borderColor: 'border-[rgba(160,160,180,0.2)] hover:border-[rgba(160,160,180,0.4)]',
-    textColor: 'text-[#b0b0c0]',
-    glowColor: 'shadow-[0_0_15px_rgba(160,160,180,0.1)]',
+    color: 'from-slate-400 to-slate-500',
+    borderColor: 'border-slate-400/25 hover:border-slate-400/50',
+    textColor: 'text-slate-300',
+    glowColor: 'shadow-[0_0_15px_rgba(148,163,184,0.15)]',
   },
   {
     role: 'viewer' as const,
@@ -94,10 +111,10 @@ const QUICK_USERS = [
     password: 'view123',
     label: 'مشاهد',
     icon: Eye,
-    color: 'from-[#708070] to-[#506050]',
-    borderColor: 'border-[rgba(130,150,130,0.2)] hover:border-[rgba(130,150,130,0.4)]',
-    textColor: 'text-[#a0b0a0]',
-    glowColor: 'shadow-[0_0_15px_rgba(130,150,130,0.1)]',
+    color: 'from-emerald-500 to-emerald-600',
+    borderColor: 'border-emerald-500/25 hover:border-emerald-500/50',
+    textColor: 'text-emerald-400',
+    glowColor: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]',
   },
 ]
 
@@ -116,13 +133,13 @@ function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email || !password) {
-      toast({ title: 'خطأ', description: 'يرجى إدخال البريد وكلمة المرور', variant: 'destructive' })
+      toast({ title: 'خطأ', description: 'يرجى إدخال البريد الإلكتروني وكلمة المرور', variant: 'destructive' })
       return
     }
     setLoading(true)
     const success = await login(email, password)
     if (!success) {
-      toast({ title: 'خطأ', description: 'البريد أو كلمة المرور غير صحيحة', variant: 'destructive' })
+      toast({ title: 'خطأ', description: 'البريد الإلكتروني أو كلمة المرور غير صحيحة', variant: 'destructive' })
     }
     setLoading(false)
   }
@@ -139,13 +156,13 @@ function LoginPage() {
   }, [login, toast])
 
   return (
-    <div dir="rtl" className="min-h-screen relative overflow-hidden bg-[#0a0a0f] mesh-bg-login">
-      {/* Mesh gradient blobs */}
+    <div dir="rtl" className="min-h-screen relative overflow-hidden bg-[#0f0f17] mesh-bg-login">
+      {/* Gradient blobs */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[rgba(212,168,83,0.07)] rounded-full blur-[150px] animate-pulse" />
-        <div className="absolute bottom-[-15%] left-[-10%] w-[500px] h-[500px] bg-[rgba(212,168,83,0.05)] rounded-full blur-[130px] animate-pulse" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-[rgba(180,140,60,0.03)] rounded-full blur-[120px]" />
-        <div className="absolute bottom-[20%] right-[20%] w-[300px] h-[300px] bg-[rgba(240,212,138,0.03)] rounded-full blur-[100px]" style={{ animationDelay: '2.5s' }} />
+        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-amber-500/[0.07] rounded-full blur-[150px] animate-pulse" />
+        <div className="absolute bottom-[-15%] left-[-10%] w-[500px] h-[500px] bg-amber-500/[0.05] rounded-full blur-[130px] animate-pulse" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-purple-500/[0.04] rounded-full blur-[120px]" />
+        <div className="absolute bottom-[20%] right-[20%] w-[300px] h-[300px] bg-cyan-500/[0.03] rounded-full blur-[100px]" style={{ animationDelay: '2.5s' }} />
       </div>
 
       <div className="relative min-h-screen flex items-center justify-center p-4">
@@ -153,9 +170,9 @@ function LoginPage() {
 
           {/* Logo */}
           <div className="text-center mb-8 animate-fade-up">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-[#d4a853] via-[#c49a48] to-[#b8912e] animate-glow mb-5 relative">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f0d48a] to-[#b8912e] opacity-20 blur-md animate-pulse" />
-              <CalendarDays className="w-11 h-11 text-[#0a0a0f] relative z-10" strokeWidth={1.8} />
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 animate-glow mb-5 relative">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-300 to-amber-600 opacity-20 blur-md animate-pulse" />
+              <CalendarDays className="w-11 h-11 text-[#0f0f17] relative z-10" strokeWidth={1.8} />
             </div>
             <h1
               className="text-5xl font-bold text-gold-gradient mb-2"
@@ -164,7 +181,7 @@ function LoginPage() {
               صالات الأفراح
             </h1>
             <p
-              className="text-[#8a8690] text-sm tracking-wide"
+              className="text-[#9490a0] text-sm tracking-wide"
               style={{ fontFamily: '"Cormorant Garamond", serif' }}
             >
               Wedding Hall Management System
@@ -175,18 +192,18 @@ function LoginPage() {
           <div className="glass-strong rounded-2xl p-8 animate-fade-up stagger-2">
             <div className="text-center mb-6">
               <h2
-                className="text-2xl font-bold text-[#f5f0e8] mb-1"
+                className="text-2xl font-bold text-[#f0ece4] mb-1"
                 style={{ fontFamily: '"Playfair Display", serif' }}
               >
                 تسجيل الدخول
               </h2>
-              <p className="text-[#8a8690] text-sm">أدخل بياناتك أو استخدم الدخول السريع</p>
+              <p className="text-[#9490a0] text-sm">أدخل بياناتك أو استخدم الدخول السريع</p>
             </div>
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-[#8a8690] text-sm font-medium mb-2">
+                <label className="block text-[#9490a0] text-sm font-medium mb-2">
                   البريد الإلكتروني
                 </label>
                 <Input
@@ -195,11 +212,11 @@ function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@wedding.com"
                   dir="ltr"
-                  className="text-left h-11 rounded-xl bg-[rgba(20,20,30,0.6)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder-[rgba(138,134,144,0.5)] focus:border-[rgba(212,168,83,0.4)] focus:ring-1 focus:ring-[rgba(212,168,83,0.15)] transition-colors duration-200"
+                  className="text-left h-11 rounded-xl bg-[rgba(22,22,34,0.6)] border-[rgba(255,255,255,0.08)] text-[#f0ece4] placeholder-[rgba(148,144,160,0.5)] focus:border-[rgba(232,184,74,0.4)] focus:ring-1 focus:ring-[rgba(232,184,74,0.15)] transition-colors duration-200"
                 />
               </div>
               <div>
-                <label className="block text-[#8a8690] text-sm font-medium mb-2">
+                <label className="block text-[#9490a0] text-sm font-medium mb-2">
                   كلمة المرور
                 </label>
                 <Input
@@ -208,7 +225,7 @@ function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   dir="ltr"
-                  className="text-left h-11 rounded-xl bg-[rgba(20,20,30,0.6)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder-[rgba(138,134,144,0.5)] focus:border-[rgba(212,168,83,0.4)] focus:ring-1 focus:ring-[rgba(212,168,83,0.15)] transition-colors duration-200"
+                  className="text-left h-11 rounded-xl bg-[rgba(22,22,34,0.6)] border-[rgba(255,255,255,0.08)] text-[#f0ece4] placeholder-[rgba(148,144,160,0.5)] focus:border-[rgba(232,184,74,0.4)] focus:ring-1 focus:ring-[rgba(232,184,74,0.15)] transition-colors duration-200"
                 />
               </div>
               <Button
@@ -236,15 +253,15 @@ function LoginPage() {
                 <div className="w-full divider-gold" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-3 text-xs text-[#8a8690] bg-transparent">أو</span>
+                <span className="px-3 text-xs text-[#9490a0] bg-transparent">أو</span>
               </div>
             </div>
 
             {/* Quick Login */}
             <div>
-              <p className="text-center text-[#8a8690] text-sm mb-4 flex items-center justify-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#d4a853]" />
-                دخول سريع - اضغط على الدور المطلوب
+              <p className="text-center text-[#9490a0] text-sm mb-4 flex items-center justify-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                دخول سريع — اختر الدور المطلوب
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {QUICK_USERS.map((user) => {
@@ -258,17 +275,17 @@ function LoginPage() {
                       className={`relative flex flex-col items-center gap-2 p-4 rounded-2xl border glass transition-all duration-300 group ${user.borderColor} ${isLoading ? 'opacity-80 scale-95' : 'hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98]'}`}
                     >
                       {isLoading && (
-                        <div className="absolute inset-0 rounded-2xl bg-[rgba(20,20,30,0.5)] flex items-center justify-center">
-                          <Loader2 className="w-5 h-5 animate-spin text-[#d4a853]" />
+                        <div className="absolute inset-0 rounded-2xl bg-[rgba(15,15,23,0.6)] flex items-center justify-center">
+                          <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
                         </div>
                       )}
                       <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${user.color} flex items-center justify-center ${user.glowColor} group-hover:scale-110 transition-transform duration-300`}>
-                        <Icon className="w-5 h-5 text-[#0a0a0f]" strokeWidth={2} />
+                        <Icon className="w-5 h-5 text-white" strokeWidth={2} />
                       </div>
                       <span className={`text-xs font-semibold ${user.textColor}`}>
                         {user.label}
                       </span>
-                      <span className="text-[10px] text-[#8a8690]" dir="ltr" style={{ fontFamily: '"DM Mono", monospace' }}>
+                      <span className="text-[10px] text-[#9490a0]" dir="ltr" style={{ fontFamily: '"DM Mono", monospace' }}>
                         {user.email}
                       </span>
                     </button>
@@ -281,9 +298,9 @@ function LoginPage() {
           {/* Feature Icons */}
           <div className="grid grid-cols-3 gap-3 mt-6 animate-fade-up stagger-4">
             {[
-              { icon: Shield, label: 'نظام صلاحيات', color: 'text-[#d4a853]', bg: 'bg-[rgba(212,168,83,0.08)]' },
-              { icon: Gamepad2, label: 'تحكم بالأجهزة', color: 'text-[#d4a853]', bg: 'bg-[rgba(212,168,83,0.08)]' },
-              { icon: CreditCard, label: 'إدارة الفواتير', color: 'text-[#d4a853]', bg: 'bg-[rgba(212,168,83,0.08)]' },
+              { icon: Shield, label: 'نظام صلاحيات', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+              { icon: Gamepad2, label: 'تحكم بالأجهزة', color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
+              { icon: CreditCard, label: 'إدارة الفواتير', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
             ].map((f) => (
               <div
                 key={f.label}
@@ -292,13 +309,13 @@ function LoginPage() {
                 <div className={`w-9 h-9 mx-auto mb-2 rounded-lg ${f.bg} flex items-center justify-center`}>
                   <f.icon className={`w-4 h-4 ${f.color}`} />
                 </div>
-                <p className="text-[10px] text-[#8a8690]">{f.label}</p>
+                <p className="text-[10px] text-[#9490a0]">{f.label}</p>
               </div>
             ))}
           </div>
 
-          <p className="text-center text-[rgba(138,134,144,0.5)] text-xs mt-6 animate-fade-up stagger-5">
-            © 2024 Wedding Hall System — All Rights Reserved
+          <p className="text-center text-[rgba(148,144,160,0.5)] text-xs mt-6 animate-fade-up stagger-5">
+            © 2025 Wedding Hall System — جميع الحقوق محفوظة
           </p>
         </div>
       </div>
@@ -325,7 +342,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'billing', label: 'الفواتير', icon: CreditCard, roles: ['admin', 'manager', 'employee', 'viewer'] },
   { key: 'calendar', label: 'التقويم', icon: Calendar, roles: ['admin', 'manager', 'employee', 'viewer'] },
   { key: 'activity', label: 'سجل النشاطات', icon: ClipboardList, roles: ['admin', 'manager'] },
-  { key: 'users', label: 'المستخدمين', icon: Shield, roles: ['admin'] },
+  { key: 'users', label: 'المستخدمون', icon: Shield, roles: ['admin'] },
   { key: 'settings', label: 'الإعدادات', icon: Settings, roles: ['admin', 'manager', 'employee', 'viewer'] },
 ]
 
@@ -343,24 +360,24 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
   const userNavItems = NAV_ITEMS.filter((item) => item.roles.includes(user.role))
 
   return (
-    <div className="flex flex-col h-full bg-[#0d0d12]">
+    <div className="flex flex-col h-full bg-[#0d0d15]">
       {/* Logo Header */}
       <div className="p-4 pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853] to-[#b8912e] flex items-center justify-center shadow-lg shadow-[rgba(212,168,83,0.15)] shrink-0">
-            <CalendarDays className="w-5 h-5 text-[#0a0a0f]" strokeWidth={1.8} />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20 shrink-0">
+            <CalendarDays className="w-5 h-5 text-[#0f0f17]" strokeWidth={1.8} />
           </div>
           <div className="flex-1 min-w-0">
             <h2
-              className="font-bold text-sm truncate text-[#f5f0e8]"
+              className="font-bold text-sm truncate text-[#f0ece4]"
               style={{ fontFamily: '"Playfair Display", serif' }}
             >
               صالات الأفراح
             </h2>
-            <p className="text-xs text-[#8a8690] truncate">{user.name}</p>
+            <p className="text-xs text-[#9490a0] truncate">{user.name}</p>
           </div>
           {onClose && (
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]" onClick={onClose}>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-[#9490a0] hover:text-[#f0ece4] hover:bg-[rgba(255,255,255,0.06)]" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           )}
@@ -375,18 +392,29 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
           {userNavItems.map((item) => {
             const isActive = currentPage === item.key
             const Icon = item.icon
+            const colors = PAGE_COLORS[item.key]
             return (
               <button
                 key={item.key}
                 onClick={() => handleNav(item.key)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-[rgba(212,168,83,0.1)] text-[#d4a853] border-r-2 border-[#d4a853]'
-                    : 'text-[#8a8690] hover:bg-[rgba(212,168,83,0.05)] hover:text-[#f5f0e8]'
+                    ? `text-white border-r-2`
+                    : 'text-[#9490a0] hover:text-[#f0ece4] hover:bg-[rgba(255,255,255,0.04)]'
                 }`}
+                style={isActive ? {
+                  backgroundColor: colors?.bg,
+                  borderColor: colors?.accent,
+                } : undefined}
               >
-                <Icon className={`h-[18px] w-[18px] shrink-0 ${isActive ? 'text-[#d4a853]' : ''}`} />
-                {item.label}
+                <Icon className={`h-[18px] w-[18px] shrink-0`} style={isActive ? { color: colors?.accent } : undefined} />
+                <span>{item.label}</span>
+                {isActive && (
+                  <span
+                    className="mr-auto w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: colors?.accent, boxShadow: `0 0 6px ${colors?.accent}` }}
+                  />
+                )}
               </button>
             )
           })}
@@ -403,19 +431,19 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
       <div className="p-3 pt-2">
         <div className="divider-gold mb-3" />
         <div className="flex items-center gap-3 px-2 py-2">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8912e] flex items-center justify-center text-[#0a0a0f] text-xs font-bold shrink-0 shadow-md shadow-[rgba(212,168,83,0.15)]">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[#0f0f17] text-xs font-bold shrink-0 shadow-md shadow-amber-500/20">
             {user.name.charAt(0)}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate text-[#f5f0e8]">{user.name}</p>
-            <span className="inline-block text-[10px] px-1.5 py-0.5 rounded-md bg-[rgba(212,168,83,0.1)] text-[#d4a853] font-medium mt-0.5">
+            <p className="text-sm font-medium truncate text-[#f0ece4]">{user.name}</p>
+            <span className="inline-block text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium mt-0.5">
               {ROLE_LABELS[user.role]}
             </span>
           </div>
         </div>
         <Button
           variant="ghost"
-          className="w-full mt-1 justify-start gap-2 text-[#8a8690] hover:text-red-400 hover:bg-[rgba(239,68,68,0.06)] h-9 px-3 rounded-lg transition-colors duration-200"
+          className="w-full mt-1 justify-start gap-2 text-[#9490a0] hover:text-rose-400 hover:bg-rose-500/10 h-9 px-3 rounded-lg transition-colors duration-200"
           onClick={logout}
         >
           <LogOut className="h-4 w-4" />
@@ -440,12 +468,12 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
+      <div className="min-h-screen flex items-center justify-center bg-[#0f0f17]">
         <div className="text-center space-y-4">
           <div className="relative w-20 h-20 mx-auto">
-            <div className="absolute inset-0 border-2 border-[rgba(212,168,83,0.15)] rounded-full" />
-            <div className="absolute inset-0 border-2 border-transparent border-t-[#d4a853] rounded-full animate-spin" />
-            <div className="absolute inset-3 border-2 border-transparent border-t-[#b8912e] rounded-full animate-spin" style={{ animationDuration: '0.75s', animationDirection: 'reverse' }} />
+            <div className="absolute inset-0 border-2 border-amber-500/20 rounded-full" />
+            <div className="absolute inset-0 border-2 border-transparent border-t-amber-400 rounded-full animate-spin" />
+            <div className="absolute inset-3 border-2 border-transparent border-t-amber-600 rounded-full animate-spin" style={{ animationDuration: '0.75s', animationDirection: 'reverse' }} />
           </div>
           <h2
             className="text-lg font-bold text-gold-gradient"
@@ -453,7 +481,7 @@ export default function Home() {
           >
             صالات الأفراح
           </h2>
-          <p className="text-sm text-[#8a8690]">جاري التحميل...</p>
+          <p className="text-sm text-[#9490a0]">جاري التحميل...</p>
         </div>
       </div>
     )
@@ -465,28 +493,17 @@ export default function Home() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'home':
-        return <DashboardPage />
-      case 'dashboard':
-        return <ControlDashboard />
-      case 'customers':
-        return <CustomerManagement />
-      case 'bookings':
-        return <BookingManagement />
-      case 'billing':
-        return <BillingManagement />
-      case 'calendar':
-        return <CalendarView />
-      case 'activity':
-        return <ActivityLogPage />
-      case 'users':
-        return <UserManagement />
-      case 'settings':
-        return <SettingsPanel />
-      case 'profile':
-        return <ProfilePage />
-      default:
-        return <DashboardPage />
+      case 'home': return <DashboardPage />
+      case 'dashboard': return <ControlDashboard />
+      case 'customers': return <CustomerManagement />
+      case 'bookings': return <BookingManagement />
+      case 'billing': return <BillingManagement />
+      case 'calendar': return <CalendarView />
+      case 'activity': return <ActivityLogPage />
+      case 'users': return <UserManagement />
+      case 'settings': return <SettingsPanel />
+      case 'profile': return <ProfilePage />
+      default: return <DashboardPage />
     }
   }
 
@@ -503,18 +520,21 @@ export default function Home() {
     profile: 'الملف الشخصي',
   }
 
+  const currentColors = PAGE_COLORS[currentPage] || PAGE_COLORS.home
+  const pageGradientClass = `page-gradient-${currentPage}`
+
   return (
     <div dir="rtl" className="min-h-screen bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:fixed lg:inset-y-0 lg:right-0 lg:z-50 lg:flex lg:w-64 lg:flex-col border-l border-[rgba(255,255,255,0.04)]">
-        <div className="flex grow flex-col overflow-y-auto bg-[#0d0d12]">
+      <aside className="hidden lg:fixed lg:inset-y-0 lg:right-0 lg:z-50 lg:flex lg:w-64 lg:flex-col border-l border-[rgba(255,255,255,0.05)]">
+        <div className="flex grow flex-col overflow-y-auto bg-[#0d0d15]">
           <SidebarContent />
         </div>
       </aside>
 
       {/* Mobile Sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="right" className="w-72 p-0 glass-strong border-l border-[rgba(255,255,255,0.04)]">
+        <SheetContent side="right" className="w-72 p-0 glass-strong border-l border-[rgba(255,255,255,0.05)]">
           <SheetTitle className="sr-only">القائمة الجانبية</SheetTitle>
           <SidebarContent onClose={() => setSidebarOpen(false)} />
         </SheetContent>
@@ -523,24 +543,33 @@ export default function Home() {
       {/* Main Content */}
       <div className="lg:pr-64">
         {/* Header */}
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-4 glass border-b border-[rgba(212,168,83,0.1)] px-4 lg:px-6">
+        <header
+          className="sticky top-0 z-40 flex h-14 items-center gap-4 glass border-b px-4 lg:px-6 transition-colors duration-300"
+          style={{ borderColor: currentColors.border }}
+        >
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden h-9 w-9 text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[rgba(255,255,255,0.04)]"
+            className="lg:hidden h-9 w-9 text-[#9490a0] hover:text-[#f0ece4] hover:bg-[rgba(255,255,255,0.06)]"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="h-5 w-5" />
           </Button>
 
-          {/* Page Title */}
-          <h1
-            className="text-lg font-semibold text-[#f5f0e8]"
-            style={{ fontFamily: '"Playfair Display", serif' }}
-          >
-            {pageTitle[currentPage] || 'لوحة التحكم'}
-          </h1>
+          {/* Page Title with colored dot */}
+          <div className="flex items-center gap-2.5">
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: currentColors.accent, boxShadow: `0 0 8px ${currentColors.accent}` }}
+            />
+            <h1
+              className="text-lg font-semibold text-[#f0ece4]"
+              style={{ fontFamily: '"Playfair Display", serif' }}
+            >
+              {pageTitle[currentPage] || 'لوحة التحكم'}
+            </h1>
+          </div>
 
           {/* Spacer */}
           <div className="flex-1" />
@@ -552,21 +581,22 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <Badge
               variant="outline"
-              className="hidden sm:flex gap-1 text-xs border-[rgba(212,168,83,0.25)] text-[#d4a853] bg-[rgba(212,168,83,0.06)] hover:bg-[rgba(212,168,83,0.1)] transition-colors duration-200"
+              className="hidden sm:flex gap-1 text-xs transition-colors duration-300"
+              style={{ borderColor: currentColors.border, color: currentColors.accent, backgroundColor: currentColors.bg }}
             >
               {ROLE_LABELS[user?.role || 'viewer']}
             </Badge>
             <button
               onClick={() => setCurrentPage('profile')}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-[#d4a853] to-[#b8912e] flex items-center justify-center text-[#0a0a0f] text-xs font-bold hover:scale-105 transition-all duration-200 shadow-md shadow-[rgba(212,168,83,0.15)]"
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[#0f0f17] text-xs font-bold hover:scale-105 transition-all duration-200 shadow-md shadow-amber-500/20"
             >
               {user?.name?.charAt(0) || 'U'}
             </button>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="p-4 lg:p-6 max-w-7xl mx-auto mesh-bg min-h-[calc(100vh-3.5rem)]">
+        {/* Page Content with themed gradient */}
+        <main className={`p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)] ${pageGradientClass}`}>
           {renderPage()}
         </main>
       </div>

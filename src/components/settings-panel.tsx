@@ -199,8 +199,8 @@ export default function SettingsPanel() {
 
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
-          <Settings className="h-6 w-6 text-[#d4a853]" />
+        <h2 className="text-2xl font-bold flex items-center gap-3 text-slate-100 font-[Playfair_Display]">
+          <Settings className="h-6 w-6 text-slate-300" />
           الإعدادات
         </h2>
         <p className="text-[#8a8690] text-sm mt-1">
@@ -209,10 +209,10 @@ export default function SettingsPanel() {
       </div>
 
       {/* Firebase Configuration Status */}
-      <Card className="glass border-[#d4a853]/10 border-r-4 border-r-[#d4a853] card-hover">
+      <Card className="glass border-slate-500/12 border-r-4 border-r-slate-400 card-hover">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg text-[#f5f0e8]">
-            <Flame className="h-5 w-5 text-[#d4a853]" />
+            <Flame className="h-5 w-5 text-orange-400" />
             حالة Firebase
           </CardTitle>
           <CardDescription className="text-[#8a8690]">
@@ -246,7 +246,7 @@ export default function SettingsPanel() {
               variant="outline"
               onClick={handleTestConnection}
               disabled={testing}
-              className="gap-2 border-[#d4a853]/30 text-[#d4a853] hover:bg-[#d4a853]/10 hover:text-[#f0d48a]"
+              className="gap-2 border-orange-500/30 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300"
             >
               {testing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -284,7 +284,7 @@ export default function SettingsPanel() {
                     onChange={(e) => updateField('firebaseProjectId', e.target.value)}
                     placeholder="your-project-id"
                     dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20 font-[DM_Mono]"
+                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -295,7 +295,7 @@ export default function SettingsPanel() {
                     onChange={(e) => updateField('firebaseDatabaseUrl', e.target.value)}
                     placeholder="https://your-project.firebaseio.com"
                     dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20 font-[DM_Mono]"
+                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -306,7 +306,7 @@ export default function SettingsPanel() {
                     onChange={(e) => updateField('firebaseApiKey', e.target.value)}
                     placeholder="AIzaSy..."
                     dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20 font-[DM_Mono]"
+                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -317,7 +317,7 @@ export default function SettingsPanel() {
                     onChange={(e) => updateField('firebaseAuthDomain', e.target.value)}
                     placeholder="your-project.firebaseapp.com"
                     dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20 font-[DM_Mono]"
+                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
                   />
                 </div>
               </div>
@@ -326,7 +326,7 @@ export default function SettingsPanel() {
                 <Button
                   onClick={handleSave}
                   disabled={saving}
-                  className="gap-2 btn-gold"
+                  className="gap-2 bg-gradient-to-b from-slate-500 to-slate-600 text-white hover:from-slate-400 hover:to-slate-500 shadow-[0_2px_12px_rgba(100,116,139,0.3)]"
                 >
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                   {saving ? 'جاري الحفظ...' : 'حفظ إعدادات Firebase'}
@@ -408,10 +408,10 @@ export default function SettingsPanel() {
       )}
 
       {/* Hall Information */}
-      <Card className="glass border-[#d4a853]/10 border-r-4 border-r-[#d4a853] card-hover">
+      <Card className="glass border-slate-500/12 border-r-4 border-r-slate-400 card-hover">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg text-[#f5f0e8]">
-            <Building2 className="h-5 w-5 text-[#d4a853]" />
+            <Building2 className="h-5 w-5 text-slate-300" />
             معلومات الصالة
           </CardTitle>
           <CardDescription className="text-[#8a8690]">
@@ -421,7 +421,7 @@ export default function SettingsPanel() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="hall-name" className="flex items-center gap-2 text-[#8a8690]">
-              <Building2 className="h-4 w-4 text-[#d4a853]" />
+              <Building2 className="h-4 w-4 text-slate-300" />
               اسم الصالة
             </Label>
             <Input
@@ -430,12 +430,12 @@ export default function SettingsPanel() {
               onChange={(e) => updateField('hallName', e.target.value)}
               placeholder="أدخل اسم الصالة"
               disabled={!canWrite}
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="hall-phone" className="flex items-center gap-2 text-[#8a8690]">
-              <Phone className="h-4 w-4 text-[#d4a853]" />
+              <Phone className="h-4 w-4 text-slate-300" />
               رقم الهاتف
             </Label>
             <Input
@@ -445,12 +445,12 @@ export default function SettingsPanel() {
               placeholder="أدخل رقم هاتف الصالة"
               dir="ltr"
               disabled={!canWrite}
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20 font-[DM_Mono]"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="hall-address" className="flex items-center gap-2 text-[#8a8690]">
-              <MapPin className="h-4 w-4 text-[#d4a853]" />
+              <MapPin className="h-4 w-4 text-slate-300" />
               العنوان
             </Label>
             <Textarea
@@ -460,7 +460,7 @@ export default function SettingsPanel() {
               placeholder="أدخل عنوان الصالة بالتفصيل"
               rows={3}
               disabled={!canWrite}
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20"
+              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20"
             />
           </div>
         </CardContent>
@@ -472,7 +472,7 @@ export default function SettingsPanel() {
           <Button
             onClick={handleSave}
             disabled={saving}
-            className="gap-2 btn-gold min-w-[160px]"
+            className="gap-2 bg-gradient-to-b from-slate-500 to-slate-600 text-white hover:from-slate-400 hover:to-slate-500 shadow-[0_2px_12px_rgba(100,116,139,0.3)] min-w-[160px]"
           >
             {saving ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -490,7 +490,7 @@ export default function SettingsPanel() {
       <Card className="glass border-[#1f1f2e]">
         <CardContent className="p-6">
           <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-[#d4a853] mt-0.5" />
+            <Info className="h-5 w-5 text-slate-400 mt-0.5" />
             <div className="space-y-1">
               <h3 className="font-semibold text-[#f5f0e8] font-[Playfair_Display]">حول النظام</h3>
               <p className="text-sm text-[#8a8690]">

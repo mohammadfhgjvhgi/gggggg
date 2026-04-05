@@ -236,7 +236,7 @@ export default function ActivityLogPage() {
               size="sm"
               className={`w-8 h-8 p-0 font-[DM_Mono] text-xs ${
                 p === page
-                  ? 'bg-[#d4a853] text-[#0a0a0f] hover:bg-[#d4a853]'
+                  ? 'bg-gradient-to-b from-indigo-500 to-indigo-600 text-[#0a0a0f] hover:from-indigo-400 hover:to-indigo-500'
                   : 'text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[#1a1a25]'
               }`}
               onClick={() => setPage(p)}
@@ -262,12 +262,12 @@ export default function ActivityLogPage() {
     return (
       <div className="space-y-6 animate-fade-up">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
-            <ClipboardList className="h-6 w-6 text-[#d4a853]" />
+          <h2 className="text-2xl font-bold flex items-center gap-3 text-gradient-activity font-[Playfair_Display]">
+            <ClipboardList className="h-6 w-6 text-indigo-400" />
             سجل النشاطات
           </h2>
         </div>
-        <Card className="glass border-[#d4a853]/10">
+        <Card className="glass border-indigo-500/12">
           <CardContent className="p-12 text-center text-[#8a8690]">
             <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-30" />
             <p>ليس لديك صلاحية الوصول إلى سجل النشاطات</p>
@@ -282,24 +282,24 @@ export default function ActivityLogPage() {
     <div className="space-y-6 animate-fade-up">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-3 text-gold-gradient font-[Playfair_Display]">
-          <ClipboardList className="h-6 w-6 text-[#d4a853]" />
+        <h2 className="text-2xl font-bold flex items-center gap-3 text-gradient-activity font-[Playfair_Display]">
+          <ClipboardList className="h-6 w-6 text-indigo-400" />
           سجل النشاطات
         </h2>
         <p className="text-[#8a8690] text-sm mt-1">متابعة جميع العمليات والإجراءات في النظام</p>
       </div>
 
       {/* Filters */}
-      <Card className="glass border-[#d4a853]/10">
+      <Card className="glass border-indigo-500/12">
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex items-center gap-2 text-sm text-[#d4a853]">
+            <div className="flex items-center gap-2 text-sm text-indigo-400">
               <Filter className="h-4 w-4" />
               تصفية:
             </div>
             <div className="flex-1">
               <Select value={userIdFilter || '__all__'} onValueChange={(v) => setUserIdFilter(v === '__all__' ? '' : v)}>
-                <SelectTrigger className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20">
+                <SelectTrigger className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] focus:border-indigo-500/50 focus:ring-indigo-500/20">
                   <SelectValue placeholder="جميع المستخدمين" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#12121a] border-[#1f1f2e]">
@@ -314,7 +314,7 @@ export default function ActivityLogPage() {
             </div>
             <div className="flex-1">
               <Select value={actionFilter || '__all__'} onValueChange={(v) => setActionFilter(v === '__all__' ? '' : v)}>
-                <SelectTrigger className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] focus:border-[#d4a853]/50 focus:ring-[#d4a853]/20">
+                <SelectTrigger className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] focus:border-indigo-500/50 focus:ring-indigo-500/20">
                   <SelectValue placeholder="جميع الإجراءات" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#12121a] border-[#1f1f2e]">
@@ -332,7 +332,7 @@ export default function ActivityLogPage() {
       </Card>
 
       {/* Timeline Log */}
-      <Card className="glass border-[#d4a853]/10">
+      <Card className="glass border-indigo-500/12">
         <CardContent className="p-4 sm:p-6">
           {loading ? (
             <div className="space-y-4">

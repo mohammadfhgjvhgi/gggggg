@@ -52,83 +52,97 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Page theme colors */
+  --color-page-dashboard: #f59e0b;
+  --color-page-control: #06b6d4;
+  --color-page-customers: #f97316;
+  --color-page-bookings: #a855f7;
+  --color-page-billing: #10b981;
+  --color-page-calendar: #ec4899;
+  --color-page-activity: #6366f1;
+  --color-page-settings: #64748b;
+  --color-page-profile: #e879f9;
 }
 
 :root {
   --radius: 0.75rem;
 
-  --background: #0a0a0f;
-  --foreground: #f5f0e8;
-  --surface: #12121a;
-  --surface-hover: #1a1a25;
-  --card: #14141e;
-  --card-foreground: #f5f0e8;
-  --popover: #14141e;
-  --popover-foreground: #f5f0e8;
+  /* Rich dark background - not pure black */
+  --background: #0f0f17;
+  --foreground: #f0ece4;
+  --surface: #161622;
+  --surface-hover: #1e1e2e;
+  --card: #1a1a28;
+  --card-foreground: #f0ece4;
+  --popover: #1a1a28;
+  --popover-foreground: #f0ece4;
 
-  --gold: #d4a853;
-  --gold-light: #f0d48a;
-  --gold-dark: #b8912e;
-  --gold-muted: #d4a85330;
+  /* Vibrant gold */
+  --gold: #e8b84a;
+  --gold-light: #f5d77a;
+  --gold-dark: #c99530;
+  --gold-muted: #e8b84a40;
 
-  --primary: #d4a853;
-  --primary-foreground: #0a0a0f;
-  --secondary: #1e1e2a;
-  --secondary-foreground: #f5f0e8;
-  --muted: #1a1a25;
-  --muted-foreground: #8a8690;
-  --accent: #1e1e2a;
-  --accent-foreground: #f5f0e8;
+  --primary: #e8b84a;
+  --primary-foreground: #0f0f17;
+  --secondary: #22222f;
+  --secondary-foreground: #f0ece4;
+  --muted: #1e1e2e;
+  --muted-foreground: #9490a0;
+  --accent: #22222f;
+  --accent-foreground: #f0ece4;
 
-  --destructive: #ef4444;
-  --border: rgba(255, 255, 255, 0.06);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #d4a853;
+  --destructive: #f43f5e;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #e8b84a;
 
-  --chart-1: #d4a853;
-  --chart-2: #22c55e;
-  --chart-3: #3b82f6;
+  /* Vibrant chart colors */
+  --chart-1: #f59e0b;
+  --chart-2: #10b981;
+  --chart-3: #06b6d4;
   --chart-4: #a855f7;
-  --chart-5: #ef4444;
+  --chart-5: #f43f5e;
 
-  --sidebar: #0d0d12;
-  --sidebar-foreground: #f5f0e8;
-  --sidebar-primary: #d4a853;
-  --sidebar-primary-foreground: #0a0a0f;
-  --sidebar-accent: rgba(212, 168, 83, 0.08);
-  --sidebar-accent-foreground: #d4a853;
+  --sidebar: #0d0d15;
+  --sidebar-foreground: #f0ece4;
+  --sidebar-primary: #e8b84a;
+  --sidebar-primary-foreground: #0f0f17;
+  --sidebar-accent: rgba(232, 184, 74, 0.1);
+  --sidebar-accent-foreground: #e8b84a;
   --sidebar-border: rgba(255, 255, 255, 0.06);
-  --sidebar-ring: #d4a853;
+  --sidebar-ring: #e8b84a;
 }
 
-/* Dark mode vars (same as root since app is always dark) */
+/* Dark mode vars */
 .dark {
-  --background: #0a0a0f;
-  --foreground: #f5f0e8;
-  --card: #14141e;
-  --card-foreground: #f5f0e8;
-  --popover: #14141e;
-  --popover-foreground: #f5f0e8;
-  --primary: #d4a853;
-  --primary-foreground: #0a0a0f;
-  --secondary: #1e1e2a;
-  --secondary-foreground: #f5f0e8;
-  --muted: #1a1a25;
-  --muted-foreground: #8a8690;
-  --accent: #1e1e2a;
-  --accent-foreground: #f5f0e8;
-  --destructive: #ef4444;
-  --border: rgba(255, 255, 255, 0.06);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #d4a853;
-  --sidebar: #0d0d12;
-  --sidebar-foreground: #f5f0e8;
-  --sidebar-primary: #d4a853;
-  --sidebar-primary-foreground: #0a0a0f;
-  --sidebar-accent: rgba(212, 168, 83, 0.08);
-  --sidebar-accent-foreground: #d4a853;
+  --background: #0f0f17;
+  --foreground: #f0ece4;
+  --card: #1a1a28;
+  --card-foreground: #f0ece4;
+  --popover: #1a1a28;
+  --popover-foreground: #f0ece4;
+  --primary: #e8b84a;
+  --primary-foreground: #0f0f17;
+  --secondary: #22222f;
+  --secondary-foreground: #f0ece4;
+  --muted: #1e1e2e;
+  --muted-foreground: #9490a0;
+  --accent: #22222f;
+  --accent-foreground: #f0ece4;
+  --destructive: #f43f5e;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #e8b84a;
+  --sidebar: #0d0d15;
+  --sidebar-foreground: #f0ece4;
+  --sidebar-primary: #e8b84a;
+  --sidebar-primary-foreground: #0f0f17;
+  --sidebar-accent: rgba(232, 184, 74, 0.1);
+  --sidebar-accent-foreground: #e8b84a;
   --sidebar-border: rgba(255, 255, 255, 0.06);
-  --sidebar-ring: #d4a853;
+  --sidebar-ring: #e8b84a;
 }
 
 @layer base {
@@ -148,18 +162,18 @@
 /* ═══════════════════════════════════════ */
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 168, 83, 0.2);
+  background: rgba(232, 184, 74, 0.25);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 168, 83, 0.4);
+  background: rgba(232, 184, 74, 0.45);
 }
 
 /* ═══════════════════════════════════════ */
@@ -167,8 +181,8 @@
 /* ═══════════════════════════════════════ */
 
 ::selection {
-  background: rgba(212, 168, 83, 0.3);
-  color: #f5f0e8;
+  background: rgba(232, 184, 74, 0.35);
+  color: #f0ece4;
 }
 
 /* ═══════════════════════════════════════ */
@@ -176,24 +190,139 @@
 /* ═══════════════════════════════════════ */
 
 .glass {
-  background: rgba(20, 20, 30, 0.6);
+  background: rgba(26, 26, 40, 0.65);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.glass-strong {
-  background: rgba(20, 20, 30, 0.8);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.glass-strong {
+  background: rgba(26, 26, 40, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .glass-gold {
-  background: rgba(212, 168, 83, 0.06);
+  background: rgba(232, 184, 74, 0.07);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 168, 83, 0.15);
+  border: 1px solid rgba(232, 184, 74, 0.18);
+}
+
+/* ═══════════════════════════════════════ */
+/*   Page-specific glass variants            */
+/* ═══════════════════════════════════════ */
+
+.glass-dashboard {
+  background: rgba(245, 158, 11, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245, 158, 11, 0.12);
+}
+
+.glass-control {
+  background: rgba(6, 182, 212, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(6, 182, 212, 0.12);
+}
+
+.glass-customers {
+  background: rgba(249, 115, 22, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(249, 115, 22, 0.12);
+}
+
+.glass-bookings {
+  background: rgba(168, 85, 247, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+}
+
+.glass-billing {
+  background: rgba(16, 185, 129, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.12);
+}
+
+.glass-calendar {
+  background: rgba(236, 72, 153, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(236, 72, 153, 0.12);
+}
+
+.glass-activity {
+  background: rgba(99, 102, 241, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.12);
+}
+
+.glass-settings {
+  background: rgba(100, 116, 139, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(100, 116, 139, 0.12);
+}
+
+.glass-profile {
+  background: rgba(232, 121, 249, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(232, 121, 249, 0.12);
+}
+
+/* ═══════════════════════════════════════ */
+/*   Page-themed accent gradients           */
+/* ═══════════════════════════════════════ */
+
+.page-gradient-dashboard {
+  background: radial-gradient(ellipse at 20% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(245, 158, 11, 0.04) 0%, transparent 40%);
+}
+
+.page-gradient-control {
+  background: radial-gradient(ellipse at 20% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(6, 182, 212, 0.04) 0%, transparent 40%);
+}
+
+.page-gradient-customers {
+  background: radial-gradient(ellipse at 20% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(249, 115, 22, 0.04) 0%, transparent 40%);
+}
+
+.page-gradient-bookings {
+  background: radial-gradient(ellipse at 20% 0%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(168, 85, 247, 0.04) 0%, transparent 40%);
+}
+
+.page-gradient-billing {
+  background: radial-gradient(ellipse at 20% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 40%);
+}
+
+.page-gradient-calendar {
+  background: radial-gradient(ellipse at 20% 0%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(236, 72, 153, 0.04) 0%, transparent 40%);
+}
+
+.page-gradient-activity {
+  background: radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.04) 0%, transparent 40%);
+}
+
+.page-gradient-settings {
+  background: radial-gradient(ellipse at 20% 0%, rgba(100, 116, 139, 0.06) 0%, transparent 50%);
+}
+
+.page-gradient-profile {
+  background: radial-gradient(ellipse at 20% 0%, rgba(232, 121, 249, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 100%, rgba(232, 121, 249, 0.04) 0%, transparent 40%);
 }
 
 /* ═══════════════════════════════════════ */
@@ -206,7 +335,7 @@
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 128px 128px;
@@ -218,16 +347,16 @@
 
 .mesh-bg {
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(212, 168, 83, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(232, 184, 74, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
 }
 
 .mesh-bg-login {
   background:
-    radial-gradient(ellipse at 30% 20%, rgba(212, 168, 83, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 80%, rgba(212, 168, 83, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 60%);
+    radial-gradient(ellipse at 30% 20%, rgba(232, 184, 74, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(232, 184, 74, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%);
 }
 
 /* ═══════════════════════════════════════ */
@@ -255,8 +384,8 @@
 }
 
 @keyframes pulse-gold {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 168, 83, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(212, 168, 83, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 184, 74, 0.45); }
+  50% { box-shadow: 0 0 0 8px rgba(232, 184, 74, 0); }
 }
 
 @keyframes pulse-dot {
@@ -270,13 +399,19 @@
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 15px rgba(212, 168, 83, 0.15); }
-  50% { box-shadow: 0 0 30px rgba(212, 168, 83, 0.25); }
+  0%, 100% { box-shadow: 0 0 15px rgba(232, 184, 74, 0.18); }
+  50% { box-shadow: 0 0 30px rgba(232, 184, 74, 0.28); }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-6px); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .animate-fade-up {
@@ -304,7 +439,7 @@
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent 0%, rgba(212, 168, 83, 0.06) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(232, 184, 74, 0.07) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 2s ease-in-out infinite;
 }
@@ -334,7 +469,7 @@
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(212, 168, 83, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(232, 184, 74, 0.1);
 }
 
 /* ═══════════════════════════════════════ */
@@ -342,14 +477,14 @@
 /* ═══════════════════════════════════════ */
 
 .btn-gold {
-  background: linear-gradient(135deg, #d4a853, #b8912e);
-  color: #0a0a0f;
+  background: linear-gradient(135deg, #f0c24a, #c99530);
+  color: #0f0f17;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 .btn-gold:hover {
-  background: linear-gradient(135deg, #f0d48a, #d4a853);
-  box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3);
+  background: linear-gradient(135deg, #f5d77a, #e8b84a);
+  box-shadow: 0 4px 20px rgba(232, 184, 74, 0.35);
   transform: translateY(-1px);
 }
 .btn-gold:active {
@@ -358,28 +493,154 @@
 
 .btn-ghost-gold {
   background: transparent;
-  color: #d4a853;
-  border: 1px solid rgba(212, 168, 83, 0.2);
+  color: #e8b84a;
+  border: 1px solid rgba(232, 184, 74, 0.25);
   transition: all 0.2s ease;
 }
 .btn-ghost-gold:hover {
-  background: rgba(212, 168, 83, 0.08);
-  border-color: rgba(212, 168, 83, 0.4);
+  background: rgba(232, 184, 74, 0.1);
+  border-color: rgba(232, 184, 74, 0.5);
 }
 
 /* ═══════════════════════════════════════ */
-/*   Gold Text Gradient                     */
+/*   Page-themed button variants            */
+/* ═══════════════════════════════════════ */
+
+.btn-dashboard {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #0f0f17;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-dashboard:hover {
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-control {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: #0f0f17;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-control:hover {
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-customers {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-customers:hover {
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-bookings {
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-bookings:hover {
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-billing {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-billing:hover {
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-calendar {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-calendar:hover {
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.35);
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════ */
+/*   Text Gradient Utilities                */
 /* ═══════════════════════════════════════ */
 
 .text-gold-gradient {
-  background: linear-gradient(135deg, #f0d48a, #d4a853, #b8912e);
+  background: linear-gradient(135deg, #f5d77a, #e8b84a, #c99530);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gold-gradient-light {
-  background: linear-gradient(135deg, #f0d48a, #d4a853);
+  background: linear-gradient(135deg, #f5d77a, #e8b84a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-dashboard {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-control {
+  background: linear-gradient(135deg, #22d3ee, #06b6d4, #0891b2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-customers {
+  background: linear-gradient(135deg, #fb923c, #f97316, #ea580c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-bookings {
+  background: linear-gradient(135deg, #c084fc, #a855f7, #9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-billing {
+  background: linear-gradient(135deg, #34d399, #10b981, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-calendar {
+  background: linear-gradient(135deg, #f472b6, #ec4899, #db2777);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-activity {
+  background: linear-gradient(135deg, #818cf8, #6366f1, #4f46e5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-profile {
+  background: linear-gradient(135deg, #f0abfc, #e879f9, #d946ef);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -394,7 +655,7 @@ input, textarea, select {
 }
 
 input::placeholder, textarea::placeholder {
-  color: rgba(138, 134, 144, 0.6);
+  color: rgba(148, 144, 160, 0.55);
 }
 
 /* ═══════════════════════════════════════ */
@@ -405,7 +666,7 @@ input::placeholder, textarea::placeholder {
   transition: background-color 0.15s ease;
 }
 .table-row-hover:hover {
-  background-color: rgba(212, 168, 83, 0.03);
+  background-color: rgba(232, 184, 74, 0.04);
 }
 
 /* ═══════════════════════════════════════ */
@@ -417,7 +678,7 @@ input::placeholder, textarea::placeholder {
   height: 8px;
   border-radius: 50%;
   background: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
@@ -425,8 +686,8 @@ input::placeholder, textarea::placeholder {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #ef4444;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  background: #f43f5e;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.7);
 }
 
 /* ═══════════════════════════════════════ */
@@ -435,5 +696,73 @@ input::placeholder, textarea::placeholder {
 
 .divider-gold {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(232, 184, 74, 0.25), transparent);
+}
+
+/* ═══════════════════════════════════════ */
+/*   Page Icon Wrapper (themed)             */
+/* ═══════════════════════════════════════ */
+
+.page-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.page-icon-dashboard {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+  color: #0f0f17;
+}
+
+.page-icon-control {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3);
+  color: #0f0f17;
+}
+
+.page-icon-customers {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+  color: white;
+}
+
+.page-icon-bookings {
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+  color: white;
+}
+
+.page-icon-billing {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+  color: white;
+}
+
+.page-icon-calendar {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3);
+  color: white;
+}
+
+.page-icon-activity {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  color: white;
+}
+
+.page-icon-settings {
+  background: linear-gradient(135deg, #64748b, #475569);
+  box-shadow: 0 4px 16px rgba(100, 116, 139, 0.3);
+  color: white;
+}
+
+.page-icon-profile {
+  background: linear-gradient(135deg, #e879f9, #d946ef);
+  box-shadow: 0 4px 16px rgba(232, 121, 249, 0.3);
+  color: white;
 }
