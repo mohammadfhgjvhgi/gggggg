@@ -272,7 +272,7 @@ function GateDoorCard({
             className={`w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
               isOpen
                 ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/20 ring-1 ring-green-400/30'
-                : 'bg-white/[0.04] text-[#8a8690] hover:bg-white/[0.07] hover:text-[#f5f0e8] border border-white/[0.06]'
+                : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]'
             } disabled:opacity-40 disabled:cursor-not-allowed`}
           >
             {isLoading && isOpen === false ? (
@@ -287,7 +287,7 @@ function GateDoorCard({
             disabled={disabled || isLoading}
             className={`w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
               !isOpen
-                ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#8a8690] ring-1 ring-white/[0.06]'
+                ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#b0acb8] ring-1 ring-white/[0.1]'
                 : 'bg-red-500/10 text-red-400 hover:bg-red-500/15 border border-red-500/20'
             } disabled:opacity-40 disabled:cursor-not-allowed`}
           >
@@ -377,7 +377,7 @@ function SeatCard({
             className={`w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
               active
                 ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/20 ring-1 ring-violet-400/30'
-                : 'bg-white/[0.04] text-[#8a8690] hover:bg-white/[0.07] hover:text-[#f5f0e8] border border-white/[0.06]'
+                : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]'
             } disabled:opacity-40 disabled:cursor-not-allowed`}
           >
             {isLoading ? (
@@ -392,7 +392,7 @@ function SeatCard({
             <button
               onClick={onReset}
               disabled={disabled || isLoading}
-              className="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 bg-white/[0.03] text-[#8a8690] hover:bg-white/[0.06] hover:text-[#f5f0e8] border border-white/[0.06] disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 bg-white/[0.06] text-[#b0acb8] hover:bg-white/[0.1] hover:text-[#f5f0e8] border border-white/[0.1] disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <RotateCcw className="size-4" />
               إعادة تعيين
@@ -475,8 +475,8 @@ function LightsCard({
                   layout
                   className={`flex items-center justify-between rounded-xl px-4 py-3.5 transition-all duration-300 ${
                     isOn
-                      ? 'bg-cyan-500/5 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.08)]'
-                      : 'bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04]'
+                      ? 'bg-cyan-500/8 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.08)]'
+                      : 'bg-white/[0.06] border border-white/[0.1] hover:bg-white/[0.09]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -649,7 +649,7 @@ function Mp3Card({
 
         <div className="px-5 pb-5 space-y-5">
           {/* معلومات المسار */}
-          <div className="flex items-center justify-between rounded-xl bg-white/[0.03] border border-white/[0.06] px-4 py-3.5">
+          <div className="flex items-center justify-between rounded-xl bg-white/[0.06] border border-white/[0.1] px-4 py-3.5">
             <div className="flex items-center gap-3">
               <Volume2 className="size-4 text-[#8a8690]" />
               <div>
@@ -667,7 +667,7 @@ function Mp3Card({
                 onChange={(e) => setTrackInput(e.target.value)}
                 disabled={disabled}
                 dir="ltr"
-                className="w-16 h-8 text-center text-sm font-[DM_Mono] rounded-lg border border-white/[0.08] bg-white/[0.03] text-[#f5f0e8] px-2 focus:outline-none focus:ring-1 focus:ring-pink-500/30 placeholder:text-[#8a8690]/40"
+                className="w-16 h-8 text-center text-sm font-[DM_Mono] rounded-lg border border-white/[0.12] bg-white/[0.06] text-[#f5f0e8] px-2 focus:outline-none focus:ring-1 focus:ring-pink-500/30 placeholder:text-[#8a8690]/40"
               />
               <button
                 type="submit"
@@ -684,7 +684,7 @@ function Mp3Card({
             <button
               onClick={onPrevTrack}
               disabled={disabled || isLoading}
-              className="size-11 rounded-full flex items-center justify-center bg-white/[0.04] border border-white/[0.08] text-[#8a8690] hover:bg-white/[0.08] hover:text-[#f5f0e8] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="size-11 rounded-full flex items-center justify-center bg-white/[0.07] border border-white/[0.12] text-[#b0acb8] hover:bg-white/[0.11] hover:text-[#f5f0e8] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <SkipBack className="size-4" />
             </button>
@@ -710,7 +710,7 @@ function Mp3Card({
             <button
               onClick={onNextTrack}
               disabled={disabled || isLoading}
-              className="size-11 rounded-full flex items-center justify-center bg-white/[0.04] border border-white/[0.08] text-[#8a8690] hover:bg-white/[0.08] hover:text-[#f5f0e8] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="size-11 rounded-full flex items-center justify-center bg-white/[0.07] border border-white/[0.12] text-[#b0acb8] hover:bg-white/[0.11] hover:text-[#f5f0e8] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <SkipForward className="size-4" />
             </button>
@@ -726,7 +726,7 @@ function Mp3Card({
                 className={`h-8 px-3.5 text-xs font-medium rounded-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${
                   track === t
                     ? 'bg-pink-500/15 text-pink-400 border border-pink-500/25 shadow-[0_0_10px_rgba(236,72,153,0.1)]'
-                    : 'bg-white/[0.03] text-[#8a8690] border border-white/[0.06] hover:bg-white/[0.06] hover:text-[#f5f0e8]'
+                    : 'bg-white/[0.06] text-[#b0acb8] border border-white/[0.1] hover:bg-white/[0.09] hover:text-[#f5f0e8]'
                 }`}
               >
                 {t}
