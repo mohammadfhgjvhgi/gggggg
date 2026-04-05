@@ -306,93 +306,233 @@
 /*   Page-themed gradients + Islamic patterns */
 /* ═══════════════════════════════════════ */
 
-/* Dashboard: Islamic 8-pointed Star + amber gradient */
+/* Dashboard: Real photo background — party lights */
 .page-gradient-dashboard {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-star),
-    radial-gradient(ellipse at 20% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(245, 158, 11, 0.04) 0%, transparent 40%);
-  background-size: 60px 60px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/dashboard.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-dashboard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(245, 158, 11, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.5) 0%, rgba(15, 15, 23, 0.85) 40%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Control: Geometric Diamond Grid + cyan gradient */
+/* Control: Real photo background — wedding entrance */
 .page-gradient-control {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-grid),
-    radial-gradient(ellipse at 20% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(6, 182, 212, 0.04) 0%, transparent 40%);
-  background-size: 40px 40px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/control.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-control::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(6, 182, 212, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.5) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Customers: Geometric Diamond Grid + orange gradient */
+/* Customers: Real photo background — groom / formal */
 .page-gradient-customers {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-grid),
-    radial-gradient(ellipse at 20% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(249, 115, 22, 0.04) 0%, transparent 40%);
-  background-size: 40px 40px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/customers.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-customers::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(249, 115, 22, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(249, 115, 22, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Bookings: Arabesque Scroll + purple gradient */
+/* Bookings: Real photo background — wedding decorations */
 .page-gradient-bookings {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-arabesque),
-    radial-gradient(ellipse at 20% 0%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(168, 85, 247, 0.04) 0%, transparent 40%);
-  background-size: 80px 80px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/bookings.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-bookings::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(168, 85, 247, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Billing: Arabesque Scroll + emerald gradient */
+/* Billing: Real photo background — banquet table */
 .page-gradient-billing {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-arabesque),
-    radial-gradient(ellipse at 20% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 40%);
-  background-size: 80px 80px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/billing.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-billing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Calendar: Hexagonal Star + pink gradient */
+/* Calendar: Real photo background — wedding cake */
 .page-gradient-calendar {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-hex),
-    radial-gradient(ellipse at 20% 0%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(236, 72, 153, 0.04) 0%, transparent 40%);
-  background-size: 50px 50px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/calendar.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-calendar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(236, 72, 153, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Activity: Hexagonal Star + indigo gradient */
+/* Activity: Real photo background — wedding flowers */
 .page-gradient-activity {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-hex),
-    radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.04) 0%, transparent 40%);
-  background-size: 50px 50px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/activity.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-activity::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Settings: Interlocking Circles + slate gradient */
+/* Settings: Real photo background — ambient lighting */
 .page-gradient-settings {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-circles),
-    radial-gradient(ellipse at 20% 0%, rgba(100, 116, 139, 0.06) 0%, transparent 50%);
-  background-size: 60px 60px, 100% 100%;
+    url('/images/backgrounds/settings.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-settings::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(100, 116, 139, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.9) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Profile: Interlocking Circles + fuchsia gradient */
+/* Profile: Real photo background — wedding car */
 .page-gradient-profile {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-circles),
-    radial-gradient(ellipse at 20% 0%, rgba(232, 121, 249, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(232, 121, 249, 0.04) 0%, transparent 40%);
-  background-size: 60px 60px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/profile.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-profile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(232, 121, 249, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(232, 121, 249, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Users: Islamic Star + rose gradient */
+/* Users: Real photo background — geometric pattern / team */
 .page-gradient-users {
+  position: relative;
+  background-color: #0f0f17;
   background-image:
-    var(--pat-star),
-    radial-gradient(ellipse at 20% 0%, rgba(244, 63, 94, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(244, 63, 94, 0.04) 0%, transparent 40%);
-  background-size: 60px 60px, 100% 100%, 100% 100%;
+    url('/images/backgrounds/users.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.page-gradient-users::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(244, 63, 94, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(244, 63, 94, 0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.45) 0%, rgba(15, 15, 23, 0.88) 35%, rgba(15, 15, 23, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ═══════════════════════════════════════ */
@@ -423,28 +563,22 @@
 }
 
 .mesh-bg-login {
-  background-image:
-    var(--pat-circles),
-    radial-gradient(ellipse at 30% 20%, rgba(232, 184, 74, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 80%, rgba(232, 184, 74, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%);
-  background-size: 60px 60px, 100% 100%, 100% 100%, 100% 100%;
+  background-color: #0f0f17;
+  background-image: url('/images/backgrounds/login.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
-
-/* Mihrab-inspired geometric watermark behind login card */
+/* Dark overlay on login photo */
 .mesh-bg-login::after {
   content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 320px;
-  height: 480px;
-  background-image: var(--pat-mihrab);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.03;
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(232, 184, 74, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(232, 184, 74, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(15, 15, 23, 0.3) 0%, rgba(15, 15, 23, 0.75) 40%, rgba(15, 15, 23, 0.92) 100%);
   pointer-events: none;
   z-index: 0;
 }

@@ -605,8 +605,8 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Page Content with themed gradient */}
-        <main className={`relative p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)] ${pageGradientClass}`}>
+        {/* Page Content with themed gradient + real photo background */}
+        <main className={`relative z-[1] p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)] ${pageGradientClass}`}>
           {renderPage()}
         </main>
       </div>
