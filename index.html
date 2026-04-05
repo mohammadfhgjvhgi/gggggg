@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة قاعة الأفراح</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        dark: { DEFAULT:'#0f0f17', 100:'#16162a', 200:'#1c1c2a', 300:'#24243a' },
+        gold: { DEFAULT:'#e8b84a', light:'#f0c24a', dark:'#c99530', dim:'#a07828' },
+        cream: { DEFAULT:'#f5f0e8', dark:'#b0acb8' }
+      },
+      fontFamily: {
+        display: ['Playfair Display','serif'],
+        sans: ['DM Sans','sans-serif'],
+        mono: ['DM Mono','monospace']
+      }
+    }
+  }
+}
+</script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background:#0f0f17; color:#f5f0e8; font-family:'DM Sans',sans-serif; }
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:#0f0f17; }
+::-webkit-scrollbar-thumb { background:#e8b84a44; border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:#e8b84a88; }
+.glass { background:rgba(28,28,42,0.85); backdrop-filter:blur(16px); border:1px solid rgba(232,184,74,0.12); }
+.glass-strong { background:rgba(28,28,42,0.95); backdrop-filter:blur(20px); border:1px solid rgba(232,184,74,0.18); }
+.btn-gold { background:linear-gradient(135deg,#f0c24a,#c99530); color:#0f0f17; font-weight:600; border:none; cursor:pointer; transition:all 0.2s; }
+.btn-gold:hover { transform:translateY(-1px); box-shadow:0 4px 20px rgba(232,184,74,0.3); }
+.btn-gold:disabled { opacity:1; background:#333; color:#666; cursor:not-allowed; transform:none; box-shadow:none; }
+.btn-outline { border:1px solid rgba(232,184,74,0.4); color:#e8b84a; background:transparent; cursor:pointer; transition:all 0.2s; }
+.btn-outline:hover { background:rgba(232,184,74,0.1); }
+input,select,textarea { background:rgba(15,15,23,0.6); border:1px solid rgba(232,184,74,0.2); color:#f5f0e8; padding:10px 14px; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:border 0.2s; width:100%; }
+input:focus,select:focus,textarea:focus { border-color:#e8b84a; }
+input::placeholder,textarea::placeholder { color:#555; }
+select option { background:#1c1c2a; color:#f5f0e8; }
+table { width:100%; border-collapse:collapse; }
+th { text-align:right; padding:12px 16px; color:#b0acb8; font-size:13px; font-weight:500; border-bottom:1px solid rgba(232,184,74,0.1); white-space:nowrap; }
+td { padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.04); font-size:14px; }
+tr:hover td { background:rgba(232,184,74,0.03); }
+.badge { display:inline-flex; align-items:center; padding:2px 10px; border-radius:20px; font-size:12px; font-weight:500; }
+.sidebar-item { display:flex; align-items:center; gap:12px; padding:10px 16px; border-radius:10px; cursor:pointer; transition:all 0.2s; color:#b0acb8; font-size:14px; }
+.sidebar-item:hover { background:rgba(232,184,74,0.06); color:#f5f0e8; }
+.sidebar-item.active { background:rgba(232,184,74,0.12); color:#e8b84a; border-right:3px solid #e8b84a; }
+.stat-card { transition:transform 0.2s,box-shadow 0.2s; }
+.stat-card:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,0,0,0.3); }
+.toggle-track { width:48px; height:26px; border-radius:13px; background:#333; position:relative; cursor:pointer; transition:background 0.3s; flex-shrink:0; }
+.toggle-track.on { background:#e8b84a; }
+.toggle-thumb { width:22px; height:22px; border-radius:50%; background:#fff; position:absolute; top:2px; right:2px; transition:transform 0.3s; }
+.toggle-track.on .toggle-thumb { transform:translateX(-22px); }
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:100; display:flex; align-items:center; justify-content:center; }
+.modal-content { max-height:90vh; overflow-y:auto; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse-gold { 0%,100%{box-shadow:0 0 0 0 rgba(232,184,74,0.4)} 50%{box-shadow:0 0 0 8px rgba(232,184,74,0)} }
+.animate-in { animation:fadeIn 0.3s ease; }
+.pulse-gold { animation:pulse-gold 2s infinite; }
+.page-hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN PAGE ============ -->
+<div id="loginPage" class="min-h-screen flex items-center justify-center p-4" style="background:radial-gradient(ellipse at 30% 20%,rgba(232,184,74,0.06),transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(201,149,48,0.04),transparent 50%),#0f0f17;">
+  <div class="glass rounded-2xl p-8 w-full max-w-md animate-in">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center">
+        <svg class="w-8 h-8 text-dark" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h1 class="font-display text-3xl font-bold text-gold mb-2">قاعة الأفراح</h1>
+      <p class="text-cream-dark text-sm">نظام إدارة متكامل</p>
+    </div>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block text-sm text-cream-dark mb-1">البريد الإلكتروني</label>
+        <input type="email" id="loginEmail" placeholder="example@wedding.com">
+      </div>
+      <div>
+        <label class="block text-sm text-cream-dark mb-1">كلمة المرور</label>
+        <input type="password" id="loginPassword" placeholder="••••••••">
+      </div>
+      <button onclick="handleLogin()" class="btn-gold w-full py-3 rounded-xl text-base">تسجيل الدخول</button>
+      <p id="loginError" class="text-red-400 text-sm text-center hidden">بيانات الدخول غير صحيحة</p>
+    </div>
+    <div class="border-t border-white/5 pt-5">
+      <p class="text-cream-dark text-xs text-center mb-3">دخول سريع — اختر الدور المطلوب</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="quickLogin('admin@wedding.com','admin123')" class="py-2 px-3 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition">مدير النظام</button>
+        <button onclick="quickLogin('manager@wedding.com','manager123')" class="py-2 px-3 rounded-lg text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 transition">المدير</button>
+        <button onclick="quickLogin('employee@wedding.com','emp123')" class="py-2 px-3 rounded-lg text-xs font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20 hover:bg-slate-500/20 transition">الموظف</button>
+        <button onclick="quickLogin('viewer@wedding.com','view123')" class="py-2 px-3 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition">المشاهد</button>
+      </div>
+    </div>
+    <p class="text-cream-dark/50 text-xs text-center mt-6">© 2025 جميع الحقوق محفوظة</p>
+  </div>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div id="appShell" class="hidden min-h-screen flex">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="fixed right-0 top-0 h-full w-64 glass-strong z-50 flex flex-col transition-transform duration-300 lg:translate-x-0 translate-x-full lg:translate-x-0">
+    <div class="p-5 border-b border-white/5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center">
+          <svg class="w-5 h-5 text-dark" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div>
+          <h2 class="font-display text-lg font-bold text-gold">قاعة الأفراح</h2>
+          <p class="text-xs text-cream-dark">لوحة التحكم</p>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 p-3 space-y-1 overflow-y-auto" id="sidebarNav"></nav>
+    <div class="p-4 border-t border-white/5">
+      <div class="flex items-center gap-3 mb-3">
+        <div id="sidebarAvatar" class="w-9 h-9 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">م</div>
+        <div class="flex-1 min-w-0">
+          <p id="sidebarName" class="text-sm font-medium truncate">المستخدم</p>
+          <p id="sidebarRole" class="text-xs text-cream-dark truncate">الدور</p>
+        </div>
+      </div>
+      <button onclick="handleLogout()" class="w-full flex items-center gap-2 text-red-400 text-sm hover:bg-red-500/10 p-2 rounded-lg transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        تسجيل الخروج
+      </button>
+    </div>
+  </aside>
+
+  <!-- MOBILE OVERLAY -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 lg:mr-64 min-h-screen">
+    <!-- TOP BAR -->
+    <header class="sticky top-0 z-30 glass-strong px-4 lg:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-white/5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <h1 id="pageTitle" class="font-display text-lg font-bold text-gold">لوحة المعلومات</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="headerBadge" class="badge bg-gold/10 text-gold text-xs hidden lg:inline-flex"></span>
+      </div>
+    </header>
+
+    <!-- PAGE CONTAINER -->
+    <div class="p-4 lg:p-6" id="pageContainer">
+
+      <!-- ===== HOME PAGE ===== -->
+      <div id="page-home" class="page-content animate-in">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card glass rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-cream-dark text-sm">إجمالي الزبائن</span>
+              <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+            </div>
+            <p id="statCustomers" class="font-mono text-2xl font-bold text-amber-400">0</p>
+          </div>
+          <div class="stat-card glass rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-cream-dark text-sm">الحجوزات الشهرية</span>
+              <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
+            </div>
+            <p id="statBookings" class="font-mono text-2xl font-bold text-cyan-400">0</p>
+          </div>
+          <div class="stat-card glass rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-cream-dark text-sm">الإيرادات الشهرية</span>
+              <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>
+              </div>
+            </div>
+            <p id="statRevenue" class="font-mono text-2xl font-bold text-emerald-400">0 ر.س</p>
+          </div>
+          <div class="stat-card glass rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-cream-dark text-sm">الحجوزات القادمة</span>
+              <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              </div>
+            </div>
+            <p id="statUpcoming" class="font-mono text-2xl font-bold text-purple-400">0</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-display text-base font-bold text-cream mb-4">آخر الحجوزات</h3>
+            <div class="overflow-x-auto max-h-64 overflow-y-auto">
+              <table>
+                <thead><tr><th>الزبون</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+                <tbody id="recentBookingsBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-display text-base font-bold text-cream mb-4">إجراءات سريعة</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="navigateTo('control')" class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 hover:bg-cyan-500/20 transition text-center">
+                <svg class="w-6 h-6 mx-auto mb-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span class="text-sm text-cyan-300">التحكم بالأجهزة</span>
+              </button>
+              <button onclick="navigateTo('bookings');setTimeout(()=>document.getElementById('addBookingBtn')?.click(),100)" class="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 transition text-center">
+                <svg class="w-6 h-6 mx-auto mb-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span class="text-sm text-purple-300">حجز جديد</span>
+              </button>
+              <button onclick="navigateTo('customers');setTimeout(()=>document.getElementById('addCustomerBtn')?.click(),100)" class="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 transition text-center">
+                <svg class="w-6 h-6 mx-auto mb-2 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                <span class="text-sm text-orange-300">زبون جديد</span>
+              </button>
+              <button onclick="navigateTo('billing')" class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition text-center">
+                <svg class="w-6 h-6 mx-auto mb-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+                <span class="text-sm text-emerald-300">الفواتير</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CONTROL PAGE ===== -->
+      <div id="page-control" class="page-content page-hidden animate-in">
+        <!-- ESP32 Status -->
+        <div class="glass rounded-xl p-5 mb-4 flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-3">
+            <div id="esp32StatusDot" class="w-3 h-3 rounded-full bg-gray-500"></div>
+            <span class="text-sm text-cream-dark">حالة ESP32:</span>
+            <span id="esp32StatusText" class="text-sm font-medium">غير متصل</span>
+          </div>
+          <div class="text-sm text-cream-dark">آخر ظهور: <span id="esp32LastSeen" class="text-cream font-mono">—</span></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <!-- Gate -->
+          <div class="glass rounded-xl p-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+              </div>
+              <h3 class="font-medium">البوابة</h3>
+            </div>
+            <div class="flex items-center justify-between">
+              <span id="gateStatus" class="text-sm text-cream-dark">مغلقة</span>
+              <button id="gateBtn" onclick="toggleGate()" class="btn-gold px-4 py-2 rounded-lg text-sm">فتح</button>
+            </div>
+          </div>
+          <!-- Door -->
+          <div class="glass rounded-xl p-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
+              <h3 class="font-medium">الباب الرئيسي</h3>
+            </div>
+            <div class="flex items-center justify-between">
+              <span id="doorStatus" class="text-sm text-cream-dark">مغلق</span>
+              <button id="doorBtn" onclick="toggleDoor()" class="btn-gold px-4 py-2 rounded-lg text-sm">فتح</button>
+            </div>
+          </div>
+          <!-- Seat -->
+          <div class="glass rounded-xl p-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-pink-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              </div>
+              <h3 class="font-medium">نظام المقاعد</h3>
+            </div>
+            <div class="flex items-center justify-between">
+              <span id="seatStatus" class="text-sm text-cream-dark">غير مفعل</span>
+              <button id="seatBtn" onclick="toggleSeat()" class="btn-gold px-4 py-2 rounded-lg text-sm">تفعيل</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lights -->
+        <div class="glass rounded-xl p-5 mb-4">
+          <h3 class="font-display text-base font-bold text-cream mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/></svg>
+            الإضاءة
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="lightsGrid"></div>
+        </div>
+
+        <!-- MP3 -->
+        <div class="glass rounded-xl p-5">
+          <h3 class="font-display text-base font-bold text-cream mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-pink-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            مشغل الموسيقى
+          </h3>
+          <div class="flex flex-wrap items-center gap-4">
+            <button onclick="mp3Prev()" class="btn-outline px-3 py-2 rounded-lg">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <button id="mp3PlayBtn" onclick="mp3Toggle()" class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center pulse-gold">
+              <svg id="mp3PlayIcon" class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button onclick="mp3Next()" class="btn-outline px-3 py-2 rounded-lg">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+            <div class="flex-1 min-w-[200px]">
+              <p id="mp3TrackName" class="text-sm text-cream">—</p>
+              <p id="mp3StatusText" class="text-xs text-cream-dark">متوقف</p>
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-3 sm:grid-cols-6 gap-2" id="mp3TrackList"></div>
+        </div>
+      </div>
+
+      <!-- ===== CUSTOMERS PAGE ===== -->
+      <div id="page-customers" class="page-content page-hidden animate-in">
+        <div class="glass rounded-xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <input type="text" id="customerSearch" placeholder="بحث بالاسم أو الهاتف..." class="max-w-xs" oninput="renderCustomers()">
+            <button id="addCustomerBtn" onclick="openModal('customerModal')" class="btn-gold px-4 py-2 rounded-lg text-sm">+ إضافة زبون</button>
+          </div>
+          <div class="overflow-x-auto max-h-96 overflow-y-auto">
+            <table>
+              <thead><tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>البريد</th><th>ملاحظات</th><th>إجراءات</th></tr></thead>
+              <tbody id="customersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BOOKINGS PAGE ===== -->
+      <div id="page-bookings" class="page-content page-hidden animate-in">
+        <div class="glass rounded-xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="flex flex-wrap gap-2">
+              <button onclick="filterBookings('all')" class="btn-outline px-3 py-1.5 rounded-lg text-xs booking-filter active" data-filter="all">الكل</button>
+              <button onclick="filterBookings('confirmed')" class="btn-outline px-3 py-1.5 rounded-lg text-xs booking-filter" data-filter="confirmed">مؤكد</button>
+              <button onclick="filterBookings('pending')" class="btn-outline px-3 py-1.5 rounded-lg text-xs booking-filter" data-filter="pending">معلّق</button>
+              <button onclick="filterBookings('cancelled')" class="btn-outline px-3 py-1.5 rounded-lg text-xs booking-filter" data-filter="cancelled">ملغي</button>
+            </div>
+            <button id="addBookingBtn" onclick="openModal('bookingModal')" class="btn-gold px-4 py-2 rounded-lg text-sm">+ حجز جديد</button>
+          </div>
+          <div class="overflow-x-auto max-h-96 overflow-y-auto">
+            <table>
+              <thead><tr><th>#</th><th>الزبون</th><th>التاريخ</th><th>نوع القاعة</th><th>الحالة</th><th>ملاحظات</th><th>إجراءات</th></tr></thead>
+              <tbody id="bookingsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BILLING PAGE ===== -->
+      <div id="page-billing" class="page-content page-hidden animate-in">
+        <div class="glass rounded-xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <h3 class="font-display text-base font-bold">الفواتير</h3>
+            <button onclick="openModal('invoiceModal')" class="btn-gold px-4 py-2 rounded-lg text-sm">+ فاتورة جديدة</button>
+          </div>
+          <div class="overflow-x-auto max-h-96 overflow-y-auto">
+            <table>
+              <thead><tr><th>#</th><th>رقم الفاتورة</th><th>الزبون</th><th>المبلغ</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+              <tbody id="billingBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CALENDAR PAGE ===== -->
+      <div id="page-calendar" class="page-content page-hidden animate-in">
+        <div class="glass rounded-xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <button onclick="changeMonth(-1)" class="btn-outline px-3 py-2 rounded-lg">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <h3 id="calendarTitle" class="font-display text-lg font-bold text-gold"></h3>
+            <button onclick="changeMonth(1)" class="btn-outline px-3 py-2 rounded-lg">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+          </div>
+          <div class="grid grid-cols-7 gap-1 mb-2">
+            <div class="text-center text-xs text-cream-dark py-2">أحد</div>
+            <div class="text-center text-xs text-cream-dark py-2">إثنين</div>
+            <div class="text-center text-xs text-cream-dark py-2">ثلاثاء</div>
+            <div class="text-center text-xs text-cream-dark py-2">أربعاء</div>
+            <div class="text-center text-xs text-cream-dark py-2">خميس</div>
+            <div class="text-center text-xs text-cream-dark py-2">جمعة</div>
+            <div class="text-center text-xs text-cream-dark py-2">سبت</div>
+          </div>
+          <div class="grid grid-cols-7 gap-1" id="calendarGrid"></div>
+          <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500"></span><span class="text-xs text-cream-dark">مؤكد</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-yellow-500"></span><span class="text-xs text-cream-dark">معلّق</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-red-500"></span><span class="text-xs text-cream-dark">ملغي</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-blue-500"></span><span class="text-xs text-cream-dark">مكتمل</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ACTIVITY LOG PAGE ===== -->
+      <div id="page-activity" class="page-content page-hidden animate-in">
+        <div class="glass rounded-xl p-5">
+          <h3 class="font-display text-base font-bold mb-4">سجل النشاطات</h3>
+          <div class="overflow-x-auto max-h-96 overflow-y-auto">
+            <table>
+              <thead><tr><th>التاريخ</th><th>المستخدم</th><th>الإجراء</th><th>التفاصيل</th></tr></thead>
+              <tbody id="activityBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== USERS PAGE ===== -->
+      <div id="page-users" class="page-content page-hidden animate-in">
+        <div class="glass rounded-xl p-5">
+          <h3 class="font-display text-base font-bold mb-4">المستخدمون</h3>
+          <div class="overflow-x-auto max-h-96 overflow-y-auto">
+            <table>
+              <thead><tr><th>#</th><th>الاسم</th><th>البريد</th><th>الدور</th><th>الحالة</th></tr></thead>
+              <tbody id="usersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS PAGE ===== -->
+      <div id="page-settings" class="page-content page-hidden animate-in">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-display text-base font-bold mb-4">معلومات القاعة</h3>
+            <div class="space-y-3">
+              <div><label class="block text-sm text-cream-dark mb-1">اسم القاعة</label><input id="settingHallName" value="قاعة الأفراح الملكية"></div>
+              <div><label class="block text-sm text-cream-dark mb-1">الهاتف</label><input id="settingPhone" value="0512345678"></div>
+              <div><label class="block text-sm text-cream-dark mb-1">العنوان</label><input id="settingAddress" value="الرياض - حي الملقا"></div>
+              <button onclick="saveSettings()" class="btn-gold px-4 py-2 rounded-lg text-sm">حفظ الإعدادات</button>
+            </div>
+          </div>
+          <div class="glass rounded-xl p-5">
+            <h3 class="font-display text-base font-bold mb-4">إعدادات Firebase</h3>
+            <div class="space-y-3">
+              <div class="flex items-center gap-2 mb-3">
+                <div id="firebaseStatusDot" class="w-3 h-3 rounded-full bg-gray-500"></div>
+                <span id="firebaseStatusText" class="text-sm">جاري الاتصال...</span>
+              </div>
+              <div><label class="block text-sm text-cream-dark mb-1">حالة ESP32</label>
+                <div class="flex items-center gap-2">
+                  <span id="settingsEspStatus" class="text-sm text-cream-dark">—</span>
+                </div>
+              </div>
+              <button onclick="resetDevices()" class="px-4 py-2 rounded-lg text-sm bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition">إعادة تعيين الأجهزة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PROFILE PAGE ===== -->
+      <div id="page-profile" class="page-content page-hidden animate-in">
+        <div class="max-w-lg mx-auto">
+          <div class="glass rounded-xl p-6 text-center mb-4">
+            <div id="profileAvatar" class="w-20 h-20 rounded-full bg-gradient-to-br from-gold-light to-gold-dark flex items-center justify-center mx-auto mb-4 text-3xl font-bold text-dark">م</div>
+            <h3 id="profileName" class="font-display text-xl font-bold text-cream mb-1"></h3>
+            <span id="profileRoleBadge" class="badge bg-gold/10 text-gold"></span>
+            <p id="profileEmail" class="text-cream-dark text-sm mt-2"></p>
+            <p id="profilePhone" class="text-cream-dark text-sm"></p>
+          </div>
+          <div class="glass rounded-xl p-6">
+            <h3 class="font-display text-base font-bold mb-4">تعديل المعلومات</h3>
+            <div class="space-y-3">
+              <div><label class="block text-sm text-cream-dark mb-1">الاسم</label><input id="profileEditName"></div>
+              <div><label class="block text-sm text-cream-dark mb-1">الهاتف</label><input id="profileEditPhone"></div>
+              <button onclick="saveProfile()" class="btn-gold px-4 py-2 rounded-lg text-sm">حفظ التغييرات</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end pageContainer -->
+  </main>
+</div><!-- end appShell -->
+
+<!-- ============ MODALS ============ -->
+
+<!-- Customer Modal -->
+<div id="customerModal" class="modal-overlay hidden">
+  <div class="modal-content glass rounded-2xl p-6 w-full max-w-md animate-in">
+    <div class="flex items-center justify-between mb-5">
+      <h3 id="customerModalTitle" class="font-display text-lg font-bold text-gold">إضافة زبون</h3>
+      <button onclick="closeModal('customerModal')" class="text-cream-dark hover:text-cream">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="space-y-3">
+      <input type="hidden" id="customerEditId">
+      <div><label class="block text-sm text-cream-dark mb-1">الاسم</label><input id="customerName" placeholder="اسم الزبون"></div>
+      <div><label class="block text-sm text-cream-dark mb-1">الهاتف</label><input id="customerPhone" placeholder="05xxxxxxxx"></div>
+      <div><label class="block text-sm text-cream-dark mb-1">البريد الإلكتروني</label><input id="customerEmail" placeholder="email@example.com"></div>
+      <div><label class="block text-sm text-cream-dark mb-1">ملاحظات</label><textarea id="customerNotes" rows="2" placeholder="ملاحظات إضافية..."></textarea></div>
+      <button onclick="saveCustomer()" class="btn-gold w-full py-2.5 rounded-xl text-sm">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal-overlay hidden">
+  <div class="modal-content glass rounded-2xl p-6 w-full max-w-md animate-in">
+    <div class="flex items-center justify-between mb-5">
+      <h3 id="bookingModalTitle" class="font-display text-lg font-bold text-gold">حجز جديد</h3>
+      <button onclick="closeModal('bookingModal')" class="text-cream-dark hover:text-cream">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="space-y-3">
+      <input type="hidden" id="bookingEditId">
+      <div><label class="block text-sm text-cream-dark mb-1">الزبون</label><select id="bookingCustomer"></select></div>
+      <div><label class="block text-sm text-cream-dark mb-1">التاريخ</label><input type="date" id="bookingDate"></div>
+      <div><label class="block text-sm text-cream-dark mb-1">نوع القاعة</label>
+        <select id="bookingHallType">
+          <option value="main">القاعة الرئيسية</option>
+          <option value="outdoor">الساحة الخارجية</option>
+          <option value="vip">قاعة VIP</option>
+          <option value="garden">الحديقة</option>
+        </select>
+      </div>
+      <div><label class="block text-sm text-cream-dark mb-1">الحالة</label>
+        <select id="bookingStatus">
+          <option value="pending">معلّق</option>
+          <option value="confirmed">مؤكد</option>
+          <option value="cancelled">ملغي</option>
+          <option value="completed">مكتمل</option>
+        </select>
+      </div>
+      <div><label class="block text-sm text-cream-dark mb-1">ملاحظات</label><textarea id="bookingNotes" rows="2" placeholder="ملاحظات..."></textarea></div>
+      <button onclick="saveBooking()" class="btn-gold w-full py-2.5 rounded-xl text-sm">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Invoice Modal -->
+<div id="invoiceModal" class="modal-overlay hidden">
+  <div class="modal-content glass rounded-2xl p-6 w-full max-w-md animate-in">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-display text-lg font-bold text-gold">فاتورة جديدة</h3>
+      <button onclick="closeModal('invoiceModal')" class="text-cream-dark hover:text-cream">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="space-y-3">
+      <input type="hidden" id="invoiceEditId">
+      <div><label class="block text-sm text-cream-dark mb-1">الزبون</label><select id="invoiceCustomer"></select></div>
+      <div><label class="block text-sm text-cream-dark mb-1">المبلغ (ر.س)</label><input type="number" id="invoiceAmount" placeholder="0.00"></div>
+      <div><label class="block text-sm text-cream-dark mb-1">الحالة</label>
+        <select id="invoiceStatus">
+          <option value="pending">معلّقة</option>
+          <option value="paid">مدفوعة</option>
+          <option value="overdue">متأخرة</option>
+        </select>
+      </div>
+      <div><label class="block text-sm text-cream-dark mb-1">ملاحظات</label><textarea id="invoiceNotes" rows="2" placeholder="ملاحظات..."></textarea></div>
+      <button onclick="saveInvoice()" class="btn-gold w-full py-2.5 rounded-xl text-sm">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="fixed bottom-4 left-4 z-[200] space-y-2"></div>
+
+<script>
+// ==========================================
+// DATA & STATE
+// ==========================================
+
+const USERS = [
+  { id:'u1', name:'مدير النظام', email:'admin@wedding.com', password:'admin123', role:'admin', phone:'0510000001', active:true },
+  { id:'u2', name:'أحمد المدير', email:'manager@wedding.com', password:'manager123', role:'manager', phone:'0510000002', active:true },
+  { id:'u3', name:'محمد الموظف', email:'employee@wedding.com', password:'emp123', role:'employee', phone:'0510000003', active:true },
+  { id:'u4', name:'خالد المشاهد', email:'viewer@wedding.com', password:'view123', role:'viewer', phone:'0510000004', active:true }
+];
+
+const ROLE_LABELS = { admin:'مدير النظام', manager:'المدير', employee:'الموظف', viewer:'المشاهد' };
+const ROLE_COLORS = { admin:'amber', manager:'cyan', employee:'slate', viewer:'emerald' };
+const STATUS_LABELS = { confirmed:'مؤكد', pending:'معلّق', cancelled:'ملغي', completed:'مكتمل' };
+const STATUS_COLORS = { confirmed:'emerald', pending:'yellow', cancelled:'red', completed:'blue' };
+const HALL_LABELS = { main:'القاعة الرئيسية', outdoor:'الساحة الخارجية', vip:'قاعة VIP', garden:'الحديقة' };
+const INVOICE_STATUS = { pending:'معلّقة', paid:'مدفوعة', overdue:'متأخرة' };
+const INVOICE_COLORS = { pending:'yellow', paid:'emerald', overdue:'red' };
+
+const NAV_ITEMS = [
+  { id:'home', label:'لوحة المعلومات', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>', roles:['admin','manager','employee','viewer'] },
+  { id:'control', label:'التحكم بالأجهزة', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>', roles:['admin','manager','employee'] },
+  { id:'customers', label:'الزبائن', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>', roles:['admin','manager','employee','viewer'] },
+  { id:'bookings', label:'الحجوزات', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', roles:['admin','manager','employee','viewer'] },
+  { id:'billing', label:'الفواتير', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/>', roles:['admin','manager'] },
+  { id:'calendar', label:'التقويم', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', roles:['admin','manager','viewer'] },
+  { id:'activity', label:'سجل النشاطات', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>', roles:['admin','manager'] },
+  { id:'users', label:'المستخدمون', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>', roles:['admin'] },
+  { id:'settings', label:'الإعدادات', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>', roles:['admin'] },
+  { id:'profile', label:'الملف الشخصي', icon:'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>', roles:['admin','manager','employee','viewer'] }
+];
+
+const LIGHTS = [
+  { key:'street', label:'إضاءة الشارع', color:'amber' },
+  { key:'ship', label:'إضاءة السفينة', color:'cyan' },
+  { key:'ceiling', label:'إضاءة سقف الصالة', color:'violet' },
+  { key:'floor', label:'إضاءة أرضية الصالة', color:'pink' },
+  { key:'pillar_outer', label:'العمود الخارجي', color:'orange' },
+  { key:'pillar_inner', label:'العمود الداخلي', color:'emerald' }
+];
+
+const MP3_TRACKS = [
+  'عرس سعيد', 'أغنية الحياة', 'ليلة الفرح', 'أنغام الحب',
+  'موسيقى هادئة', 'أجواء احتفالية', 'سيمفونية الفرح', 'لحن العمر'
+];
+
+let state = {
+  currentUser: null,
+  currentPage: 'home',
+  customers: [],
+  bookings: [],
+  invoices: [],
+  activities: [],
+  settings: { hallName:'قاعة الأفراح الملكية', phone:'0512345678', address:'الرياض - حي الملقا' },
+  calendarMonth: new Date().getMonth(),
+  calendarYear: new Date().getFullYear(),
+  bookingFilter: 'all',
+  firebaseReady: false,
+  esp32Online: false,
+  esp32LastSeen: null,
+  gateOpen: false,
+  doorOpen: false,
+  seatActive: false,
+  lights: { street:false, ship:false, ceiling:false, floor:false, pillar_outer:false, pillar_inner:false },
+  mp3Playing: false,
+  mp3Track: 1
+};
+
+// ==========================================
+// INITIALIZATION
+// ==========================================
+
+function initApp() {
+  loadFromStorage();
+  seedData();
+  initFirebase();
+  checkAuth();
+}
+
+function seedData() {
+  if (localStorage.getItem('wh_seeded')) return;
+
+  state.customers = [
+    { id:'c1', name:'عبدالله الشمري', phone:'0551234567', email:'abdullah@email.com', notes:'زبون مميز' },
+    { id:'c2', name:'فاطمة العتيبي', phone:'0559876543', email:'fatima@email.com', notes:'' },
+    { id:'c3', name:'سلطان الدوسري', phone:'0553456789', email:'sultan@email.com', notes:'حجز سنوي' },
+    { id:'c4', name:'نورة القحطاني', phone:'0557654321', email:'noura@email.com', notes:'' },
+    { id:'c5', name:'خالد المالكي', phone:'0552345678', email:'khaled@email.com', notes:'يفضل القاعة VIP' }
+  ];
+
+  const today = new Date();
+  const fmt = d => d.toISOString().split('T')[0];
+  const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return r; };
+
+  state.bookings = [
+    { id:'b1', customerId:'c1', date:fmt(addDays(today,3)), hallType:'main', status:'confirmed', notes:'حفل زفاف' },
+    { id:'b2', customerId:'c2', date:fmt(addDays(today,7)), hallType:'vip', status:'pending', notes:'حفل تخرج' },
+    { id:'b3', customerId:'c3', date:fmt(addDays(today,14)), hallType:'outdoor', status:'confirmed', notes:'حفل خطوبة' },
+    { id:'b4', customerId:'c4', date:fmt(addDays(today,-5)), hallType:'garden', status:'completed', notes:'حفل عشاء' },
+    { id:'b5', customerId:'c5', date:fmt(addDays(today,10)), hallType:'main', status:'cancelled', notes:'تم الإلغاء' },
+    { id:'b6', customerId:'c1', date:fmt(addDays(today,21)), hallType:'vip', status:'pending', notes:'' }
+  ];
+
+  state.invoices = [
+    { id:'inv1', customerId:'c1', amount:15000, date:fmt(addDays(today,-2)), status:'paid', notes:'حفل زفاف' },
+    { id:'inv2', customerId:'c2', amount:8000, date:fmt(addDays(today,5)), status:'pending', notes:'حفل تخرج' },
+    { id:'inv3', customerId:'c3', amount:12000, date:fmt(addDays(today,10)), status:'overdue', notes:'حفل خطوبة' },
+    { id:'inv4', customerId:'c5', amount:20000, date:fmt(addDays(today,-10)), status:'paid', notes:'دفعة مقدمة' }
+  ];
+
+  state.activities = [
+    { id:'a1', userId:'u1', action:'تسجيل دخول', details:'تم تسجيل الدخول بنجاح', date:new Date().toISOString() },
+    { id:'a2', userId:'u1', action:'إضافة زبون', details:'تمت إضافة الزبون: عبدالله الشمري', date:addDays(today,-1).toISOString() },
+    { id:'a3', userId:'u2', action:'حجز جديد', details:'حجز قاعة رئيسية لعبدالله الشمري', date:addDays(today,-1).toISOString() },
+    { id:'a4', userId:'u1', action:'فاتورة جديدة', details:'فاتورة 15,000 ر.س لعبدالله الشمري', date:addDays(today,-2).toISOString() }
+  ];
+
+  saveToStorage();
+  localStorage.setItem('wh_seeded', 'true');
+}
+
+function loadFromStorage() {
+  try {
+    const d = localStorage.getItem('wh_data');
+    if (d) {
+      const parsed = JSON.parse(d);
+      if (parsed.customers) state.customers = parsed.customers;
+      if (parsed.bookings) state.bookings = parsed.bookings;
+      if (parsed.invoices) state.invoices = parsed.invoices;
+      if (parsed.activities) state.activities = parsed.activities;
+      if (parsed.settings) state.settings = parsed.settings;
+    }
+    const sess = localStorage.getItem('wh_session');
+    if (sess) state.currentUser = JSON.parse(sess);
+    if (state.currentUser) state.currentPage = 'home';
+  } catch(e) {}
+}
+
+function saveToStorage() {
+  localStorage.setItem('wh_data', JSON.stringify({
+    customers: state.customers,
+    bookings: state.bookings,
+    invoices: state.invoices,
+    activities: state.activities,
+    settings: state.settings
+  }));
+}
+
+function checkAuth() {
+  if (state.currentUser) {
+    showApp();
+  }
+}
+
+// ==========================================
+// AUTH
+// ==========================================
+
+function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const user = USERS.find(u => u.email === email && u.password === pass && u.active);
+  if (!user) {
+    document.getElementById('loginError').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('loginError').classList.add('hidden');
+  loginUser(user);
+}
+
+function quickLogin(email, pass) {
+  document.getElementById('loginEmail').value = email;
+  document.getElementById('loginPassword').value = pass;
+  handleLogin();
+}
+
+function loginUser(user) {
+  state.currentUser = { id:user.id, name:user.name, email:user.email, role:user.role, phone:user.phone };
+  localStorage.setItem('wh_session', JSON.stringify(state.currentUser));
+  addActivity('تسجيل دخول', 'تم تسجيل الدخول بنجاح');
+  showApp();
+}
+
+function handleLogout() {
+  addActivity('تسجيل خروج', 'تم تسجيل الخروج');
+  state.currentUser = null;
+  localStorage.removeItem('wh_session');
+  document.getElementById('loginPage').classList.remove('hidden');
+  document.getElementById('appShell').classList.add('hidden');
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+}
+
+function showApp() {
+  document.getElementById('loginPage').classList.add('hidden');
+  document.getElementById('appShell').classList.remove('hidden');
+  document.getElementById('appShell').classList.add('flex');
+  buildSidebar();
+  buildLightsGrid();
+  buildMp3Tracks();
+  const firstAccessible = NAV_ITEMS.find(n => n.roles.includes(state.currentUser.role));
+  navigateTo(firstAccessible ? firstAccessible.id : 'home');
+}
+
+// ==========================================
+// NAVIGATION
+// ==========================================
+
+function buildSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = '';
+  NAV_ITEMS.filter(n => n.roles.includes(state.currentUser.role)).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'sidebar-item';
+    div.dataset.page = item.id;
+    div.innerHTML = `<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">${item.icon}</svg><span>${item.label}</span>`;
+    div.onclick = () => navigateTo(item.id);
+    nav.appendChild(div);
+  });
+  const u = state.currentUser;
+  document.getElementById('sidebarAvatar').textContent = u.name.charAt(0);
+  document.getElementById('sidebarName').textContent = u.name;
+  document.getElementById('sidebarRole').textContent = ROLE_LABELS[u.role];
+}
+
+function navigateTo(pageId) {
+  if (!NAV_ITEMS.find(n => n.id === pageId && n.roles.includes(state.currentUser.role))) {
+    showToast('غير مصرح بالوصول', 'error');
+    return;
+  }
+
+  state.currentPage = pageId;
+
+  document.querySelectorAll('.page-content').forEach(p => p.classList.add('page-hidden'));
+  const pageEl = document.getElementById('page-' + pageId);
+  if (pageEl) {
+    pageEl.classList.remove('page-hidden');
+    pageEl.classList.remove('animate-in');
+    void pageEl.offsetWidth;
+    pageEl.classList.add('animate-in');
+  }
+
+  document.querySelectorAll('.sidebar-item').forEach(s => {
+    s.classList.toggle('active', s.dataset.page === pageId);
+  });
+
+  const navItem = NAV_ITEMS.find(n => n.id === pageId);
+  document.getElementById('pageTitle').textContent = navItem ? navItem.label : '';
+
+  const color = ROLE_COLORS[state.currentUser.role] || 'gold';
+  document.getElementById('headerBadge').textContent = ROLE_LABELS[state.currentUser.role];
+  document.getElementById('headerBadge').className = `badge bg-${color}-500/10 text-${color}-400 text-xs hidden lg:inline-flex`;
+
+  // Render page content
+  if (pageId === 'home') renderHome();
+  else if (pageId === 'control') renderControl();
+  else if (pageId === 'customers') renderCustomers();
+  else if (pageId === 'bookings') renderBookings();
+  else if (pageId === 'billing') renderBilling();
+  else if (pageId === 'calendar') renderCalendar();
+  else if (pageId === 'activity') renderActivity();
+  else if (pageId === 'users') renderUsers();
+  else if (pageId === 'settings') renderSettings();
+  else if (pageId === 'profile') renderProfile();
+
+  // Close mobile sidebar
+  closeSidebar();
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  sb.classList.toggle('translate-x-full');
+  sb.classList.toggle('translate-x-0');
+  ov.classList.toggle('hidden');
+}
+
+function closeSidebar() {
+  if (window.innerWidth < 1024) {
+    document.getElementById('sidebar').classList.add('translate-x-full');
+    document.getElementById('sidebar').classList.remove('translate-x-0');
+    document.getElementById('sidebarOverlay').classList.add('hidden');
+  }
+}
+
+// ==========================================
+// HOME PAGE
+// ==========================================
+
+function renderHome() {
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+  const monthEnd = new Date(now.getFullYear(), now.getMonth()+1, 0).toISOString().split('T')[0];
+
+  document.getElementById('statCustomers').textContent = state.customers.length;
+
+  const monthlyBookings = state.bookings.filter(b => b.date >= monthStart && b.date <= monthEnd);
+  document.getElementById('statBookings').textContent = monthlyBookings.length;
+
+  const todayStr = now.toISOString().split('T')[0];
+  const paidInvoices = state.invoices.filter(i => i.status === 'paid');
+  const revenue = paidInvoices.reduce((s, i) => s + i.amount, 0);
+  document.getElementById('statRevenue').textContent = revenue.toLocaleString('ar-SA') + ' ر.س';
+
+  const upcoming = state.bookings.filter(b => b.date >= todayStr && (b.status === 'confirmed' || b.status === 'pending'));
+  document.getElementById('statUpcoming').textContent = upcoming.length;
+
+  const tbody = document.getElementById('recentBookingsBody');
+  const recent = [...state.bookings].sort((a,b) => b.date.localeCompare(a.date)).slice(0, 5);
+  tbody.innerHTML = recent.map(b => {
+    const c = state.customers.find(x => x.id === b.customerId);
+    return `<tr>
+      <td class="text-cream">${c ? c.name : '—'}</td>
+      <td class="font-mono text-sm">${b.date}</td>
+      <td><span class="badge bg-${STATUS_COLORS[b.status]}-500/10 text-${STATUS_COLORS[b.status]}-400">${STATUS_LABELS[b.status]}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ==========================================
+// FIREBASE
+// ==========================================
+
+let firebaseDb = null;
+
+function initFirebase() {
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyDPzZv-4QDyoDcBHhgEmhLsoptPTCJOVu8",
+        databaseURL: "https://wedding-hall-24f25-default-rtdb.firebaseio.com",
+        projectId: "wedding-hall-24f25"
+      });
+    }
+    firebaseDb = firebase.database();
+    state.firebaseReady = true;
+    listenFirebase();
+  } catch(e) {
+    console.error('Firebase init error:', e);
+  }
+}
+
+function fbWrite(path, value) {
+  if (!firebaseDb) return;
+  firebaseDb.ref(path).set(value).catch(e => console.error('Firebase write error:', e));
+}
+
+function listenFirebase() {
+  if (!firebaseDb) return;
+
+  // ESP32 Status
+  firebaseDb.ref('/wedding_hall/status').on('value', snap => {
+    const d = snap.val();
+    if (d) {
+      state.esp32Online = d.online === true;
+      state.esp32LastSeen = d.lastSeen || null;
+      updateEsp32Status();
+    }
+  });
+
+  // Gate
+  firebaseDb.ref('/wedding_hall/gate/open').on('value', snap => {
+    state.gateOpen = snap.val() === true;
+    updateGateUI();
+  });
+
+  // Door
+  firebaseDb.ref('/wedding_hall/door/open').on('value', snap => {
+    state.doorOpen = snap.val() === true;
+    updateDoorUI();
+  });
+
+  // Seat
+  firebaseDb.ref('/wedding_hall/seat/active').on('value', snap => {
+    state.seatActive = snap.val() === true;
+    updateSeatUI();
+  });
+
+  // Lights
+  LIGHTS.forEach(l => {
+    firebaseDb.ref('/wedding_hall/lights/' + l.key).on('value', snap => {
+      state.lights[l.key] = snap.val() === true;
+      updateLightUI(l.key);
+    });
+  });
+
+  // MP3
+  firebaseDb.ref('/wedding_hall/mp3').on('value', snap => {
+    const d = snap.val();
+    if (d) {
+      state.mp3Playing = d.playing === true;
+      state.mp3Track = d.track || 1;
+      updateMp3UI();
+    }
+  });
+}
+
+function updateEsp32Status() {
+  const dot = document.getElementById('esp32StatusDot');
+  const text = document.getElementById('esp32StatusText');
+  const seen = document.getElementById('esp32LastSeen');
+  const sDot = document.getElementById('firebaseStatusDot');
+  const sText = document.getElementById('firebaseStatusText');
+  const seStatus = document.getElementById('settingsEspStatus');
+
+  if (state.esp32Online) {
+    dot.className = 'w-3 h-3 rounded-full bg-emerald-500';
+    text.textContent = 'متصل';
+    text.className = 'text-sm font-medium text-emerald-400';
+  } else {
+    dot.className = 'w-3 h-3 rounded-full bg-gray-500';
+    text.textContent = 'غير متصل';
+    text.className = 'text-sm font-medium text-cream-dark';
+  }
+  seen.textContent = state.esp32LastSeen ? new Date(state.esp32LastSeen).toLocaleString('ar-SA') : '—';
+
+  if (state.firebaseReady) {
+    if(sDot) { sDot.className = 'w-3 h-3 rounded-full bg-emerald-500'; }
+    if(sText) { sText.textContent = 'متصل بـ Firebase'; sText.className = 'text-sm text-emerald-400'; }
+    if(seStatus) { seStatus.textContent = state.esp32Online ? 'متصل' : 'غير متصل'; seStatus.className = 'text-sm ' + (state.esp32Online ? 'text-emerald-400' : 'text-red-400'); }
+  } else {
+    if(sDot) { sDot.className = 'w-3 h-3 rounded-full bg-red-500'; }
+    if(sText) { sText.textContent = 'فشل الاتصال'; sText.className = 'text-sm text-red-400'; }
+  }
+}
+
+// ==========================================
+// CONTROL PAGE
+// ==========================================
+
+function renderControl() {
+  updateEsp32Status();
+  updateGateUI();
+  updateDoorUI();
+  updateSeatUI();
+  LIGHTS.forEach(l => updateLightUI(l.key));
+  updateMp3UI();
+}
+
+function toggleGate() {
+  if (!canWrite()) return;
+  const newVal = !state.gateOpen;
+  fbWrite('/wedding_hall/gate/open', newVal);
+  addActivity('تحكم بالبوابة', newVal ? 'تم فتح البوابة' : 'تم إغلاق البوابة');
+}
+
+function toggleDoor() {
+  if (!canWrite()) return;
+  const newVal = !state.doorOpen;
+  fbWrite('/wedding_hall/door/open', newVal);
+  addActivity('تحكم بالباب', newVal ? 'تم فتح الباب' : 'تم إغلاق الباب');
+}
+
+function toggleSeat() {
+  if (!canWrite()) return;
+  const newVal = !state.seatActive;
+  fbWrite('/wedding_hall/seat/active', newVal);
+  addActivity('تحكم بالمقاعد', newVal ? 'تم تفعيل المقاعد' : 'تم إيقاف المقاعد');
+}
+
+function updateGateUI() {
+  const btn = document.getElementById('gateBtn');
+  const st = document.getElementById('gateStatus');
+  if (state.gateOpen) {
+    btn.textContent = 'إغلاق';
+    btn.className = 'px-4 py-2 rounded-lg text-sm bg-red-500/10 text-red-400 border border-red-500/20';
+    st.textContent = 'مفتوحة';
+    st.className = 'text-sm text-emerald-400';
+  } else {
+    btn.textContent = 'فتح';
+    btn.className = 'btn-gold px-4 py-2 rounded-lg text-sm';
+    st.textContent = 'مغلقة';
+    st.className = 'text-sm text-cream-dark';
+  }
+}
+
+function updateDoorUI() {
+  const btn = document.getElementById('doorBtn');
+  const st = document.getElementById('doorStatus');
+  if (state.doorOpen) {
+    btn.textContent = 'إغلاق';
+    btn.className = 'px-4 py-2 rounded-lg text-sm bg-red-500/10 text-red-400 border border-red-500/20';
+    st.textContent = 'مفتوح';
+    st.className = 'text-sm text-emerald-400';
+  } else {
+    btn.textContent = 'فتح';
+    btn.className = 'btn-gold px-4 py-2 rounded-lg text-sm';
+    st.textContent = 'مغلق';
+    st.className = 'text-sm text-cream-dark';
+  }
+}
+
+function updateSeatUI() {
+  const btn = document.getElementById('seatBtn');
+  const st = document.getElementById('seatStatus');
+  if (state.seatActive) {
+    btn.textContent = 'إيقاف';
+    btn.className = 'px-4 py-2 rounded-lg text-sm bg-red-500/10 text-red-400 border border-red-500/20';
+    st.textContent = 'مفعّل';
+    st.className = 'text-sm text-emerald-400';
+  } else {
+    btn.textContent = 'تفعيل';
+    btn.className = 'btn-gold px-4 py-2 rounded-lg text-sm';
+    st.textContent = 'غير مفعل';
+    st.className = 'text-sm text-cream-dark';
+  }
+}
+
+function buildLightsGrid() {
+  const grid = document.getElementById('lightsGrid');
+  grid.innerHTML = LIGHTS.map(l => `
+    <div class="flex items-center justify-between p-3 rounded-lg bg-dark-100/50">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-${l.color}-500/10 flex items-center justify-center">
+          <svg class="w-4 h-4 text-${l.color}-400" fill="currentColor" viewBox="0 0 24 24"><path d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/></svg>
+        </div>
+        <span class="text-sm">${l.label}</span>
+      </div>
+      <div id="light-toggle-${l.key}" class="toggle-track" onclick="toggleLight('${l.key}')">
+        <div class="toggle-thumb"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleLight(key) {
+  if (!canWrite()) return;
+  const newVal = !state.lights[key];
+  state.lights[key] = newVal;
+  fbWrite('/wedding_hall/lights/' + key, newVal);
+  const label = LIGHTS.find(l => l.key === key)?.label || key;
+  addActivity('تحكم بالإضاءة', `${label}: ${newVal ? 'تشغيل' : 'إطفاء'}`);
+}
+
+function updateLightUI(key) {
+  const el = document.getElementById('light-toggle-' + key);
+  if (el) el.classList.toggle('on', state.lights[key]);
+}
+
+function buildMp3Tracks() {
+  const list = document.getElementById('mp3TrackList');
+  list.innerHTML = MP3_TRACKS.map((t, i) => `
+    <button onclick="selectTrack(${i+1})" id="mp3-track-${i+1}" class="text-xs p-2 rounded-lg btn-outline text-center hover:bg-gold/10 transition">${t}</button>
+  `).join('');
+}
+
+function selectTrack(num) {
+  if (!canWrite()) return;
+  state.mp3Track = num;
+  state.mp3Playing = true;
+  fbWrite('/wedding_hall/mp3', { playing: true, track: num });
+  updateMp3UI();
+  addActivity('تشغيل موسيقى', MP3_TRACKS[num-1]);
+}
+
+function mp3Toggle() {
+  if (!canWrite()) return;
+  state.mp3Playing = !state.mp3Playing;
+  fbWrite('/wedding_hall/mp3', { playing: state.mp3Playing, track: state.mp3Track });
+  updateMp3UI();
+}
+
+function mp3Prev() {
+  if (!canWrite()) return;
+  let t = state.mp3Track - 1;
+  if (t < 1) t = MP3_TRACKS.length;
+  selectTrack(t);
+}
+
+function mp3Next() {
+  if (!canWrite()) return;
+  let t = state.mp3Track + 1;
+  if (t > MP3_TRACKS.length) t = 1;
+  selectTrack(t);
+}
+
+function updateMp3UI() {
+  const name = document.getElementById('mp3TrackName');
+  const status = document.getElementById('mp3StatusText');
+  const icon = document.getElementById('mp3PlayIcon');
+
+  name.textContent = MP3_TRACKS[state.mp3Track - 1] || '—';
+  status.textContent = state.mp3Playing ? 'جاري التشغيل' : 'متوقف';
+
+  if (state.mp3Playing) {
+    icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  } else {
+    icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  }
+
+  // Highlight active track
+  MP3_TRACKS.forEach((_, i) => {
+    const el = document.getElementById('mp3-track-' + (i+1));
+    if (el) {
+      el.className = (i+1 === state.mp3Track)
+        ? 'text-xs p-2 rounded-lg bg-gold/20 text-gold border border-gold/40 text-center'
+        : 'text-xs p-2 rounded-lg btn-outline text-center hover:bg-gold/10 transition';
+    }
+  });
+}
+
+function resetDevices() {
+  if (!canWrite()) return;
+  if (!confirm('هل أنت متأكد من إعادة تعيين جميع الأجهزة؟')) return;
+  fbWrite('/wedding_hall/gate/open', false);
+  fbWrite('/wedding_hall/door/open', false);
+  fbWrite('/wedding_hall/seat/active', false);
+  LIGHTS.forEach(l => fbWrite('/wedding_hall/lights/' + l.key, false));
+  fbWrite('/wedding_hall/mp3', { playing: false, track: 1 });
+  addActivity('إعادة تعيين', 'تم إعادة تعيين جميع الأجهزة');
+  showToast('تم إعادة تعيين الأجهزة', 'success');
+}
+
+function canWrite() {
+  if (state.currentUser.role === 'viewer') {
+    showToast('ليس لديك صلاحية التعديل', 'error');
+    return false;
+  }
+  return true;
+}
+
+// ==========================================
+// CUSTOMERS
+// ==========================================
+
+function renderCustomers() {
+  const search = (document.getElementById('customerSearch')?.value || '').toLowerCase();
+  const filtered = state.customers.filter(c =>
+    c.name.toLowerCase().includes(search) || c.phone.includes(search)
+  );
+  const isViewer = state.currentUser.role === 'viewer';
+
+  document.getElementById('customersBody').innerHTML = filtered.map((c, i) => `
+    <tr>
+      <td class="text-cream-dark">${i+1}</td>
+      <td class="text-cream font-medium">${esc(c.name)}</td>
+      <td class="font-mono text-sm" dir="ltr">${esc(c.phone)}</td>
+      <td class="text-cream-dark text-sm">${esc(c.email || '—')}</td>
+      <td class="text-cream-dark text-sm">${esc(c.notes || '—')}</td>
+      <td>
+        ${isViewer ? '<span class="text-cream-dark text-xs">عرض فقط</span>' : `
+        <button onclick="editCustomer('${c.id}')" class="text-gold text-xs hover:underline ml-2">تعديل</button>
+        <button onclick="deleteCustomer('${c.id}')" class="text-red-400 text-xs hover:underline">حذف</button>`}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function editCustomer(id) {
+  const c = state.customers.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('customerModalTitle').textContent = 'تعديل الزبون';
+  document.getElementById('customerEditId').value = id;
+  document.getElementById('customerName').value = c.name;
+  document.getElementById('customerPhone').value = c.phone;
+  document.getElementById('customerEmail').value = c.email || '';
+  document.getElementById('customerNotes').value = c.notes || '';
+  openModal('customerModal');
+}
+
+function deleteCustomer(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا الزبون؟')) return;
+  const c = state.customers.find(x => x.id === id);
+  state.customers = state.customers.filter(x => x.id !== id);
+  saveToStorage();
+  renderCustomers();
+  addActivity('حذف زبون', `تم حذف الزبون: ${c?.name || id}`);
+  showToast('تم حذف الزبون', 'success');
+}
+
+function saveCustomer() {
+  const id = document.getElementById('customerEditId').value;
+  const name = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const email = document.getElementById('customerEmail').value.trim();
+  const notes = document.getElementById('customerNotes').value.trim();
+
+  if (!name || !phone) { showToast('الاسم والهاتف مطلوبان', 'error'); return; }
+
+  if (id) {
+    const c = state.customers.find(x => x.id === id);
+    if (c) { c.name=name; c.phone=phone; c.email=email; c.notes=notes; }
+    addActivity('تعديل زبون', `تم تعديل: ${name}`);
+  } else {
+    state.customers.push({ id:'c'+Date.now(), name, phone, email, notes });
+    addActivity('إضافة زبون', `تمت إضافة: ${name}`);
+  }
+
+  saveToStorage();
+  closeModal('customerModal');
+  clearCustomerForm();
+  renderCustomers();
+  showToast('تم الحفظ بنجاح', 'success');
+}
+
+function clearCustomerForm() {
+  document.getElementById('customerEditId').value = '';
+  document.getElementById('customerName').value = '';
+  document.getElementById('customerPhone').value = '';
+  document.getElementById('customerEmail').value = '';
+  document.getElementById('customerNotes').value = '';
+  document.getElementById('customerModalTitle').textContent = 'إضافة زبون';
+}
+
+// ==========================================
+// BOOKINGS
+// ==========================================
+
+function renderBookings() {
+  const filter = state.bookingFilter;
+  const filtered = filter === 'all' ? state.bookings : state.bookings.filter(b => b.status === filter);
+  const sorted = [...filtered].sort((a,b) => b.date.localeCompare(a.date));
+  const isViewer = state.currentUser.role === 'viewer';
+
+  document.getElementById('bookingsBody').innerHTML = sorted.map((b, i) => {
+    const c = state.customers.find(x => x.id === b.customerId);
+    return `<tr>
+      <td class="text-cream-dark">${i+1}</td>
+      <td class="text-cream font-medium">${c ? esc(c.name) : '—'}</td>
+      <td class="font-mono text-sm">${b.date}</td>
+      <td class="text-sm">${HALL_LABELS[b.hallType] || b.hallType}</td>
+      <td><span class="badge bg-${STATUS_COLORS[b.status]}-500/10 text-${STATUS_COLORS[b.status]}-400">${STATUS_LABELS[b.status]}</span></td>
+      <td class="text-cream-dark text-sm">${esc(b.notes || '—')}</td>
+      <td>
+        ${isViewer ? '<span class="text-cream-dark text-xs">عرض فقط</span>' : `
+        <button onclick="editBooking('${b.id}')" class="text-gold text-xs hover:underline ml-2">تعديل</button>
+        <button onclick="deleteBooking('${b.id}')" class="text-red-400 text-xs hover:underline">حذف</button>`}
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Update filter button styles
+  document.querySelectorAll('.booking-filter').forEach(btn => {
+    if (btn.dataset.filter === filter) {
+      btn.className = 'btn-gold px-3 py-1.5 rounded-lg text-xs booking-filter';
+    } else {
+      btn.className = 'btn-outline px-3 py-1.5 rounded-lg text-xs booking-filter';
+    }
+  });
+}
+
+function filterBookings(status) {
+  state.bookingFilter = status;
+  renderBookings();
+}
+
+function editBooking(id) {
+  const b = state.bookings.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById('bookingModalTitle').textContent = 'تعديل الحجز';
+  document.getElementById('bookingEditId').value = id;
+  populateCustomerSelect('bookingCustomer', b.customerId);
+  document.getElementById('bookingDate').value = b.date;
+  document.getElementById('bookingHallType').value = b.hallType;
+  document.getElementById('bookingStatus').value = b.status;
+  document.getElementById('bookingNotes').value = b.notes || '';
+  openModal('bookingModal');
+}
+
+function deleteBooking(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا الحجز؟')) return;
+  state.bookings = state.bookings.filter(x => x.id !== id);
+  saveToStorage();
+  renderBookings();
+  addActivity('حذف حجز', 'تم حذف حجز');
+  showToast('تم حذف الحجز', 'success');
+}
+
+function saveBooking() {
+  const id = document.getElementById('bookingEditId').value;
+  const customerId = document.getElementById('bookingCustomer').value;
+  const date = document.getElementById('bookingDate').value;
+  const hallType = document.getElementById('bookingHallType').value;
+  const status = document.getElementById('bookingStatus').value;
+  const notes = document.getElementById('bookingNotes').value.trim();
+
+  if (!customerId || !date) { showToast('الزبون والتاريخ مطلوبان', 'error'); return; }
+
+  const c = state.customers.find(x => x.id === customerId);
+
+  if (id) {
+    const b = state.bookings.find(x => x.id === id);
+    if (b) { b.customerId=customerId; b.date=date; b.hallType=hallType; b.status=status; b.notes=notes; }
+    addActivity('تعديل حجز', `تعديل حجز لـ ${c?.name || ''}`);
+  } else {
+    state.bookings.push({ id:'b'+Date.now(), customerId, date, hallType, status, notes });
+    addActivity('حجز جديد', `حجز جديد لـ ${c?.name || ''}`);
+  }
+
+  saveToStorage();
+  closeModal('bookingModal');
+  clearBookingForm();
+  renderBookings();
+  showToast('تم الحفظ بنجاح', 'success');
+}
+
+function clearBookingForm() {
+  document.getElementById('bookingEditId').value = '';
+  document.getElementById('bookingDate').value = '';
+  document.getElementById('bookingHallType').value = 'main';
+  document.getElementById('bookingStatus').value = 'pending';
+  document.getElementById('bookingNotes').value = '';
+  document.getElementById('bookingModalTitle').textContent = 'حجز جديد';
+}
+
+// ==========================================
+// BILLING
+// ==========================================
+
+function renderBilling() {
+  const sorted = [...state.invoices].sort((a,b) => b.date.localeCompare(a.date));
+  document.getElementById('billingBody').innerHTML = sorted.map((inv, i) => {
+    const c = state.customers.find(x => x.id === inv.customerId);
+    return `<tr>
+      <td class="text-cream-dark">${i+1}</td>
+      <td class="font-mono text-sm text-gold">${inv.id.toUpperCase()}</td>
+      <td class="text-cream font-medium">${c ? esc(c.name) : '—'}</td>
+      <td class="font-mono text-emerald-400">${Number(inv.amount).toLocaleString('ar-SA')} ر.س</td>
+      <td class="font-mono text-sm">${inv.date}</td>
+      <td><span class="badge bg-${INVOICE_COLORS[inv.status]}-500/10 text-${INVOICE_COLORS[inv.status]}-400">${INVOICE_STATUS[inv.status]}</span></td>
+      <td>
+        <button onclick="editInvoice('${inv.id}')" class="text-gold text-xs hover:underline ml-2">تعديل</button>
+        <button onclick="deleteInvoice('${inv.id}')" class="text-red-400 text-xs hover:underline">حذف</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function editInvoice(id) {
+  const inv = state.invoices.find(x => x.id === id);
+  if (!inv) return;
+  document.getElementById('invoiceEditId').value = id;
+  populateCustomerSelect('invoiceCustomer', inv.customerId);
+  document.getElementById('invoiceAmount').value = inv.amount;
+  document.getElementById('invoiceStatus').value = inv.status;
+  document.getElementById('invoiceNotes').value = inv.notes || '';
+  openModal('invoiceModal');
+}
+
+function deleteInvoice(id) {
+  if (!confirm('هل أنت متأكد من حذف هذه الفاتورة؟')) return;
+  state.invoices = state.invoices.filter(x => x.id !== id);
+  saveToStorage();
+  renderBilling();
+  addActivity('حذف فاتورة', 'تم حذف فاتورة');
+  showToast('تم حذف الفاتورة', 'success');
+}
+
+function saveInvoice() {
+  const id = document.getElementById('invoiceEditId').value;
+  const customerId = document.getElementById('invoiceCustomer').value;
+  const amount = parseFloat(document.getElementById('invoiceAmount').value);
+  const status = document.getElementById('invoiceStatus').value;
+  const notes = document.getElementById('invoiceNotes').value.trim();
+
+  if (!customerId || isNaN(amount) || amount <= 0) { showToast('الزبون والمبلغ مطلوبان', 'error'); return; }
+
+  const c = state.customers.find(x => x.id === customerId);
+  const date = new Date().toISOString().split('T')[0];
+
+  if (id) {
+    const inv = state.invoices.find(x => x.id === id);
+    if (inv) { inv.customerId=customerId; inv.amount=amount; inv.status=status; inv.notes=notes; }
+    addActivity('تعديل فاتورة', `تعديل فاتورة ${amount.toLocaleString('ar-SA')} ر.س لـ ${c?.name || ''}`);
+  } else {
+    const newId = 'inv' + Date.now();
+    state.invoices.push({ id:newId, customerId, amount, date, status, notes });
+    addActivity('فاتورة جديدة', `فاتورة ${amount.toLocaleString('ar-SA')} ر.س لـ ${c?.name || ''}`);
+  }
+
+  saveToStorage();
+  closeModal('invoiceModal');
+  document.getElementById('invoiceEditId').value = '';
+  document.getElementById('invoiceAmount').value = '';
+  document.getElementById('invoiceStatus').value = 'pending';
+  document.getElementById('invoiceNotes').value = '';
+  renderBilling();
+  showToast('تم الحفظ بنجاح', 'success');
+}
+
+// ==========================================
+// CALENDAR
+// ==========================================
+
+function renderCalendar() {
+  const y = state.calendarYear;
+  const m = state.calendarMonth;
+  const arabicMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  document.getElementById('calendarTitle').textContent = arabicMonths[m] + ' ' + y;
+
+  const grid = document.getElementById('calendarGrid');
+  grid.innerHTML = '';
+
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+
+  // Empty cells
+  for (let i = 0; i < firstDay; i++) {
+    grid.innerHTML += '<div class="p-2 min-h-[48px]"></div>';
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = dateStr === todayStr;
+    const dayBookings = state.bookings.filter(b => b.date === dateStr);
+
+    let dots = '';
+    dayBookings.forEach(b => {
+      dots += `<span class="w-2 h-2 rounded-full bg-${STATUS_COLORS[b.status]}-500 inline-block"></span>`;
+    });
+
+    grid.innerHTML += `
+      <div class="p-2 min-h-[48px] rounded-lg ${isToday ? 'bg-gold/10 border border-gold/30' : 'bg-dark-100/30 hover:bg-dark-100/50'} transition cursor-pointer" onclick="showDayBookings('${dateStr}')">
+        <span class="text-sm ${isToday ? 'text-gold font-bold' : 'text-cream'}">${d}</span>
+        <div class="flex gap-1 mt-1 flex-wrap">${dots}</div>
+      </div>`;
+  }
+}
+
+function changeMonth(dir) {
+  state.calendarMonth += dir;
+  if (state.calendarMonth > 11) { state.calendarMonth = 0; state.calendarYear++; }
+  if (state.calendarMonth < 0) { state.calendarMonth = 11; state.calendarYear--; }
+  renderCalendar();
+}
+
+function showDayBookings(dateStr) {
+  const bookings = state.bookings.filter(b => b.date === dateStr);
+  if (bookings.length === 0) {
+    showToast('لا توجد حجوزات في هذا اليوم', 'info');
+    return;
+  }
+  const list = bookings.map(b => {
+    const c = state.customers.find(x => x.id === b.customerId);
+    return `${c?.name || '—'} — ${HALL_LABELS[b.hallType]} — ${STATUS_LABELS[b.status]}`;
+  }).join('\n');
+  alert('حجوزات ' + dateStr + ':\n\n' + list);
+}
+
+// ==========================================
+// ACTIVITY LOG
+// ==========================================
+
+function renderActivity() {
+  const sorted = [...state.activities].sort((a,b) => new Date(b.date) - new Date(a.date));
+  document.getElementById('activityBody').innerHTML = sorted.map(a => {
+    const user = USERS.find(u => u.id === a.userId);
+    const date = new Date(a.date);
+    const relTime = getRelativeTime(date);
+    return `<tr>
+      <td class="font-mono text-sm text-cream-dark">${relTime}</td>
+      <td>
+        <span class="text-cream text-sm">${user?.name || '—'}</span>
+        <span class="badge bg-${ROLE_COLORS[user?.role || 'viewer']}-500/10 text-${ROLE_COLORS[user?.role || 'viewer']}-400 mr-1">${ROLE_LABELS[user?.role || 'viewer']}</span>
+      </td>
+      <td class="text-sm">${esc(a.action)}</td>
+      <td class="text-cream-dark text-sm">${esc(a.details)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function addActivity(action, details) {
+  if (!state.currentUser) return;
+  state.activities.push({
+    id: 'a' + Date.now(),
+    userId: state.currentUser.id,
+    action,
+    details,
+    date: new Date().toISOString()
+  });
+  saveToStorage();
+}
+
+function getRelativeTime(date) {
+  const now = new Date();
+  const diff = Math.floor((now - date) / 1000);
+  if (diff < 60) return 'الآن';
+  if (diff < 3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
+  if (diff < 86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
+  if (diff < 604800) return `منذ ${Math.floor(diff/86400)} يوم`;
+  return date.toLocaleDateString('ar-SA');
+}
+
+// ==========================================
+// USERS
+// ==========================================
+
+function renderUsers() {
+  document.getElementById('usersBody').innerHTML = USERS.map((u, i) => `
+    <tr>
+      <td class="text-cream-dark">${i+1}</td>
+      <td class="text-cream font-medium">${esc(u.name)}</td>
+      <td class="text-sm text-cream-dark">${esc(u.email)}</td>
+      <td><span class="badge bg-${ROLE_COLORS[u.role]}-500/10 text-${ROLE_COLORS[u.role]}-400">${ROLE_LABELS[u.role]}</span></td>
+      <td><span class="badge ${u.active ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}">${u.active ? 'نشط' : 'معطّل'}</span></td>
+    </tr>
+  `).join('');
+}
+
+// ==========================================
+// SETTINGS
+// ==========================================
+
+function renderSettings() {
+  document.getElementById('settingHallName').value = state.settings.hallName || '';
+  document.getElementById('settingPhone').value = state.settings.phone || '';
+  document.getElementById('settingAddress').value = state.settings.address || '';
+  updateEsp32Status();
+}
+
+function saveSettings() {
+  state.settings.hallName = document.getElementById('settingHallName').value.trim();
+  state.settings.phone = document.getElementById('settingPhone').value.trim();
+  state.settings.address = document.getElementById('settingAddress').value.trim();
+  saveToStorage();
+  addActivity('تعديل الإعدادات', 'تم تحديث إعدادات القاعة');
+  showToast('تم حفظ الإعدادات', 'success');
+}
+
+// ==========================================
+// PROFILE
+// ==========================================
+
+function renderProfile() {
+  const u = state.currentUser;
+  document.getElementById('profileAvatar').textContent = u.name.charAt(0);
+  document.getElementById('profileName').textContent = u.name;
+  document.getElementById('profileRoleBadge').textContent = ROLE_LABELS[u.role];
+  document.getElementById('profileEmail').textContent = u.email;
+  document.getElementById('profilePhone').textContent = u.phone || '—';
+  document.getElementById('profileEditName').value = u.name;
+  document.getElementById('profileEditPhone').value = u.phone || '';
+}
+
+function saveProfile() {
+  const name = document.getElementById('profileEditName').value.trim();
+  const phone = document.getElementById('profileEditPhone').value.trim();
+  if (!name) { showToast('الاسم مطلوب', 'error'); return; }
+  state.currentUser.name = name;
+  state.currentUser.phone = phone;
+  localStorage.setItem('wh_session', JSON.stringify(state.currentUser));
+  // Update in USERS array too
+  const u = USERS.find(x => x.id === state.currentUser.id);
+  if (u) { u.name = name; u.phone = phone; }
+  buildSidebar();
+  renderProfile();
+  addActivity('تعديل الملف', 'تم تحديث الملف الشخصي');
+  showToast('تم حفظ التغييرات', 'success');
+}
+
+// ==========================================
+// MODALS & HELPERS
+// ==========================================
+
+function openModal(id) {
+  document.getElementById(id).classList.remove('hidden');
+  if (id === 'bookingModal' || id === 'invoiceModal') {
+    populateCustomerSelect(id === 'bookingModal' ? 'bookingCustomer' : 'invoiceCustomer');
+  }
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+  if (id === 'customerModal') clearCustomerForm();
+  if (id === 'bookingModal') clearBookingForm();
+}
+
+function populateCustomerSelect(selectId, selectedValue) {
+  const sel = document.getElementById(selectId);
+  sel.innerHTML = '<option value="">-- اختر الزبون --</option>' +
+    state.customers.map(c => `<option value="${c.id}" ${c.id === selectedValue ? 'selected':''}>${esc(c.name)}</option>`).join('');
+}
+
+function esc(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showToast(msg, type='info') {
+  const container = document.getElementById('toastContainer');
+  const colors = { success:'emerald', error:'red', info:'gold' };
+  const color = colors[type] || 'gold';
+  const toast = document.createElement('div');
+  toast.className = `glass rounded-xl px-4 py-3 text-sm animate-in flex items-center gap-2 min-w-[250px]`;
+  toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-${color}-500 flex-shrink-0"></span><span>${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(()=>toast.remove(),300); }, 3000);
+}
+
+// Close modal on overlay click
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.add('hidden');
+  }
+});
+
+// Enter key on login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginPage').offsetParent !== null) {
+    handleLogin();
+  }
+});
+
+// ==========================================
+// INIT
+// ==========================================
+
+initApp();
+</script>
+</body>
+</html>
