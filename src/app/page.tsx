@@ -165,7 +165,7 @@ function LoginPage() {
         <div className="absolute bottom-[20%] right-[20%] w-[300px] h-[300px] bg-cyan-500/[0.03] rounded-full blur-[100px]" style={{ animationDelay: '2.5s' }} />
       </div>
 
-      <div className="relative min-h-screen flex items-center justify-center p-4">
+      <div className="relative min-h-screen flex items-center justify-center p-4 z-[1]">
         <div className="w-full max-w-md">
 
           {/* Logo */}
@@ -189,7 +189,7 @@ function LoginPage() {
           </div>
 
           {/* Login Card */}
-          <div className="glass-strong rounded-2xl p-8 animate-fade-up stagger-2">
+          <div className="glass-strong islamic-border-frame rounded-2xl p-8 animate-fade-up stagger-2">
             <div className="text-center mb-6">
               <h2
                 className="text-2xl font-bold text-[#f0ece4] mb-1"
@@ -335,15 +335,16 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { key: 'home', label: 'لوحة المعلومات', icon: LayoutDashboard, roles: ['admin', 'manager', 'employee', 'viewer'] },
-  { key: 'dashboard', label: 'التحكم بالأجهزة', icon: Gamepad2, roles: ['admin', 'manager', 'employee', 'viewer'] },
+  { key: 'home', label: 'لوحة المعلومات', icon: LayoutDashboard, roles: ['admin', 'manager', 'viewer'] },
+  { key: 'dashboard', label: 'التحكم بالأجهزة', icon: Gamepad2, roles: ['admin', 'manager', 'employee'] },
   { key: 'customers', label: 'الزبائن', icon: Users, roles: ['admin', 'manager', 'employee', 'viewer'] },
   { key: 'bookings', label: 'الحجوزات', icon: CalendarDays, roles: ['admin', 'manager', 'employee', 'viewer'] },
-  { key: 'billing', label: 'الفواتير', icon: CreditCard, roles: ['admin', 'manager', 'employee', 'viewer'] },
-  { key: 'calendar', label: 'التقويم', icon: Calendar, roles: ['admin', 'manager', 'employee', 'viewer'] },
+  { key: 'billing', label: 'الفواتير', icon: CreditCard, roles: ['admin', 'manager'] },
+  { key: 'calendar', label: 'التقويم', icon: Calendar, roles: ['admin', 'manager', 'viewer'] },
   { key: 'activity', label: 'سجل النشاطات', icon: ClipboardList, roles: ['admin', 'manager'] },
   { key: 'users', label: 'المستخدمون', icon: Shield, roles: ['admin'] },
-  { key: 'settings', label: 'الإعدادات', icon: Settings, roles: ['admin', 'manager', 'employee', 'viewer'] },
+  { key: 'profile', label: 'الملف الشخصي', icon: UserCircle, roles: ['admin', 'manager', 'employee', 'viewer'] },
+  { key: 'settings', label: 'الإعدادات', icon: Settings, roles: ['admin'] },
 ]
 
 function SidebarContent({ onClose }: { onClose?: () => void }) {
@@ -465,6 +466,15 @@ export default function Home() {
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
+
+  useEffect(() => {
+    if (!user) return
+    const navItems = NAV_ITEMS.filter((item) => item.roles.includes(user.role))
+    const canAccess = navItems.some((item) => item.key === currentPage)
+    if (!canAccess) {
+      setCurrentPage(navItems[0]?.key || 'home')
+    }
+  }, [user, currentPage, setCurrentPage])
 
   if (loading) {
     return (
@@ -596,7 +606,7 @@ export default function Home() {
         </header>
 
         {/* Page Content with themed gradient */}
-        <main className={`p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)] ${pageGradientClass}`}>
+        <main className={`relative p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)] ${pageGradientClass}`}>
           {renderPage()}
         </main>
       </div>

@@ -42,7 +42,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Plus, Pencil, Trash2, CreditCard, DollarSign, Clock, CheckCircle2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, CreditCard, DollarSign, Clock, CheckCircle2, ShieldAlert } from 'lucide-react'
 import { ReadOnlyBanner, PartialPermissionBanner, usePermissions } from '@/components/permission-banner'
 
 const authHeaders = () => ({
@@ -132,10 +132,11 @@ export default function BillingManagement() {
   const [deleting, setDeleting] = useState(false)
 
   const { isReadOnly, hasAnyAction } = usePermissions()
-  const canWrite = user?.role === 'admin' || user?.role === 'manager'
-  const canDelete = user?.role === 'admin' || user?.role === 'manager'
-  const showActions = hasAnyAction(user?.role, 'payments')
-  const userIsReadOnly = isReadOnly(user?.role, 'payments')
+  const userRole = user?.role
+  const canWrite = userRole === 'admin' || userRole === 'manager'
+  const canDelete = userRole === 'admin' || userRole === 'manager'
+  const showActions = hasAnyAction(userRole, 'payments')
+  const userIsReadOnly = isReadOnly(userRole, 'payments')
 
   const fetchBookings = useCallback(async () => {
     try {
@@ -211,6 +212,18 @@ export default function BillingManagement() {
   useEffect(() => {
     setPage(1)
   }, [bookingFilter, statusFilter])
+
+  // Only admin and manager can access billing
+  const BILLING_ALLOWED_ROLES = ['admin', 'manager']
+  if (!BILLING_ALLOWED_ROLES.includes(userRole)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 animate-fade-up">
+        <ShieldAlert className="h-16 w-16 text-muted-foreground/30" />
+        <h2 className="text-xl font-bold text-muted-foreground">غير مصرح</h2>
+        <p className="text-sm text-muted-foreground/70">ليس لديك صلاحية للوصول إلى هذه الصفحة</p>
+      </div>
+    )
+  }
 
   const openCreate = () => {
     setEditingItem(null)

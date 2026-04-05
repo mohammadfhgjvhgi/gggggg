@@ -18,7 +18,9 @@ import {
   Cpu,
   DoorOpen,
   Music,
+  ShieldAlert,
 } from 'lucide-react'
+import { ReadOnlyBanner } from '@/components/permission-banner'
 import { useFirebaseStatus } from '@/hooks/useFirebaseStatus'
 import { useFirebaseLights } from '@/hooks/useFirebaseLights'
 
@@ -76,9 +78,12 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
   cheque: 'شيك',
 }
 
+const DASHBOARD_ALLOWED_ROLES = ['admin', 'manager', 'viewer']
+
 export default function DashboardPage() {
   const { toast } = useToast()
   const user = useAuthStore((s) => s.user)
+  const userRole = user?.role
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -108,6 +113,17 @@ export default function DashboardPage() {
     fetchData()
   }, [fetchData])
 
+  // Employee can't access dashboard at all
+  if (!DASHBOARD_ALLOWED_ROLES.includes(userRole)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 animate-fade-up">
+        <ShieldAlert className="h-16 w-16 text-muted-foreground/30" />
+        <h2 className="text-xl font-bold text-muted-foreground">غير مصرح</h2>
+        <p className="text-sm text-muted-foreground/70">ليس لديك صلاحية للوصول إلى هذه الصفحة</p>
+      </div>
+    )
+  }
+
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('ar-SA', {
       month: 'short',
@@ -125,8 +141,15 @@ export default function DashboardPage() {
 
   const maxRevenue = data ? Math.max(...data.revenueChart.map((c) => c.revenue), 1) : 1
 
+  const isViewer = userRole === 'viewer'
+
   return (
     <div className="space-y-8">
+      {/* Permission Banner */}
+      {isViewer && (
+        <ReadOnlyBanner message="وضع العرض فقط — ليس لديك صلاحية التعديل أو الحذف في لوحة المعلومات." />
+      )}
+
       {/* Header */}
       <div className="animate-fade-up">
         <h2 className="text-3xl font-bold font-[Playfair_Display] flex items-center gap-3">

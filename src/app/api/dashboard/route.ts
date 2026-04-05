@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'غير مصرح بالوصول' }, { status: 401 })
     }
 
-    if (!hasPermission(sessionUser.role, 'control:read')) {
+    if (!hasPermission(sessionUser.role, 'dashboard:read')) {
       return NextResponse.json({ error: 'ليس لديك صلاحية لعرض لوحة التحكم' }, { status: 403 })
     }
 

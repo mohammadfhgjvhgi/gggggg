@@ -113,6 +113,14 @@
   --sidebar-accent-foreground: #e8b84a;
   --sidebar-border: rgba(255, 255, 255, 0.06);
   --sidebar-ring: #e8b84a;
+
+  /* Islamic Geometric Pattern SVG Data URIs */
+  --pat-star: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><g fill='none' stroke='%23d4a853' stroke-width='0.5' opacity='0.18'><rect x='12' y='12' width='36' height='36' transform='rotate(45 30 30)'/><rect x='17' y='17' width='26' height='26'/><circle cx='30' cy='30' r='14'/><circle cx='30' cy='30' r='20'/></g></svg>");
+  --pat-arabesque: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%23d4a853' stroke-width='0.4' opacity='0.14'><path d='M0 40 Q20 20 40 40 Q60 60 80 40'/><path d='M0 20 Q20 0 40 20 Q60 40 80 20'/><path d='M0 60 Q20 40 40 60 Q60 80 80 60'/><circle cx='40' cy='40' r='4'/><circle cx='0' cy='40' r='3'/><circle cx='80' cy='40' r='3'/></g></svg>");
+  --pat-grid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><g fill='none' stroke='%23d4a853' stroke-width='0.3' opacity='0.18'><rect x='8' y='8' width='12' height='12' transform='rotate(45 14 14)'/><rect x='22' y='22' width='12' height='12' transform='rotate(45 28 28)'/><line x1='0' y1='20' x2='40' y2='20'/><line x1='20' y1='0' x2='20' y2='40'/><circle cx='20' cy='20' r='7'/></g></svg>");
+  --pat-hex: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'><g fill='none' stroke='%23d4a853' stroke-width='0.3' opacity='0.16'><polygon points='25,5 44,15 44,35 25,45 6,35 6,15'/><polygon points='25,12 39,19 39,31 25,38 11,31 11,19'/><circle cx='25' cy='25' r='7'/><line x1='25' y1='5' x2='25' y2='45'/><line x1='6' y1='15' x2='44' y2='35'/><line x1='6' y1='35' x2='44' y2='15'/></g></svg>");
+  --pat-circles: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><g fill='none' stroke='%23d4a853' stroke-width='0.3' opacity='0.14'><circle cx='30' cy='30' r='25'/><circle cx='30' cy='30' r='15'/><circle cx='15' cy='15' r='15'/><circle cx='45' cy='15' r='15'/><circle cx='15' cy='45' r='15'/><circle cx='45' cy='45' r='15'/><circle cx='30' cy='30' r='5'/></g></svg>");
+  --pat-mihrab: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300' viewBox='0 0 200 300'><g fill='none' stroke='%23d4a853' stroke-width='0.6' opacity='0.15'><path d='M40 300 L40 100 Q40 30 100 30 Q160 30 160 100 L160 300'/><path d='M58 300 L58 108 Q58 55 100 55 Q142 55 142 108 L142 300'/><circle cx='100' cy='35' r='10'/><circle cx='100' cy='35' r='18'/><polygon points='100,15 103,27 116,27 106,34 109,46 100,39 91,46 94,34 84,27 97,27'/><circle cx='50' cy='200' r='6'/><circle cx='150' cy='200' r='6'/><path d='M57 200 Q50 180 57 160'/><path d='M143 200 Q150 180 143 160'/><line x1='65' y1='275' x2='135' y2='275'/><circle cx='82' cy='275' r='2' fill='%23d4a853' opacity='0.2'/><circle cx='100' cy='275' r='2' fill='%23d4a853' opacity='0.2'/><circle cx='118' cy='275' r='2' fill='%23d4a853' opacity='0.2'/><circle cx='100' cy='140' r='20'/><circle cx='100' cy='140' r='12'/></g></svg>");
 }
 
 /* Dark mode vars */
@@ -278,51 +286,113 @@
 }
 
 /* ═══════════════════════════════════════ */
-/*   Page-themed accent gradients           */
+/*   Islamic Geometric Pattern Classes       */
 /* ═══════════════════════════════════════ */
 
+.islamic-pattern-base {
+  position: relative;
+}
+
+.islamic-border-frame {
+  border: 1px solid rgba(212, 168, 83, 0.2);
+  box-shadow:
+    0 0 0 1px rgba(212, 168, 83, 0.05),
+    0 0 20px rgba(212, 168, 83, 0.05),
+    0 0 60px rgba(212, 168, 83, 0.02),
+    inset 0 1px 0 rgba(212, 168, 83, 0.1);
+}
+
+/* ═══════════════════════════════════════ */
+/*   Page-themed gradients + Islamic patterns */
+/* ═══════════════════════════════════════ */
+
+/* Dashboard: Islamic 8-pointed Star + amber gradient */
 .page-gradient-dashboard {
-  background: radial-gradient(ellipse at 20% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(245, 158, 11, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-star),
+    radial-gradient(ellipse at 20% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(245, 158, 11, 0.04) 0%, transparent 40%);
+  background-size: 60px 60px, 100% 100%, 100% 100%;
 }
 
+/* Control: Geometric Diamond Grid + cyan gradient */
 .page-gradient-control {
-  background: radial-gradient(ellipse at 20% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(6, 182, 212, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-grid),
+    radial-gradient(ellipse at 20% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(6, 182, 212, 0.04) 0%, transparent 40%);
+  background-size: 40px 40px, 100% 100%, 100% 100%;
 }
 
+/* Customers: Geometric Diamond Grid + orange gradient */
 .page-gradient-customers {
-  background: radial-gradient(ellipse at 20% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(249, 115, 22, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-grid),
+    radial-gradient(ellipse at 20% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(249, 115, 22, 0.04) 0%, transparent 40%);
+  background-size: 40px 40px, 100% 100%, 100% 100%;
 }
 
+/* Bookings: Arabesque Scroll + purple gradient */
 .page-gradient-bookings {
-  background: radial-gradient(ellipse at 20% 0%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(168, 85, 247, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-arabesque),
+    radial-gradient(ellipse at 20% 0%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(168, 85, 247, 0.04) 0%, transparent 40%);
+  background-size: 80px 80px, 100% 100%, 100% 100%;
 }
 
+/* Billing: Arabesque Scroll + emerald gradient */
 .page-gradient-billing {
-  background: radial-gradient(ellipse at 20% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-arabesque),
+    radial-gradient(ellipse at 20% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 40%);
+  background-size: 80px 80px, 100% 100%, 100% 100%;
 }
 
+/* Calendar: Hexagonal Star + pink gradient */
 .page-gradient-calendar {
-  background: radial-gradient(ellipse at 20% 0%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(236, 72, 153, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-hex),
+    radial-gradient(ellipse at 20% 0%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(236, 72, 153, 0.04) 0%, transparent 40%);
+  background-size: 50px 50px, 100% 100%, 100% 100%;
 }
 
+/* Activity: Hexagonal Star + indigo gradient */
 .page-gradient-activity {
-  background: radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-hex),
+    radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.04) 0%, transparent 40%);
+  background-size: 50px 50px, 100% 100%, 100% 100%;
 }
 
+/* Settings: Interlocking Circles + slate gradient */
 .page-gradient-settings {
-  background: radial-gradient(ellipse at 20% 0%, rgba(100, 116, 139, 0.06) 0%, transparent 50%);
+  background-image:
+    var(--pat-circles),
+    radial-gradient(ellipse at 20% 0%, rgba(100, 116, 139, 0.06) 0%, transparent 50%);
+  background-size: 60px 60px, 100% 100%;
 }
 
+/* Profile: Interlocking Circles + fuchsia gradient */
 .page-gradient-profile {
-  background: radial-gradient(ellipse at 20% 0%, rgba(232, 121, 249, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 100%, rgba(232, 121, 249, 0.04) 0%, transparent 40%);
+  background-image:
+    var(--pat-circles),
+    radial-gradient(ellipse at 20% 0%, rgba(232, 121, 249, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(232, 121, 249, 0.04) 0%, transparent 40%);
+  background-size: 60px 60px, 100% 100%, 100% 100%;
+}
+
+/* Users: Islamic Star + rose gradient */
+.page-gradient-users {
+  background-image:
+    var(--pat-star),
+    radial-gradient(ellipse at 20% 0%, rgba(244, 63, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(244, 63, 94, 0.04) 0%, transparent 40%);
+  background-size: 60px 60px, 100% 100%, 100% 100%;
 }
 
 /* ═══════════════════════════════════════ */
@@ -353,10 +423,30 @@
 }
 
 .mesh-bg-login {
-  background:
+  background-image:
+    var(--pat-circles),
     radial-gradient(ellipse at 30% 20%, rgba(232, 184, 74, 0.1) 0%, transparent 50%),
     radial-gradient(ellipse at 70% 80%, rgba(232, 184, 74, 0.06) 0%, transparent 50%),
     radial-gradient(ellipse at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%);
+  background-size: 60px 60px, 100% 100%, 100% 100%, 100% 100%;
+}
+
+/* Mihrab-inspired geometric watermark behind login card */
+.mesh-bg-login::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  height: 480px;
+  background-image: var(--pat-mihrab);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ═══════════════════════════════════════ */

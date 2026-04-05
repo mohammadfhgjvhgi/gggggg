@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { ChevronRight, ChevronLeft, CalendarDays } from 'lucide-react'
+import { ChevronRight, ChevronLeft, CalendarDays, ShieldAlert } from 'lucide-react'
 import { ReadOnlyBanner, usePermissions } from '@/components/permission-banner'
 
 const authHeaders = () => ({
@@ -58,13 +58,14 @@ export default function CalendarView() {
   const user = useAuthStore((s) => s.user)
   const { isReadOnly } = usePermissions()
 
+  const userRole = user?.role
   const [currentDate, setCurrentDate] = useState(new Date())
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const userIsReadOnly = isReadOnly(user?.role, 'bookings')
+  const userIsReadOnly = userRole === 'viewer'
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -122,6 +123,18 @@ export default function CalendarView() {
   }
 
   const selectedBookings = selectedDay ? bookingsByDay[selectedDay] || [] : []
+
+  // Employee can't access calendar at all
+  const CALENDAR_ALLOWED_ROLES = ['admin', 'manager', 'viewer']
+  if (!CALENDAR_ALLOWED_ROLES.includes(userRole)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 animate-fade-up">
+        <ShieldAlert className="h-16 w-16 text-muted-foreground/30" />
+        <h2 className="text-xl font-bold text-muted-foreground">غير مصرح</h2>
+        <p className="text-sm text-muted-foreground/70">ليس لديك صلاحية للوصول إلى هذه الصفحة</p>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 animate-fade-up">

@@ -155,3 +155,147 @@ Stage Summary:
 - Arabic text formatting improved
 - All functionality preserved - only visual changes
 - 9 distinct color themes across the application
+
+---
+Task ID: 5
+Agent: frontend-styling-expert
+Task: Add Islamic-themed CSS background patterns to globals.css
+
+Work Log:
+- Created 6 pure CSS Islamic geometric SVG patterns as data URIs stored in CSS custom properties on :root:
+  - --pat-star: 8-pointed Islamic star (rotated square + nested circles, 60x60)
+  - --pat-arabesque: Flowing vine/scroll curves with decorative circles (80x80)
+  - --pat-grid: Interlocking diamond grid with crosshairs and central circle (40x40)
+  - --pat-hex: Hexagonal star with nested polygons and radial lines (50x50)
+  - --pat-circles: Interlocking circles pattern (flower-of-life inspired, 60x60)
+  - --pat-mihrab: Mihrab/arch silhouette with star, decorative scrolls, and ornamental dots (200x300)
+- All patterns use gold (#d4a853) stroke color with very low opacity (0.14-0.18) for subtlety
+- Added .islamic-pattern-base utility class (position: relative)
+- Added .islamic-border-frame class with gold border + layered box-shadow for login card
+- Enhanced all 9 .page-gradient-* classes + added new .page-gradient-users class:
+  - dashboard, users: Islamic star pattern
+  - control, customers: Geometric diamond grid pattern
+  - bookings, billing: Arabesque scroll pattern
+  - calendar, activity: Hexagonal star pattern
+  - settings, profile: Interlocking circles pattern
+  - Each uses background-image multi-layer (pattern tile + radial gradients)
+- Enhanced .mesh-bg-login with interlocking circles pattern layer
+- Added .mesh-bg-login::after pseudo-element for mihrab watermark (320x480px, opacity 0.03, pointer-events none)
+- Updated page.tsx: added 'relative' class to <main> for z-index context
+- Updated page.tsx: added 'z-[1]' to login content container to float above mihrab watermark
+- Updated page.tsx: added 'islamic-border-frame' class to login card for gold decorative border
+- All patterns are pure CSS (no external images), no human figures, no music instruments
+- Pre-existing lint/TS errors unchanged (4 lint errors in dashboard-page.tsx and settings-panel.tsx, 14 TS errors across project - all pre-existing)
+
+Stage Summary:
+- 6 unique Islamic geometric SVG patterns created as CSS data URIs
+- All 10 page backgrounds now have subtle Islamic pattern overlays
+- Login page features mihrab watermark behind card + gold decorative border frame
+- Pattern distribution provides visual variety: star, arabesque, grid, hexagonal, circles
+- Patterns are very subtle (0.03-0.05 effective opacity) ensuring no readability impact
+- All existing layouts and functionality preserved - only CSS additions
+
+---
+## Task ID: 2
+### Work Task
+Update core permission system files with new role-based access structure across 6 files.
+
+### Work Summary
+Updated the permission system across 6 files to implement a refined role-based access control:
+
+1. **src/lib/auth.ts** - Replaced ROLE_PERMISSIONS with new granular permissions: dashboard, control, calendar, activity, notifications permissions added; employee no longer has payments:read or settings:read; viewer restricted to dashboard:read, customers:read, bookings:read, calendar:read, notifications:read only.
+
+2. **src/components/permission-banner.tsx** - Replaced PERMISSIONS_TABLE with 10 resource entries (dashboard, control, customers, bookings, payments, calendar, activity, notifications, users, settings). Added ROLE_BANNER config mapping each role to a label/icon/color (admin=gold ShieldCheck "تحكم كامل", manager=cyan ShieldCheck "إدارة كاملة", employee=slate Info "إدخال بيانات", viewer=emerald Eye "عرض فقط"). Updated PermissionsCard to display role banner at top.
+
+3. **src/app/page.tsx** - Updated NAV_ITEMS with new role arrays matching permission structure. Added "profile" nav item (accessible to all roles) before settings. Added useEffect to redirect users to their first accessible page when current page is unauthorized.
+
+4. **src/app/api/dashboard/route.ts** - Changed permission check from `control:read` to `dashboard:read`.
+
+5. **src/app/api/activity/route.ts** - Changed permission check from `control:write` to `activity:read`.
+
+6. **src/app/api/notifications/route.ts** - Changed GET permission from `control:read` to `notifications:read`, PUT permission from `control:read` to `notifications:write`.
+
+All lint checks pass, dev server compiles without errors.
+
+---
+## Task ID: 4
+### Work Task
+Update all component files with proper role-based permissions and fix English text.
+
+### Work Summary
+Updated 11 component files with role-based permission checks and verified all user-visible text is in Arabic:
+
+1. **dashboard-page.tsx** - Added ShieldAlert + ReadOnlyBanner imports, DASHBOARD_ALLOWED_ROLES check (admin/manager/viewer). Employee gets "غير مصرح" unauthorized screen. Viewer sees ReadOnlyBanner. Permission check placed after all React hooks to comply with rules-of-hooks.
+
+2. **control-dashboard.tsx** - Added ShieldAlert import. Viewer now sees "غير مصرح" unauthorized screen (device cards hidden via conditional fragment). Admin/manager/employee retain full control. The ReadOnlyBanner for non-control non-viewer roles preserved.
+
+3. **customer-management.tsx** - Already correctly implemented: viewer sees ReadOnlyBanner, employee sees PartialPermissionBanner (no delete), admin/manager have full CRUD. No changes needed.
+
+4. **booking-management.tsx** - Already correctly implemented: same pattern as customer-management. No changes needed.
+
+5. **billing-management.tsx** - Added ShieldAlert import. Added BILLING_ALLOWED_ROLES check (admin/manager only). Employee and viewer now see "غير مصرح" unauthorized screen. Check placed after all hooks.
+
+6. **calendar-view.tsx** - Added ShieldAlert import. Added CALENDAR_ALLOWED_ROLES check (admin/manager/viewer). Employee sees "غير مصرح". Viewer sees ReadOnlyBanner (changed from bookings-based permission to direct role check). Check placed after all hooks.
+
+7. **activity-log-page.tsx** - Already correctly implemented: non-admin/manager get unauthorized screen. No changes needed.
+
+8. **notification-bell.tsx** - Already correctly implemented: all roles can view and mark as read. No changes needed.
+
+9. **settings-panel.tsx** - Employee and viewer now see "غير مصرح" unauthorized screen. Manager sees ReadOnlyBanner ("وضع العرض فقط"). Admin retains full access. Check placed after all hooks.
+
+10. **user-management.tsx** - Already correctly implemented: admin-only access with unauthorized screen. No changes needed.
+
+11. **profile-page.tsx** - Already correctly implemented: all roles can access. All text already in Arabic. No changes needed.
+
+All user-visible text was verified to be in Arabic — no English text was found in any component JSX. All lint checks pass (0 errors), dev server compiles successfully.
+---
+Task ID: 2
+Agent: Main orchestrator
+Task: Strict role-based permissions + Islamic backgrounds
+
+Work Log:
+- Updated lib/auth.ts ROLE_PERMISSIONS with new granular permissions (dashboard, calendar, activity, notifications scopes)
+- Updated permission-banner.tsx PERMISSIONS_TABLE with 10 resource entries matching user requirements
+- Added ROLE_BANNER with role-specific labels (admin: تحكم كامل, manager: إدارة كاملة, employee: إدخال بيانات, viewer: عرض فقط)
+- Updated page.tsx NAV_ITEMS with correct role visibility per user specification
+- Added profile nav item accessible to all roles
+- Added redirect useEffect to send users to first accessible page
+- Updated API routes: dashboard (dashboard:read), activity (activity:read), notifications (notifications:read/write)
+- Updated dashboard-page.tsx: employee blocked, viewer read-only
+- Updated control-dashboard.tsx: viewer blocked with unauthorized screen
+- Updated billing-management.tsx: employee & viewer blocked
+- Updated calendar-view.tsx: employee blocked, viewer read-only
+- Updated settings-panel.tsx: only admin can write, manager can read
+- Verified customer-management.tsx, booking-management.tsx already had correct permissions
+- Verified activity-log-page.tsx already blocks non-admin/manager
+- Verified notification-bell.tsx and user-management.tsx already correct
+
+Stage Summary:
+- Strict RBAC system implemented matching user's exact permission table
+- Sidebar shows only accessible pages per role
+- Components show "غير مصرح" for inaccessible pages, ReadOnlyBanner for read-only
+- All text verified Arabic, no English remnants
+- Lint passes clean, dev server compiles without errors
+
+---
+Task ID: 5
+Agent: frontend-styling-expert
+Task: Islamic CSS background patterns for all pages
+
+Work Log:
+- Created 6 pure CSS SVG Islamic geometric patterns as data URIs
+- Patterns: Islamic Star, Arabesque Scroll, Diamond Grid, Hexagonal Star, Interlocking Circles, Mihrab Arch
+- All patterns use gold (#d4a853) strokes at very low opacity (0.14-0.18)
+- Updated all .page-gradient-* classes with pattern overlays
+- Added .islamic-border-frame for login card gold glow border
+- Added .islamic-pattern-base utility class
+- Updated mesh-bg-login with circles pattern
+- Added z-index management for content above patterns
+- Each page uses a different pattern variant
+
+Stage Summary:
+- 6 unique Islamic geometric patterns created using pure CSS SVG
+- All 11 pages have themed background patterns
+- Login page has mihrab arch pattern + gold border frame
+- Patterns are very subtle (opacity 0.03-0.05 effective) for readability
+- No external images, no human figures, no music elements

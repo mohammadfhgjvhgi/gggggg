@@ -25,6 +25,7 @@ import {
   Volume2,
   Cpu,
   Loader2,
+  ShieldAlert,
 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -829,11 +830,22 @@ export default function ControlDashboard() {
 
   return (
     <div dir="rtl" className="space-y-6">
-      {/* Permission Banner for viewer */}
-      {!canControl && (
+      {/* Unauthorized for viewer */}
+      {user?.role === 'viewer' && (
+        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 animate-fade-up">
+          <ShieldAlert className="h-16 w-16 text-muted-foreground/30" />
+          <h2 className="text-xl font-bold text-muted-foreground">غير مصرح</h2>
+          <p className="text-sm text-muted-foreground/70">ليس لديك صلاحية للوصول إلى هذه الصفحة</p>
+        </div>
+      )}
+
+      {!canControl && user?.role !== 'viewer' && (
         <ReadOnlyBanner message="يمكنك فقط مشاهدة حالة الأجهزة. للتحكم بالبوابات والأبواب والإضاءة، تواصل مع المدير." />
       )}
 
+      {/* Device controls - only show if authorized */}
+      {user?.role === 'viewer' ? null : (
+        <>
       {/* حالة ESP32 */}
       <Esp32StatusCard online={status.online} lastSeen={status.lastSeen} />
 
@@ -893,6 +905,8 @@ export default function ControlDashboard() {
         onPlay={play}
         disabled={disabled || !canControl}
       />
+      </>
+      )}
     </div>
   )
 }

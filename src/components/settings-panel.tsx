@@ -60,7 +60,7 @@ export default function SettingsPanel() {
 
   const canWrite = user?.role === 'admin'
   const canControl = user?.role === 'admin' || user?.role === 'manager'
-  const canRead = user?.role === 'admin' || user?.role === 'manager' || user?.role === 'employee' || user?.role === 'viewer'
+  const userRole = user?.role
 
   // Firebase config status
   const firebaseConfig = getFirebaseConfig()
@@ -88,6 +88,18 @@ export default function SettingsPanel() {
   useEffect(() => {
     fetchSettings()
   }, [fetchSettings])
+
+  // Employee and viewer can't access settings at all
+  const SETTINGS_ALLOWED_ROLES = ['admin', 'manager']
+  if (!SETTINGS_ALLOWED_ROLES.includes(userRole)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 animate-fade-up">
+        <ShieldAlert className="h-16 w-16 text-muted-foreground/30" />
+        <h2 className="text-xl font-bold text-muted-foreground">غير مصرح</h2>
+        <p className="text-sm text-muted-foreground/70">ليس لديك صلاحية للوصول إلى هذه الصفحة</p>
+      </div>
+    )
+  }
 
   const handleSave = async () => {
     setSaving(true)
@@ -177,9 +189,9 @@ export default function SettingsPanel() {
 
   return (
     <div className="space-y-6 animate-fade-up">
-      {/* Permission Banner */}
-      {!canWrite && canRead && (
-        <ReadOnlyBanner message="يمكنك فقط عرض الإعدادات. لتعديل إعدادات النظام، تواصل مع مدير النظام." />
+      {/* Permission Banner - manager is read-only */}
+      {!canWrite && canControl && (
+        <ReadOnlyBanner message="وضع العرض فقط — للوصول إلى الإعدادات، تواصل مع مدير النظام." />
       )}
 
       {/* Header */}

@@ -19,9 +19,16 @@ interface PermissionDetail {
 
 const PERMISSIONS_TABLE: PermissionDetail[] = [
   {
+    key: 'dashboard',
+    label: 'لوحة المعلومات',
+    read: ['admin', 'manager', 'viewer'],
+    write: ['admin', 'manager'],
+    delete: [],
+  },
+  {
     key: 'control',
     label: 'التحكم بالأجهزة',
-    read: ['admin', 'manager', 'employee', 'viewer'],
+    read: ['admin', 'manager', 'employee'],
     write: ['admin', 'manager', 'employee'],
     delete: [],
   },
@@ -41,10 +48,31 @@ const PERMISSIONS_TABLE: PermissionDetail[] = [
   },
   {
     key: 'payments',
-    label: 'المدفوعات',
-    read: ['admin', 'manager', 'employee', 'viewer'],
+    label: 'الفواتير',
+    read: ['admin', 'manager'],
     write: ['admin', 'manager'],
     delete: ['admin', 'manager'],
+  },
+  {
+    key: 'calendar',
+    label: 'التقويم',
+    read: ['admin', 'manager', 'viewer'],
+    write: ['admin', 'manager'],
+    delete: [],
+  },
+  {
+    key: 'activity',
+    label: 'سجل النشاطات',
+    read: ['admin', 'manager'],
+    write: [],
+    delete: [],
+  },
+  {
+    key: 'notifications',
+    label: 'الإشعارات',
+    read: ['admin', 'manager', 'employee', 'viewer'],
+    write: ['admin', 'manager', 'employee'],
+    delete: [],
   },
   {
     key: 'users',
@@ -56,11 +84,18 @@ const PERMISSIONS_TABLE: PermissionDetail[] = [
   {
     key: 'settings',
     label: 'الإعدادات',
-    read: ['admin', 'manager', 'employee', 'viewer'],
+    read: ['admin', 'manager'],
     write: ['admin'],
     delete: [],
   },
 ]
+
+const ROLE_BANNER: Record<Role, { label: string; color: string; bg: string }> = {
+  admin: { label: 'تحكم كامل', color: 'text-[#d4a853]', bg: 'bg-[#d4a853]/15' },
+  manager: { label: 'إدارة كاملة', color: 'text-cyan-400', bg: 'bg-cyan-500/15' },
+  employee: { label: 'إدخال بيانات', color: 'text-slate-300', bg: 'bg-slate-400/15' },
+  viewer: { label: 'عرض فقط', color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
+}
 
 // ═══════════════════════════════════════════════════
 //   بانر الصلاحيات المحدود
@@ -121,8 +156,16 @@ export function PartialPermissionBanner({ canWrite, canDelete, resource }: { can
 // ═══════════════════════════════════════════════════
 
 export function PermissionsCard({ role }: { role: Role }) {
+  const banner = ROLE_BANNER[role]
+  const BannerIcon = role === 'viewer' ? Eye : role === 'employee' ? Info : ShieldCheck
+
   return (
     <div className="space-y-2">
+      {/* Role Banner */}
+      <div className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 ${banner.bg} border border-white/[0.06]`}>
+        <BannerIcon className={`h-4 w-4 ${banner.color}`} />
+        <span className={`text-xs font-bold ${banner.color}`}>{banner.label}</span>
+      </div>
       <div className="flex items-center gap-2 px-1">
         <ShieldCheck className="h-4 w-4 text-[#d4a853]" />
         <span className="text-xs font-semibold text-[#8a8690]">صلاحياتي</span>

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'غير مصرح بالوصول' }, { status: 401 })
     }
 
-    if (!hasPermission(sessionUser.role, 'control:write')) {
+    if (!hasPermission(sessionUser.role, 'activity:read')) {
       return NextResponse.json({ error: 'ليس لديك صلاحية لعرض سجل النشاطات' }, { status: 403 })
     }
 

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'غير مصرح بالوصول' }, { status: 401 })
     }
 
-    if (!hasPermission(sessionUser.role, 'control:read')) {
+    if (!hasPermission(sessionUser.role, 'notifications:read')) {
       return NextResponse.json({ error: 'ليس لديك صلاحية لعرض الإشعارات' }, { status: 403 })
     }
 
@@ -70,7 +70,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'غير مصرح بالوصول' }, { status: 401 })
     }
 
-    if (!hasPermission(sessionUser.role, 'control:read')) {
+    if (!hasPermission(sessionUser.role, 'notifications:write')) {
       return NextResponse.json({ error: 'ليس لديك صلاحية لتعديل الإشعارات' }, { status: 403 })
     }
 

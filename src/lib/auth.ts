@@ -14,33 +14,40 @@ export const ROLE_LABELS: Record<Role, string> = {
 
 export const ROLE_PERMISSIONS: Record<Role, string[]> = {
   admin: [
+    'dashboard:read', 'dashboard:write',
     'control:read', 'control:write',
     'customers:read', 'customers:write', 'customers:delete',
     'bookings:read', 'bookings:write', 'bookings:delete',
     'payments:read', 'payments:write', 'payments:delete',
+    'calendar:read', 'calendar:write',
+    'activity:read',
+    'notifications:read', 'notifications:write',
     'users:read', 'users:write', 'users:delete',
     'settings:read', 'settings:write',
   ],
   manager: [
+    'dashboard:read', 'dashboard:write',
     'control:read', 'control:write',
     'customers:read', 'customers:write', 'customers:delete',
     'bookings:read', 'bookings:write', 'bookings:delete',
     'payments:read', 'payments:write', 'payments:delete',
+    'calendar:read', 'calendar:write',
+    'activity:read',
+    'notifications:read', 'notifications:write',
     'settings:read',
   ],
   employee: [
     'control:read', 'control:write',
     'customers:read', 'customers:write',
     'bookings:read', 'bookings:write',
-    'payments:read',
-    'settings:read',
+    'notifications:read', 'notifications:write',
   ],
   viewer: [
-    'control:read',
+    'dashboard:read',
     'customers:read',
     'bookings:read',
-    'payments:read',
-    'settings:read',
+    'calendar:read',
+    'notifications:read',
   ],
 }
 
