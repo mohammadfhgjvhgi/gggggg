@@ -320,3 +320,44 @@ Stage Summary:
 - Background images are now very subtle (barely visible texture) instead of dominating the page
 - Content on all pages (cards, buttons, text) should now be clearly readable
 - Files modified: `src/app/globals.css`
+
+---
+## Task ID: standalone-html
+### Work Task
+Create a complete single HTML file at /home/z/my-project/public/index.html that is a wedding hall management app in Arabic RTL.
+
+### Work Summary
+Created a comprehensive 1,688-line single HTML file (`public/index.html`) implementing a complete wedding hall management system with:
+
+**Tech Stack:**
+- Tailwind CSS CDN, Firebase compat SDK (v9.23.0), Google Fonts (Playfair Display, DM Sans, DM Mono)
+- All CSS and JS fully inline in a single self-contained file
+
+**Design:**
+- Dark gold theme (#0f0f17 background, #e8b84a gold accent, glassmorphism cards with rgba(28,28,42,0.85))
+- Arabic RTL throughout, responsive layout (sidebar drawer on mobile)
+
+**12 Pages (JS routing):**
+1. LOGIN - Email/password form + 4 quick-role buttons (admin/manager/employee/viewer)
+2. SIDEBAR - Icon navigation, active state, user info, logout
+3. HOME (لوحة المعلومات) - 4 stat cards, recent bookings table, quick action grid
+4. CONTROL (التحكم بالأجهزة) - ESP32 status, gate/door toggles, seat toggle, 6 light switches, MP3 player (all Firebase-connected)
+5. CUSTOMERS (الزبائن) - Searchable table + add/edit/delete modal
+6. BOOKINGS (الحجوزات) - Filterable table + add/edit/delete modal with hall type selection
+7. BILLING (الفواتير) - Invoice table with amounts and status
+8. CALENDAR (التقويم) - Monthly grid with colored booking dots, day click to view
+9. ACTIVITY LOG (سجل النشاطات) - History table with relative timestamps
+10. USERS (المستخدمون) - Read-only user table (admin only)
+11. SETTINGS (الإعدادات) - Hall info, Firebase status, device reset (admin only)
+12. PROFILE (الملف الشخصي) - User info display + edit form
+
+**Firebase Integration:**
+- Real-time listeners for ESP32 status, gate, door, seat, 6 lights, MP3 player
+- All control paths: /wedding_hall/gate/open, /wedding_hall/door/open, /wedding_hall/seat/active, /wedding_hall/lights/*, /wedding_hall/mp3/*, /wedding_hall/status/*
+
+**Permissions:**
+- admin: all pages; manager: all except users/settings; employee: home/control/customers/bookings/profile; viewer: home/customers(read)/calendar(read)/bookings(read)/profile
+
+**Data:** localStorage with seed data (5 customers, 6 bookings, 4 invoices) on first load. Firebase only for ESP32 control.
+
+File verified accessible at http://localhost:3000/index.html (HTTP 200).
