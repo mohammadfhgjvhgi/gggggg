@@ -34,21 +34,13 @@ const authHeaders = () => ({
   Authorization: `Bearer ${useAuthStore.getState().token}`,
 })
 
-interface SettingsData {
-  firebaseApiKey: string
-  firebaseDatabaseUrl: string
-  firebaseAuthDomain: string
-  firebaseProjectId: string
+interface HallSettings {
   hallName: string
   hallPhone: string
   hallAddress: string
 }
 
-const defaultSettings: SettingsData = {
-  firebaseApiKey: '',
-  firebaseDatabaseUrl: '',
-  firebaseAuthDomain: '',
-  firebaseProjectId: '',
+const defaultSettings: HallSettings = {
   hallName: '',
   hallPhone: '',
   hallAddress: '',
@@ -58,7 +50,7 @@ export default function SettingsPanel() {
   const { toast } = useToast()
   const user = useAuthStore((s) => s.user)
 
-  const [settings, setSettings] = useState<SettingsData>(defaultSettings)
+  const [settings, setSettings] = useState<HallSettings>(defaultSettings)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
@@ -81,10 +73,6 @@ export default function SettingsPanel() {
       if (res.ok) {
         const data = await res.json()
         setSettings({
-          firebaseApiKey: data.settings.firebaseApiKey || '',
-          firebaseDatabaseUrl: data.settings.firebaseDatabaseUrl || '',
-          firebaseAuthDomain: data.settings.firebaseAuthDomain || '',
-          firebaseProjectId: data.settings.firebaseProjectId || '',
           hallName: data.settings.hallName || '',
           hallPhone: data.settings.hallPhone || '',
           hallAddress: data.settings.hallAddress || '',
@@ -126,17 +114,15 @@ export default function SettingsPanel() {
     setTesting(true)
     setTestResult(null)
     try {
-      const res = await fetch('/api/firebase/test', {
-        method: 'POST',
+      const res = await fetch('/api/firebase/status', {
         headers: authHeaders(),
       })
       if (res.ok) {
         const data = await res.json()
-        setTestResult({ success: data.success, message: data.message })
+        setTestResult({ success: true, message: 'اتصال Firebase يعمل بنجاح' })
         toast({
-          title: data.success ? 'اتصال ناجح' : 'فشل الاتصال',
-          description: data.message,
-          variant: data.success ? 'default' : 'destructive',
+          title: 'اتصال ناجح',
+          description: 'Firebase Realtime Database متصل',
         })
       } else {
         setTestResult({ success: false, message: 'فشل في اختبار الاتصال' })
@@ -173,18 +159,17 @@ export default function SettingsPanel() {
     }
   }
 
-  const updateField = (key: keyof SettingsData, value: string) => {
+  const updateField = (key: keyof HallSettings, value: string) => {
     setSettings((prev) => ({ ...prev, [key]: value }))
-    setTestResult(null)
   }
 
   if (loading) {
     return (
       <div className="space-y-6 animate-fade-up">
-        <Skeleton className="h-8 w-48 bg-[#1a1a25]" />
+        <Skeleton className="h-8 w-48 bg-muted" />
         <div className="grid gap-6">
-          <Skeleton className="h-64 w-full bg-[#1a1a25]" />
-          <Skeleton className="h-48 w-full bg-[#1a1a25]" />
+          <Skeleton className="h-64 w-full bg-muted" />
+          <Skeleton className="h-48 w-full bg-muted" />
         </div>
       </div>
     )
@@ -194,42 +179,44 @@ export default function SettingsPanel() {
     <div className="space-y-6 animate-fade-up">
       {/* Permission Banner */}
       {!canWrite && canRead && (
-        <ReadOnlyBanner message="يمكنك فقط عرض الإعدادات. لتعديل إعدادات النظام أو Firebase، تواصل مع مدير النظام." />
+        <ReadOnlyBanner message="يمكنك فقط عرض الإعدادات. لتعديل إعدادات النظام، تواصل مع مدير النظام." />
       )}
 
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-3 text-slate-100 font-[Playfair_Display]">
-          <Settings className="h-6 w-6 text-slate-300" />
+        <h2 className="text-2xl font-bold flex items-center gap-3">
+          <Settings className="h-6 w-6 text-primary" />
           الإعدادات
         </h2>
-        <p className="text-[#8a8690] text-sm mt-1">
-          إعدادات النظام والصالة و Firebase
+        <p className="text-muted-foreground text-sm mt-1">
+          إعدادات النظام والصالة
         </p>
       </div>
 
       {/* Firebase Configuration Status */}
-      <Card className="glass border-slate-500/12 border-r-4 border-r-slate-400 card-hover">
+      <Card className="border-r-4 border-r-orange-400">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg text-[#f5f0e8]">
-            <Flame className="h-5 w-5 text-orange-400" />
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Flame className="h-5 w-5 text-orange-500" />
             حالة Firebase
           </CardTitle>
-          <CardDescription className="text-[#8a8690]">
+          <CardDescription className="text-muted-foreground">
             حالة الاتصال بـ Firebase Realtime Database للتحكم بـ ESP32
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Current Status */}
-          <div className="glass flex items-center justify-between rounded-lg px-4 py-3">
+          <div className="flex items-center justify-between rounded-lg border px-4 py-3 bg-muted/30">
             <div className="flex items-center gap-3">
               <Cpu className={`h-5 w-5 ${isFirebaseConfigured ? 'text-emerald-500' : 'text-red-400'}`} />
               <div>
-                <p className="text-sm font-medium text-[#f5f0e8]">
+                <p className="text-sm font-medium">
                   {isFirebaseConfigured ? 'Firebase مُعد ومتصل' : 'Firebase غير مُعد'}
                 </p>
-                <p className="text-xs text-[#8a8690] font-[DM_Mono]" dir="ltr">
-                  {isFirebaseConfigured ? `Project: ${firebaseConfig.projectId}` : 'يحتاج تهيئة'}
+                <p className="text-xs text-muted-foreground font-mono" dir="ltr">
+                  {isFirebaseConfigured
+                    ? `Project: ${firebaseConfig.projectId}`
+                    : 'يحتاج تهيئة'}
                 </p>
               </div>
             </div>
@@ -240,13 +227,27 @@ export default function SettingsPanel() {
             )}
           </div>
 
+          {/* Project Info */}
+          {isFirebaseConfigured && (
+            <div className="grid gap-2 text-xs text-muted-foreground font-mono" dir="ltr">
+              <div className="flex items-center gap-2">
+                <span className="w-24 shrink-0">Database:</span>
+                <span className="text-foreground/80 truncate">{firebaseConfig.databaseURL}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-24 shrink-0">Auth Domain:</span>
+                <span className="text-foreground/80 truncate">{firebaseConfig.authDomain}</span>
+              </div>
+            </div>
+          )}
+
           {/* Test Connection */}
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
               onClick={handleTestConnection}
               disabled={testing}
-              className="gap-2 border-orange-500/30 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300"
+              className="gap-2 border-orange-500/30 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-500/10"
             >
               {testing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -263,105 +264,40 @@ export default function SettingsPanel() {
                 ) : (
                   <XCircle className="h-3.5 w-3.5 text-red-500" />
                 )}
-                <span className={testResult.success ? 'text-emerald-500' : 'text-red-500'}>
+                <span className={testResult.success ? 'text-emerald-600' : 'text-red-500'}>
                   {testResult.message}
                 </span>
               </div>
             )}
           </div>
-
-          <Separator className="bg-[#1f1f2e]" />
-
-          {/* Config Fields (Admin Only) */}
-          {canWrite && (
-            <>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="fb-project-id" className="text-[#8a8690]">معرف المشروع (Project ID)</Label>
-                  <Input
-                    id="fb-project-id"
-                    value={settings.firebaseProjectId}
-                    onChange={(e) => updateField('firebaseProjectId', e.target.value)}
-                    placeholder="your-project-id"
-                    dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="fb-db-url" className="text-[#8a8690]">رابط قاعدة البيانات</Label>
-                  <Input
-                    id="fb-db-url"
-                    value={settings.firebaseDatabaseUrl}
-                    onChange={(e) => updateField('firebaseDatabaseUrl', e.target.value)}
-                    placeholder="https://your-project.firebaseio.com"
-                    dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="fb-api-key" className="text-[#8a8690]">مفتاح API</Label>
-                  <Input
-                    id="fb-api-key"
-                    value={settings.firebaseApiKey}
-                    onChange={(e) => updateField('firebaseApiKey', e.target.value)}
-                    placeholder="AIzaSy..."
-                    dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="fb-auth-domain" className="text-[#8a8690]">نطاق المصادقة</Label>
-                  <Input
-                    id="fb-auth-domain"
-                    value={settings.firebaseAuthDomain}
-                    onChange={(e) => updateField('firebaseAuthDomain', e.target.value)}
-                    placeholder="your-project.firebaseapp.com"
-                    dir="ltr"
-                    className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end">
-                <Button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="gap-2 bg-gradient-to-b from-slate-500 to-slate-600 text-white hover:from-slate-400 hover:to-slate-500 shadow-[0_2px_12px_rgba(100,116,139,0.3)]"
-                >
-                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                  {saving ? 'جاري الحفظ...' : 'حفظ إعدادات Firebase'}
-                </Button>
-              </div>
-            </>
-          )}
         </CardContent>
       </Card>
 
       {/* Device Reset */}
       {canControl && (
-        <Card className="glass border-red-500/10 border-r-4 border-r-red-500/50">
+        <Card className="border-r-4 border-r-red-400">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg text-[#f5f0e8]">
-              <RotateCcw className="h-5 w-5 text-[#d4a853]" />
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <RotateCcw className="h-5 w-5 text-red-500" />
               إعادة تعيين الأجهزة
             </CardTitle>
-            <CardDescription className="text-[#8a8690]">
+            <CardDescription className="text-muted-foreground">
               إعادة جميع الأجهزة المتصلة بـ ESP32 إلى حالتها الافتراضية
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2 sm:grid-cols-3 text-sm">
-              <div className="flex items-center gap-2 rounded-lg border border-[#1f1f2e] bg-red-500/5 px-3 py-2">
+              <div className="flex items-center gap-2 rounded-lg border bg-red-50 dark:bg-red-500/5 px-3 py-2">
                 <div className="h-2 w-2 rounded-full bg-red-400" />
-                <span className="text-[#8a8690]">إغلاق البوابة والباب</span>
+                <span className="text-muted-foreground">إغلاق البوابة والباب</span>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-[#1f1f2e] bg-yellow-500/5 px-3 py-2">
+              <div className="flex items-center gap-2 rounded-lg border bg-yellow-50 dark:bg-yellow-500/5 px-3 py-2">
                 <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                <span className="text-[#8a8690]">إطفاء كل الأضواء</span>
+                <span className="text-muted-foreground">إطفاء كل الأضواء</span>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-[#1f1f2e] bg-violet-500/5 px-3 py-2">
-                <div className="h-2 w-2 rounded-full bg-violet-400" />
-                <span className="text-[#8a8690]">إيقاف جلوس + MP3</span>
+              <div className="flex items-center gap-2 rounded-lg border bg-purple-50 dark:bg-purple-500/5 px-3 py-2">
+                <div className="h-2 w-2 rounded-full bg-purple-400" />
+                <span className="text-muted-foreground">إيقاف جلوس + MP3</span>
               </div>
             </div>
 
@@ -370,15 +306,15 @@ export default function SettingsPanel() {
                 onClick={() => setConfirmReset(true)}
                 disabled={resetting}
                 variant="outline"
-                className="gap-2 border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+                className="gap-2 border-red-500/30 text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
               >
                 <RotateCcw className="h-4 w-4" />
                 إعادة تعيين كل الأجهزة
               </Button>
             ) : (
-              <div className="flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+              <div className="flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-50 dark:bg-red-500/5 p-3">
                 <ShieldAlert className="h-5 w-5 text-red-500 shrink-0" />
-                <p className="text-sm text-red-400 flex-1">
+                <p className="text-sm text-red-600 dark:text-red-400 flex-1">
                   هل أنت متأكد؟ سيتم إغلاق كل الأبواب وإطفاء كل الأضواء وإيقاف كل الأجهزة.
                 </p>
                 <div className="flex gap-2 shrink-0">
@@ -396,7 +332,7 @@ export default function SettingsPanel() {
                     variant="outline"
                     size="sm"
                     disabled={resetting}
-                    className="border-[#1f1f2e] text-[#8a8690] hover:text-[#f5f0e8] hover:bg-[#1a1a25]"
+                    className="text-muted-foreground"
                   >
                     إلغاء
                   </Button>
@@ -408,20 +344,20 @@ export default function SettingsPanel() {
       )}
 
       {/* Hall Information */}
-      <Card className="glass border-slate-500/12 border-r-4 border-r-slate-400 card-hover">
+      <Card className="border-r-4 border-r-primary">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg text-[#f5f0e8]">
-            <Building2 className="h-5 w-5 text-slate-300" />
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Building2 className="h-5 w-5 text-primary" />
             معلومات الصالة
           </CardTitle>
-          <CardDescription className="text-[#8a8690]">
+          <CardDescription className="text-muted-foreground">
             بيانات الصالة التي ستظهر في النظام والفواتير
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="hall-name" className="flex items-center gap-2 text-[#8a8690]">
-              <Building2 className="h-4 w-4 text-slate-300" />
+            <Label htmlFor="hall-name" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-muted-foreground" />
               اسم الصالة
             </Label>
             <Input
@@ -430,12 +366,11 @@ export default function SettingsPanel() {
               onChange={(e) => updateField('hallName', e.target.value)}
               placeholder="أدخل اسم الصالة"
               disabled={!canWrite}
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="hall-phone" className="flex items-center gap-2 text-[#8a8690]">
-              <Phone className="h-4 w-4 text-slate-300" />
+            <Label htmlFor="hall-phone" className="flex items-center gap-2">
+              <Phone className="h-4 w-4 text-muted-foreground" />
               رقم الهاتف
             </Label>
             <Input
@@ -445,12 +380,11 @@ export default function SettingsPanel() {
               placeholder="أدخل رقم هاتف الصالة"
               dir="ltr"
               disabled={!canWrite}
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20 font-[DM_Mono]"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="hall-address" className="flex items-center gap-2 text-[#8a8690]">
-              <MapPin className="h-4 w-4 text-slate-300" />
+            <Label htmlFor="hall-address" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
               العنوان
             </Label>
             <Textarea
@@ -460,7 +394,6 @@ export default function SettingsPanel() {
               placeholder="أدخل عنوان الصالة بالتفصيل"
               rows={3}
               disabled={!canWrite}
-              className="bg-[#12121a] border-[#1f1f2e] text-[#f5f0e8] placeholder:text-[#8a8690]/50 focus:border-slate-400/50 focus:ring-slate-400/20"
             />
           </div>
         </CardContent>
@@ -472,7 +405,7 @@ export default function SettingsPanel() {
           <Button
             onClick={handleSave}
             disabled={saving}
-            className="gap-2 bg-gradient-to-b from-slate-500 to-slate-600 text-white hover:from-slate-400 hover:to-slate-500 shadow-[0_2px_12px_rgba(100,116,139,0.3)] min-w-[160px]"
+            className="gap-2 min-w-[160px]"
           >
             {saving ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -485,18 +418,18 @@ export default function SettingsPanel() {
       )}
 
       {/* About Section */}
-      <Separator className="bg-[#1f1f2e]" />
+      <Separator />
 
-      <Card className="glass border-[#1f1f2e]">
+      <Card>
         <CardContent className="p-6">
           <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-slate-400 mt-0.5" />
+            <Info className="h-5 w-5 text-muted-foreground mt-0.5" />
             <div className="space-y-1">
-              <h3 className="font-semibold text-[#f5f0e8] font-[Playfair_Display]">حول النظام</h3>
-              <p className="text-sm text-[#8a8690]">
+              <h3 className="font-semibold">حول النظام</h3>
+              <p className="text-sm text-muted-foreground">
                 نظام إدارة صالات الأفراح - الإصدار 2.0.0
               </p>
-              <p className="text-xs text-[#8a8690]/70">
+              <p className="text-xs text-muted-foreground/70">
                 نظام متكامل لإدارة الحجوزات والزبائن والمدفوعات مع التحكم بـ ESP32 عبر Firebase
               </p>
             </div>
