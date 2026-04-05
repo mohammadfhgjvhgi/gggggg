@@ -398,20 +398,24 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
               <button
                 key={item.key}
                 onClick={() => handleNav(item.key)}
-                className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-[13px] font-semibold transition-all duration-200 ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? `text-white`
-                    : 'text-[#a09cae] hover:text-[#f0ece4] hover:bg-[rgba(255,255,255,0.06)]'
+                    ? `text-white border-r-2`
+                    : 'text-[#9490a0] hover:text-[#f0ece4] hover:bg-[rgba(255,255,255,0.04)]'
                 }`}
                 style={isActive ? {
                   backgroundColor: colors?.bg,
-                  boxShadow: `0 0 20px ${colors?.accent}15, inset 0 0 0 1px ${colors?.accent}30`,
+                  borderColor: colors?.accent,
                 } : undefined}
               >
-                <div className={`flex size-8 items-center justify-center rounded-lg shrink-0 transition-all duration-200 ${isActive ? '' : 'bg-white/[0.04]'}`} style={isActive ? { backgroundColor: `${colors?.accent}25` } : undefined}>
-                  <Icon className="size-[18px] shrink-0" style={isActive ? { color: colors?.accent } : undefined} />
-                </div>
-                <span className="leading-tight">{item.label}</span>
+                <Icon className={`h-[18px] w-[18px] shrink-0`} style={isActive ? { color: colors?.accent } : undefined} />
+                <span>{item.label}</span>
+                {isActive && (
+                  <span
+                    className="mr-auto w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: colors?.accent, boxShadow: `0 0 6px ${colors?.accent}` }}
+                  />
+                )}
               </button>
             )
           })}
