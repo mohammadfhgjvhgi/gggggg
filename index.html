@@ -29,7 +29,7 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
 .text-gold-gradient-light { background: linear-gradient(135deg, #f5d77a, #e8b84a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .glass { background: rgba(28, 28, 42, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 .glass-strong { background: rgba(28, 28, 42, 0.92); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.14); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-.glass-gold { background: rgba(232, 184, 74, 0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(232, 184, 74, 0.18); }
+.g 184, 74, 0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(232,lass-gold { background: rgba(232, 184, 74, 0.18); }
 .islamic-border-frame { border: 1px solid rgba(212, 168, 83, 0.2); box-shadow: 0 0 0 1px rgba(212, 168, 83, 0.05), 0 0 20px rgba(212, 168, 83, 0.05), 0 0 60px rgba(212, 168, 83, 0.02), inset 0 1px 0 rgba(212, 168, 83, 0.1); }
 .divider-gold { height: 1px; background: linear-gradient(90deg, transparent, rgba(232, 184, 74, 0.25), transparent); }
 .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -39,13 +39,11 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
 .btn-gold:active { transform: scale(0.98); }
 .btn-ghost-gold { background: transparent; color: #e8b84a; border: 1px solid rgba(232, 184, 74, 0.25); transition: all 0.2s ease; cursor: pointer; }
 .btn-ghost-gold:hover { background: rgba(232, 184, 74, 0.1); border-color: rgba(232, 184, 74, 0.5); }
-
 .page-gradient-home { position: relative; background-color: #0f0f17; background-image: url('/images/backgrounds/dashboard.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; }
 .page-gradient-home::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 0%, rgba(245, 158, 11, 0.02) 0%, transparent 30%), linear-gradient(180deg, rgba(15, 15, 23, 0.93) 0%, rgba(15, 15, 23, 0.96) 20%, rgba(15, 15, 23, 0.98) 100%); pointer-events: none; z-index: 0; }
 .page-gradient-dashboard { position: relative; background-color: #0d0d15; background-image: radial-gradient(ellipse at 30% 10%, rgba(6, 182, 212, 0.03) 0%, transparent 50%), radial-gradient(ellipse at 70% 90%, rgba(6, 182, 212, 0.02) 0%, transparent 40%); }
 .page-gradient-customers, .page-gradient-bookings, .page-gradient-billing, .page-gradient-calendar, .page-gradient-activity, .page-gradient-settings, .page-gradient-profile, .page-gradient-users { position: relative; background-color: #0f0f17; }
 .page-gradient-customers::before, .page-gradient-bookings::before, .page-gradient-billing::before, .page-gradient-calendar::before, .page-gradient-activity::before, .page-gradient-settings::before, .page-gradient-profile::before, .page-gradient-users::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 0 0 rgba(232, 184, 74, 0.45); } 50% { box-shadow: 0 0 0 8px rgba(232, 184, 74, 0); } }
@@ -61,7 +59,6 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
 .animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 .animate-spin { animation: spin 1s linear infinite; }
 .stagger-1 { animation-delay: 0.05s; } .stagger-2 { animation-delay: 0.1s; } .stagger-3 { animation-delay: 0.15s; } .stagger-4 { animation-delay: 0.2s; } .stagger-5 { animation-delay: 0.25s; } .stagger-6 { animation-delay: 0.3s; }
-
 .text-gradient-home { background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .text-gradient-dashboard { background: linear-gradient(135deg, #22d3ee, #06b6d4, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .text-gradient-customers { background: linear-gradient(135deg, #fb923c, #f97316, #ea580c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -72,57 +69,45 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
 .text-gradient-users { background: linear-gradient(135deg, #fb7185, #f43f5e, #e11d48); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .text-gradient-settings { background: linear-gradient(135deg, #94a3b8, #64748b, #475569); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .text-gradient-profile { background: linear-gradient(135deg, #f0abfc, #e879f9, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-
 .page-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.page-icon-home { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3); color: #0f0f17; }
+.page); color: #0f0f17; }
 .page-icon-dashboard { background: linear-gradient(135deg, #06b6d4, #0891b2); box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3); color: #0f0f17; }
 .page-icon-customers { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3); color: white; }
 .page-icon-bookings { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3); color: white; }
-.page-icon-billing { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); color: white; }
+.page-icon-billing { background: linear-gradient(135deg, #10158, 11, 0.3-icon-home { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 16px rgba(245, b981, #059669); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); color: white; }
 .page-icon-calendar { background: linear-gradient(135deg, #ec4899, #db2777); box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3); color: white; }
 .page-icon-activity { background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3); color: white; }
 .page-icon-users { background: linear-gradient(135deg, #f43f5e, #e11d48); box-shadow: 0 4px 16px rgba(244, 63, 94, 0.3); color: white; }
 .page-icon-settings { background: linear-gradient(135deg, #64748b, #475569); box-shadow: 0 4px 16px rgba(100, 116, 139, 0.3); color: white; }
 .page-icon-profile { background: linear-gradient(135deg, #e879f9, #d946ef); box-shadow: 0 4px 16px rgba(232, 121, 249, 0.3); color: white; }
-
 .mesh-bg-login { background-color: #0f0f17; background-image: url('/images/backgrounds/login.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; }
 .mesh-bg-login::after { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 30% 20%, rgba(232, 184, 74, 0.03) 0%, transparent 25%), linear-gradient(180deg, rgba(15, 15, 23, 0.88) 0%, rgba(15, 15, 23, 0.94) 20%, rgba(15, 15, 23, 0.98) 100%); pointer-events: none; z-index: 0; }
-
 .nav-btn { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; transition: all 0.2s; color: #9490a0; background: transparent; border: none; border-right: 2px solid transparent; cursor: pointer; text-align: right; }
 .nav-btn:hover { color: #f0ece4; background: rgba(255,255,255,0.04); }
 .nav-btn.active { color: white; }
-
 .status-dot-online { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.7); animation: pulse-dot 2s ease-in-out infinite; display: inline-block; }
 .status-dot-offline { width: 8px; height: 8px; border-radius: 50%; background: #f43f5e; box-shadow: 0 0 8px rgba(244, 63, 94, 0.7); display: inline-block; }
-
 .toggle-switch { position: relative; width: 44px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; transition: background 0.3s; border: none; }
 .toggle-switch.on { background: #06b6d4; }
 .toggle-switch::after { content: ''; position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; background: white; transition: transform 0.3s; }
 .toggle-switch.on::after { transform: translateX(-20px); }
-
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #f0ece4; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; }
-
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th { text-align: right; font-weight: 600; color: #8a8690; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.875rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.data-table td { padding: 0.875rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); color: #f5f0e8; font-size: 0.875rem; }
+.data-table td { padding:3C/filter%3E%3Crect width='100%25' height='100%25' 0.875rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); color: #f5f0e8; font-size: 0.875rem; }
 .data-table tr { transition: background-color 0.15s ease; }
 .data-table tbody tr:hover { background-color: rgba(232, 184, 74, 0.04); }
-
-.grain::before { content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); background-repeat: repeat; background-size: 128px 128px; }
-
+.grain::before { content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E% filter='url(%23noise)'/%3E%3C/svg%3E"); background-repeat: repeat; background-size: 128px 128px; }
 .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 40; display: none; }
 .sidebar-overlay.show { display: block; }
 .mobile-sidebar { position: fixed; top: 0; right: 0; bottom: 0; width: 288px; z-index: 50; transform: translateX(100%); transition: transform 0.3s ease; }
 .mobile-sidebar.show { transform: translateX(0); }
-
 .notif-dropdown { position: absolute; left: 0; top: 100%; margin-top: 0.5rem; width: 320px; border-radius: 0.75rem; z-index: 50; overflow: hidden; animation: fadeIn 0.2s ease-out; }
 </style>
 </head>
 <body class="grain">
 
-<!-- ═══════════════════════════════════════ -->
-<!--   LOGIN PAGE                            -->
-<!-- ═══════════════════════════════════════ -->
+<!-- LOGIN PAGE -->
 <div id="loginPage" class="min-h-screen relative overflow-hidden mesh-bg-login">
   <div class="fixed inset-0 pointer-events-none">
     <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full blur-[150px]" style="background:rgba(245,158,11,0.07);animation:pulse-gold 4s ease-in-out infinite;"></div>
@@ -130,7 +115,6 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
     <div class="absolute top-[40%] left-[30%] w-[400px] h-[400px] rounded-full blur-[120px]" style="background:rgba(168,85,247,0.04);"></div>
     <div class="absolute bottom-[20%] right-[20%] w-[300px] h-[300px] rounded-full blur-[100px]" style="background:rgba(6,182,212,0.03);"></div>
   </div>
-
   <div class="relative min-h-screen flex items-center justify-center p-4" style="z-index:1;">
     <div class="w-full max-w-md">
       <div class="text-center mb-8 animate-fade-up">
@@ -141,13 +125,11 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
         <h1 class="text-5xl font-bold text-gold-gradient mb-2 font-display">صالات الأفراح</h1>
         <p class="text-[#9490a0] text-sm tracking-wide font-subheading">نظام إدارة صالات الأفراح</p>
       </div>
-
       <div class="glass-strong islamic-border-frame rounded-2xl p-8 animate-fade-up stagger-2">
         <div class="text-center mb-6">
           <h2 class="text-2xl font-bold text-[#f0ece4] mb-1 font-display">تسجيل الدخول</h2>
           <p class="text-[#9490a0] text-sm">أدخل بياناتك أو استخدم الدخول السريع</p>
         </div>
-
         <form id="loginForm" class="space-y-4" onsubmit="return handleLogin(event);">
           <div>
             <label class="block text-[#9490a0] text-sm font-medium mb-2">البريد الإلكتروني</label>
@@ -162,12 +144,10 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
             <span id="loginBtnText">تسجيل الدخول</span>
           </button>
         </form>
-
         <div class="relative my-6">
           <div class="absolute inset-0 flex items-center"><div class="w-full divider-gold"></div></div>
           <div class="relative flex justify-center"><span class="px-3 text-xs text-[#9490a0] bg-transparent">أو</span></div>
         </div>
-
         <div>
           <p class="text-center text-[#9490a0] text-sm mb-4 flex items-center justify-center gap-2">
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
@@ -205,7 +185,6 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
           </div>
         </div>
       </div>
-
       <div class="grid grid-cols-3 gap-3 mt-6 animate-fade-up stagger-4">
         <div class="glass rounded-xl p-3 text-center card-hover">
           <div class="w-9 h-9 mx-auto mb-2 rounded-lg bg-amber-500/10 flex items-center justify-center">
@@ -226,25 +205,20 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
           <p class="text-[10px] text-[#9490a0]">إدارة الفواتير</p>
         </div>
       </div>
-
       <p class="text-center text-[rgba(148,144,160,0.5)] text-xs mt-6 animate-fade-up stagger-5">© 2025 نظام صالات الأفراح — جميع الحقوق محفوظة</p>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════ -->
-<!--   MAIN APP                              -->
-<!-- ═══════════════════════════════════════ -->
+<!-- MAIN APP -->
 <div id="appPage" class="min-h-screen hidden">
   <aside class="hidden lg:fixed lg:inset-y-0 lg:right-0 lg:z-50 lg:flex lg:w-64 lg:flex-col border-l border-[rgba(255,255,255,0.05)]" style="background:#0d0d15;">
     <div class="flex grow flex-col overflow-y-auto" style="background:#0d0d15;" id="desktopSidebar"></div>
   </aside>
-
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
   <div class="mobile-sidebar" id="mobileSidebar">
     <div class="flex flex-col h-full" style="background:#0d0d15;" id="mobileSidebarContent"></div>
   </div>
-
   <div class="lg:pr-64">
     <header id="appHeader" class="sticky top-0 z-40 flex h-14 items-center gap-4 glass border-b px-4 lg:px-6 transition-colors duration-300">
       <button onclick="toggleSidebar(true)" class="lg:hidden h-9 w-9 text-[#9490a0] hover:text-[#f0ece4] hover:bg-[rgba(255,255,255,0.06)] flex items-center justify-center rounded-lg bg-transparent border-none cursor-pointer">
@@ -281,14 +255,11 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
         <button onclick="navigateTo('profile')" id="headerAvatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[#0f0f17] text-xs font-bold hover:scale-105 transition-all duration-200 shadow-md shadow-amber-500/20 border-none cursor-pointer"></button>
       </div>
     </header>
-
     <main id="mainContent" class="relative z-[1] p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)]"></main>
   </div>
-</div>
+9e0b', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(</div>
 
-<!-- ═══════════════════════════════════════ -->
-<!--   JAVASCRIPT                            -->
-<!-- ═══════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
 <script>
 // ═══════════════════════════════════════
 //   State
@@ -303,7 +274,7 @@ const QUICK_USERS = [
 const ROLE_LABELS = { admin: 'مدير النظام', manager: 'مدير', employee: 'موظف', viewer: 'مشاهد' };
 
 const PAGE_COLORS = {
-  home:        { accent: '#f59e0b', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.2)' },
+  home:        { accent: '#f5245,158,11,0.2)' },
   dashboard:   { accent: '#06b6d4', bg: 'rgba(6,182,212,0.08)',   border: 'rgba(6,182,212,0.2)' },
   customers:   { accent: '#f97316', bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.2)' },
   bookings:    { accent: '#a855f7', bg: 'rgba(168,85,247,0.08)',  border: 'rgba(168,85,247,0.2)' },
@@ -360,25 +331,77 @@ function initFirebase() {
   db = firebase.database();
 }
 
-// ⭐ الإصلاح: تحويل boolean إلى string "true"/"false" لمطابقة ESP32 v18
-function fbWrite(path, val) { if (typeof val === 'boolean') val = val ? "true" : "false"; if (db) db.ref(path).set(val); }
-function fbRead(path) { return db ? db.ref(path).once('value').then(s => s.val()) : Promise.resolve(null); }
-function fbListen(path, cb) { if (!db) return () => {}; const r = db.ref(path); r.on('value', s => cb(s.val())); return () => r.off(); }
+// ⭐ الإصلاح: boolean → string "true"/"false" لمطابقة ESP32 v18
+function fbWrite(path, val) {
+  if (typeof val === 'boolean') val = val ? "true" : "false";
+  if (db) db.ref(path).set(val);
+}
 
+function fbRead(path) {
+  return db ? db.ref(path).once('value').then(s => s.val()) : Promise.resolve(null);
+}
+
+function fbListen(path, cb) {
+  if (!db) return () => {};
+  const r = db.ref(path);
+  r.on('value', s => cb(s.val()));
+  return () => r.off();
+}
+
+// ⭐⭐⭐ الإصلاح: v === true || v === "true" بدل !!v
 function setupFirebaseListeners() {
-  fbListen('/wedding_hall/status/online', v => { state.esp32.online = !!v; renderPage(); });
-  fbListen('/wedding_hall/status/lastSeen', v => { state.esp32.lastSeen = v || 0; renderPage(); });
-  fbListen('/wedding_hall/gate/open', v => { state.esp32.gateOpen = !!v; renderPage(); });
-  fbListen('/wedding_hall/door/open', v => { state.esp32.doorOpen = !!v; renderPage(); });
-  fbListen('/wedding_hall/seat/active', v => { state.esp32.seatActive = !!v; renderPage(); });
-  fbListen('/wedding_hall/lights/street', v => { state.esp32.lights.street = !!v; renderPage(); });
-  fbListen('/wedding_hall/lights/ship', v => { state.esp32.lights.ship = !!v; renderPage(); });
-  fbListen('/wedding_hall/lights/ceiling', v => { state.esp32.lights.ceiling = !!v; renderPage(); });
-  fbListen('/wedding_hall/lights/floor', v => { state.esp32.lights.floor = !!v; renderPage(); });
-  fbListen('/wedding_hall/lights/pillar_outer', v => { state.esp32.lights.pillar_outer = !!v; renderPage(); });
-  fbListen('/wedding_hall/lights/pillar_inner', v => { state.esp32.lights.pillar_inner = !!v; renderPage(); });
-  fbListen('/wedding_hall/mp3/playing', v => { state.esp32.mp3Playing = !!v; renderPage(); });
-  fbListen('/wedding_hall/mp3/track', v => { state.esp32.mp3Track = v || 0; renderPage(); });
+  fbListen('/wedding_hall/status/online', v => {
+    state.esp32.online = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/status/lastSeen', v => {
+    state.esp32.lastSeen = v || 0;
+    renderPage();
+  });
+  fbListen('/wedding_hall/gate/open', v => {
+    state.esp32.gateOpen = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/door/open', v => {
+    state.esp32.doorOpen = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/seat/active', v => {
+    state.esp32.seatActive = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/lights/street', v => {
+    state.esp32.lights.street = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/lights/ship', v => {
+    state.esp32.lights.ship = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/lights/ceiling', v => {
+    state.esp32.lights.ceiling = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/lights/floor', v => {
+    state.esp32.lights.floor = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/lights/pillar_outer', v => {
+    state.esp32.lights.pillar_outer = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/lights/pillar_inner', v => {
+    state.esp32.lights.pillar_inner = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/mp3/playing', v => {
+    state.esp32.mp3Playing = (v === true || v === "true");
+    renderPage();
+  });
+  fbListen('/wedding_hall/mp3/track', v => {
+    state.esp32.mp3Track = v || 0;
+   ════════ renderPage();
+  });
 }
 
 // ═══════════════════════════════════════
@@ -412,7 +435,35 @@ function loginAs(user) {
 }
 
 function logout() {
-  state.user = null;
+══════════════════════════
+//   Build Sidebar
+// ═══════════════════════════════════════
+function buildSidebar() {
+  const user = state.user;
+  if (!user) return;
+  const userNav = NAV_ITEMS.filter(i => i.roles.includes(user.role));
+  const html = `
+    <div class="p-4 pb-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shrink-0" style="box-shadow:0 4px 12px rgba(245,158,11,0.2);">
+          <i data-lucide="calendar-days" class="w-5 h-5" style="color:#0f0f17;stroke-width:1.8;"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="font-bold text-sm truncate text-[#f0ece4] font-display">صالات الأفراح</h2>
+          <p class="text-xs text-[#9490a0] truncate">${user.name}</p>
+        </div>
+      </div>
+    </div>
+    <div class="divider-gold mx-4"></div>
+    <div class="py-3 px-3 flex-1 overflow-y-auto">
+      <nav class="space-y-1">
+        ${userNav.map(item => {
+          const isActive = state.currentPage === item.key;
+          const c = PAGE_COLORS[item.key] || PAGE_COLORS.home;
+          return `<button onclick="navigateTo('${item.key}')" class="nav-btn ${isActive ? 'active' : ''}" style="${isActive ? `background-color:${c.bg};border-right-color:${c.accent};` : ''}">
+            <i data-lucide="${item.icon}" class="h-[18px] w-[18px] shrink-0" style="${isActive ? `color:${c.accent};` : ''}"></i>
+            <span>${item.label}</span>
+            ${isActive ? `<span class="mr-auto w-1.5 h-1.5 rounded-full" style="background-color:${c  state.user = null;
   localStorage.removeItem('wedding-hall-user');
   document.getElementById('appPage').classList.add('hidden');
   document.getElementById('loginPage').classList.remove('hidden');
@@ -443,53 +494,7 @@ function toggleNotifications() {
   document.getElementById('notifDropdown').classList.toggle('hidden', !state.notifOpen);
 }
 
-// ═══════════════════════════════════════
-//   Build Sidebar
-// ═══════════════════════════════════════
-function buildSidebar() {
-  const user = state.user;
-  if (!user) return;
-  const userNav = NAV_ITEMS.filter(i => i.roles.includes(user.role));
-  const html = `
-    <div class="p-4 pb-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shrink-0" style="box-shadow:0 4px 12px rgba(245,158,11,0.2);">
-          <i data-lucide="calendar-days" class="w-5 h-5" style="color:#0f0f17;stroke-width:1.8;"></i>
-        </div>
-        <div class="flex-1 min-w-0">
-          <h2 class="font-bold text-sm truncate text-[#f0ece4] font-display">صالات الأفراح</h2>
-          <p class="text-xs text-[#9490a0] truncate">${user.name}</p>
-        </div>
-      </div>
-    </div>
-    <div class="divider-gold mx-4"></div>
-    <div class="py-3 px-3 flex-1 overflow-y-auto">
-      <nav class="space-y-1">
-        ${userNav.map(item => {
-          const isActive = state.currentPage === item.key;
-          const c = PAGE_COLORS[item.key] || PAGE_COLORS.home;
-          return `<button onclick="navigateTo('${item.key}')" class="nav-btn ${isActive ? 'active' : ''}" style="${isActive ? `background-color:${c.bg};border-right-color:${c.accent};` : ''}">
-            <i data-lucide="${item.icon}" class="h-[18px] w-[18px] shrink-0" style="${isActive ? `color:${c.accent};` : ''}"></i>
-            <span>${item.label}</span>
-            ${isActive ? `<span class="mr-auto w-1.5 h-1.5 rounded-full" style="background-color:${c.accent};box-shadow:0 0 6px ${c.accent};"></span>` : ''}
-          </button>`;
-        }).join('')}
-      </nav>
-      <div class="mt-4 px-1">
-        <div class="divider-gold mb-3"></div>
-        <div class="flex items-center gap-2.5 rounded-lg px-3 py-2.5" style="background:${user.role === 'admin' ? 'rgba(212,168,83,0.15)' : user.role === 'manager' ? 'rgba(6,182,212,0.15)' : user.role === 'employee' ? 'rgba(148,163,184,0.15)' : 'rgba(16,185,129,0.15)'};border:1px solid rgba(255,255,255,0.06);">
-          <i data-lucide="${user.role === 'admin' ? 'shield-check' : user.role === 'manager' ? 'shield-check' : user.role === 'employee' ? 'info' : 'eye'}" class="h-4 w-4" style="color:${user.role === 'admin' ? '#d4a853' : user.role === 'manager' ? '#06b6d4' : user.role === 'employee' ? '#94a3b8' : '#10b981'};"></i>
-          <span class="text-xs font-bold" style="color:${user.role === 'admin' ? '#d4a853' : user.role === 'manager' ? '#06b6d4' : user.role === 'employee' ? '#94a3b8' : '#10b981'};">${user.role === 'admin' ? 'تحكم كامل' : user.role === 'manager' ? 'إدارة كاملة' : user.role === 'employee' ? 'إدخال بيانات' : 'عرض فقط'}</span>
-        </div>
-      </div>
-    </div>
-    <div class="p-3 pt-2">
-      <div class="divider-gold mb-3"></div>
-      <div class="flex items-center gap-3 px-2 py-2">
-        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[#0f0f17] text-xs font-bold shrink-0" style="box-shadow:0 2px 8px rgba(245,158,11,0.2);">${user.name.charAt(0)}</div>
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium truncate text-[#f0ece4]">${user.name}</p>
-          <span class="inline-block text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium mt-0.5">${ROLE_LABELS[user.role]}</span>
+// ═════.accent};boxpx] px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium mt-0.5">${ROLE_LABELS[user.role]}</span>
         </div>
       </div>
       <button onclick="logout()" class="w-full mt-1 justify-start gap-2 text-[#9490a0] hover:text-rose-400 hover:bg-rose-500/10 h-9 px-3 rounded-lg transition-colors duration-200 flex items-center bg-transparent border-none cursor-pointer text-sm">
@@ -539,7 +544,7 @@ function renderPage() {
 }
 
 // ═══════════════════════════════════════
-//   HOME PAGE (Dashboard)
+//   HOME PAGE
 // ═══════════════════════════════════════
 function renderHomePage() {
   const esp = state.esp32;
@@ -623,7 +628,7 @@ function espStatusRow(iconOn, iconOff, label, value, isActive) {
 }
 
 // ═══════════════════════════════════════
-//   CONTROL PAGE (ESP32)
+//   CONTROL PAGE
 // ═══════════════════════════════════════
 function renderControlPage() {
   const esp = state.esp32;
@@ -733,7 +738,7 @@ function renderControlPage() {
           <div class="divider-gold"></div>
           <div class="flex gap-3">
             <button onclick="lightsAll(true)" class="flex-1 py-3 rounded-xl text-sm font-semibold btn-gold flex items-center justify-center gap-2" ${!esp.online || activeLights === 6 ? 'opacity-50' : ''}><i data-lucide="power" class="size-4"></i> تشغيل الكل</button>
-            <button onclick="lightsAll(false)" class="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 bg-transparent text-red-400 border border-red-500/20 hover:bg-red-500/10 cursor-pointer ${!esp.online || activeLights === 0 ? 'opacity-50' : ''}><i data-lucide="power-off" class="size-4"></i> إطفاء الكل</button>
+            <button onclick="lightsAll(false)" class="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 bg-transparent text-red-400 border border-red-500/20 hover:bg-red-500/10 cursor-pointer ${!esp.online || activeLights === 0 ? 'opacity-50' : ''}"><i data-lucide="power-off" class="size-4"></i> إطفاء الكل</button>
           </div>
         </div>
       </div>
@@ -1087,7 +1092,7 @@ function renderProfilePage() {
     </div>
     <div class="glass rounded-xl card-hover border-fuchsia-500/[0.12] p-6">
       <div class="flex items-center gap-4">
-        <div class="w-20 h-20 rounded-full bg-gradient-to-b from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-[#0a0a0f] text-3xl font-bold" style="box-shadow:0 0 20px rgba(232,121,249,0.3);ring:2px solid rgba(232,121,249,0.3);ring-offset-color:#0f0f17;">${u?.name?.charAt(0) || 'U'}</div>
+        <div class="w-20 h-20 rounded-full bg-gradient-to-b from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-[#0a0a0f] text-3xl font-bold" style="box-shadow:0 0 20px rgba(232,121,249,0.3);">${u?.name?.charAt(0) || 'U'}</div>
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-1">
             <h3 class="text-lg font-bold text-[#f5f0e8] font-display">${u?.name}</h3>
@@ -1155,16 +1160,3 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
-```
-
-## ✅ الإصلاح الوحيد — سطر واحد:
-
-```javascript
-// قبل (الأصلي):
-function fbWrite(path, val) { if (db) db.ref(path).set(val); }
-
-// بعد (الإصلاح):
-function fbWrite(path, val) { if (typeof val === 'boolean') val = val ? "true" : "false"; if (db) db.ref(path).set(val); }
-```
-
-هذا السطر يحوّل كل `boolean` من التطبيق إلى `string "true"/"false"` قبل ما يرسلها لـ Firebase — بالضبط زي ما ESP32 v18 بيقرأها بـ `indexOf("\"true\"")`. التصميم والواجهة **نفسها بالضبط** بدون أي تغيير.
