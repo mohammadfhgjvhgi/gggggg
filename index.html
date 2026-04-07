@@ -29,7 +29,7 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
 .text-gold-gradient-light { background: linear-gradient(135deg, #f5d77a, #e8b84a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .glass { background: rgba(28, 28, 42, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 .glass-strong { background: rgba(28, 28, 42, 0.92); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.14); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-.g 184, 74, 0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(232,lass-gold { background: rgba(232, 184, 74, 0.18); }
+.glass-gold { background: rgba(232, 184, 74, 0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(232, 184, 74, 0.25); }
 .islamic-border-frame { border: 1px solid rgba(212, 168, 83, 0.2); box-shadow: 0 0 0 1px rgba(212, 168, 83, 0.05), 0 0 20px rgba(212, 168, 83, 0.05), 0 0 60px rgba(212, 168, 83, 0.02), inset 0 1px 0 rgba(212, 168, 83, 0.1); }
 .divider-gold { height: 1px; background: linear-gradient(90deg, transparent, rgba(232, 184, 74, 0.25), transparent); }
 .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -70,11 +70,11 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
 .text-gradient-settings { background: linear-gradient(135deg, #94a3b8, #64748b, #475569); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .text-gradient-profile { background: linear-gradient(135deg, #f0abfc, #e879f9, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .page-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.page); color: #0f0f17; }
+.page-icon-home { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3); color: white; }
 .page-icon-dashboard { background: linear-gradient(135deg, #06b6d4, #0891b2); box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3); color: #0f0f17; }
 .page-icon-customers { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3); color: white; }
 .page-icon-bookings { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3); color: white; }
-.page-icon-billing { background: linear-gradient(135deg, #10158, 11, 0.3-icon-home { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 16px rgba(245, b981, #059669); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); color: white; }
+.page-icon-billing { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); color: white; }
 .page-icon-calendar { background: linear-gradient(135deg, #ec4899, #db2777); box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3); color: white; }
 .page-icon-activity { background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3); color: white; }
 .page-icon-users { background: linear-gradient(135deg, #f43f5e, #e11d48); box-shadow: 0 4px 16px rgba(244, 63, 94, 0.3); color: white; }
@@ -94,10 +94,10 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #f0ece4; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; }
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th { text-align: right; font-weight: 600; color: #8a8690; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.875rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.data-table td { padding:3C/filter%3E%3Crect width='100%25' height='100%25' 0.875rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); color: #f5f0e8; font-size: 0.875rem; }
+.data-table td { padding: 0.875rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); color: #f5f0e8; font-size: 0.875rem; }
 .data-table tr { transition: background-color 0.15s ease; }
 .data-table tbody tr:hover { background-color: rgba(232, 184, 74, 0.04); }
-.grain::before { content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E% filter='url(%23noise)'/%3E%3C/svg%3E"); background-repeat: repeat; background-size: 128px 128px; }
+.grain::before { content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); background-repeat: repeat; background-size: 128px 128px; }
 .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 40; display: none; }
 .sidebar-overlay.show { display: block; }
 .mobile-sidebar { position: fixed; top: 0; right: 0; bottom: 0; width: 288px; z-index: 50; transform: translateX(100%); transition: transform 0.3s ease; }
@@ -257,7 +257,7 @@ input::placeholder, textarea::placeholder { color: rgba(148, 144, 160, 0.55); }
     </header>
     <main id="mainContent" class="relative z-[1] p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)]"></main>
   </div>
-9e0b', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(</div>
+</div>
 
 <!-- JAVASCRIPT -->
 <script>
@@ -274,7 +274,7 @@ const QUICK_USERS = [
 const ROLE_LABELS = { admin: 'مدير النظام', manager: 'مدير', employee: 'موظف', viewer: 'مشاهد' };
 
 const PAGE_COLORS = {
-  home:        { accent: '#f5245,158,11,0.2)' },
+  home:        { accent: '#f59e0b', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.2)' },
   dashboard:   { accent: '#06b6d4', bg: 'rgba(6,182,212,0.08)',   border: 'rgba(6,182,212,0.2)' },
   customers:   { accent: '#f97316', bg: 'rgba(249,115,22,0.08)',  border: 'rgba(249,115,22,0.2)' },
   bookings:    { accent: '#a855f7', bg: 'rgba(168,85,247,0.08)',  border: 'rgba(168,85,247,0.2)' },
@@ -331,7 +331,7 @@ function initFirebase() {
   db = firebase.database();
 }
 
-// ⭐ الإصلاح: boolean → string "true"/"false" لمطابقة ESP32 v18
+// ⭐ boolean → string "true"/"false"
 function fbWrite(path, val) {
   if (typeof val === 'boolean') val = val ? "true" : "false";
   if (db) db.ref(path).set(val);
@@ -348,7 +348,7 @@ function fbListen(path, cb) {
   return () => r.off();
 }
 
-// ⭐⭐⭐ الإصلاح: v === true || v === "true" بدل !!v
+// ⭐ v === true || v === "true"
 function setupFirebaseListeners() {
   fbListen('/wedding_hall/status/online', v => {
     state.esp32.online = (v === true || v === "true");
@@ -400,7 +400,7 @@ function setupFirebaseListeners() {
   });
   fbListen('/wedding_hall/mp3/track', v => {
     state.esp32.mp3Track = v || 0;
-   ════════ renderPage();
+    renderPage();
   });
 }
 
@@ -435,7 +435,13 @@ function loginAs(user) {
 }
 
 function logout() {
-══════════════════════════
+  state.user = null;
+  localStorage.removeItem('wedding-hall-user');
+  document.getElementById('appPage').classList.add('hidden');
+  document.getElementById('loginPage').classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════
 //   Build Sidebar
 // ═══════════════════════════════════════
 function buildSidebar() {
@@ -460,13 +466,45 @@ function buildSidebar() {
         ${userNav.map(item => {
           const isActive = state.currentPage === item.key;
           const c = PAGE_COLORS[item.key] || PAGE_COLORS.home;
-          return `<button onclick="navigateTo('${item.key}')" class="nav-btn ${isActive ? 'active' : ''}" style="${isActive ? `background-color:${c.bg};border-right-color:${c.accent};` : ''}">
-            <i data-lucide="${item.icon}" class="h-[18px] w-[18px] shrink-0" style="${isActive ? `color:${c.accent};` : ''}"></i>
+          return `<button onclick="navigateTo('${item.key}')" class="nav-btn ${isActive ? 'active' : ''}" style="${isActive ? 'background-color:' + c.bg + ';border-right-color:' + c.accent + ';' : ''}">
+            <i data-lucide="${item.icon}" class="h-[18px] w-[18px] shrink-0" style="${isActive ? 'color:' + c.accent + ';' : ''}"></i>
             <span>${item.label}</span>
-            ${isActive ? `<span class="mr-auto w-1.5 h-1.5 rounded-full" style="background-color:${c  state.user = null;
-  localStorage.removeItem('wedding-hall-user');
-  document.getElementById('appPage').classList.add('hidden');
-  document.getElementById('loginPage').classList.remove('hidden');
+            ${isActive ? '<span class="mr-auto w-1.5 h-1.5 rounded-full" style="background-color:' + c.accent + ';"></span>' : ''}
+          </button>`;
+        }).join('')}
+      </nav>
+    </div>
+    <div class="divider-gold mx-4"></div>
+    <div class="p-4 pt-2">
+      <div class="flex items-center gap-3 px-1">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[#0f0f17] text-xs font-bold shrink-0">${user.name.charAt(0)}</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium truncate text-[#f0ece4]">${user.name}</p>
+          <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium mt-0.5">${ROLE_LABELS[user.role]}</span>
+        </div>
+      </div>
+      <button onclick="logout()" class="w-full mt-3 justify-start gap-2 text-[#9490a0] hover:text-rose-400 hover:bg-rose-500/10 h-9 px-3 rounded-lg transition-colors duration-200 flex items-center bg-transparent border-none cursor-pointer text-sm">
+        <i data-lucide="log-out" class="h-4 w-4"></i> تسجيل الخروج
+      </button>
+    </div>
+  `;
+  document.getElementById('desktopSidebar').innerHTML = html;
+  document.getElementById('mobileSidebarContent').innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//   Update Header
+// ═══════════════════════════════════════
+function updateHeader() {
+  const page = state.currentPage;
+  const c = PAGE_COLORS[page] || PAGE_COLORS.home;
+  document.getElementById('headerDot').style.cssText = 'background-color:' + c.accent + ';box-shadow:0 0 8px ' + c.accent + ';';
+  document.getElementById('headerTitle').textContent = PAGE_TITLES[page] || 'لوحة التحكم';
+  document.getElementById('appHeader').style.borderColor = c.border;
+  const badge = document.getElementById('headerRoleBadge');
+  badge.textContent = ROLE_LABELS[state.user?.role] || '';
+  badge.style.cssText = 'border:1px solid ' + c.border + ';color:' + c.accent + ';background:' + c.bg + ';display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:6px;font-size:12px;font-weight:500;';
+  document.getElementById('headerAvatar').textContent = state.user?.name?.charAt(0) || 'U';
 }
 
 // ═══════════════════════════════════════
@@ -494,39 +532,12 @@ function toggleNotifications() {
   document.getElementById('notifDropdown').classList.toggle('hidden', !state.notifOpen);
 }
 
-// ═════.accent};boxpx] px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-medium mt-0.5">${ROLE_LABELS[user.role]}</span>
-        </div>
-      </div>
-      <button onclick="logout()" class="w-full mt-1 justify-start gap-2 text-[#9490a0] hover:text-rose-400 hover:bg-rose-500/10 h-9 px-3 rounded-lg transition-colors duration-200 flex items-center bg-transparent border-none cursor-pointer text-sm">
-        <i data-lucide="log-out" class="h-4 w-4"></i> تسجيل الخروج
-      </button>
-    </div>
-  `;
-  document.getElementById('desktopSidebar').innerHTML = html;
-  document.getElementById('mobileSidebarContent').innerHTML = html;
-}
-
-// ═══════════════════════════════════════
-//   Update Header
-// ═══════════════════════════════════════
-function updateHeader() {
-  const page = state.currentPage;
-  const c = PAGE_COLORS[page] || PAGE_COLORS.home;
-  document.getElementById('headerDot').style.cssText = `background-color:${c.accent};box-shadow:0 0 8px ${c.accent};`;
-  document.getElementById('headerTitle').textContent = PAGE_TITLES[page] || 'لوحة التحكم';
-  document.getElementById('appHeader').style.borderColor = c.border;
-  const badge = document.getElementById('headerRoleBadge');
-  badge.textContent = ROLE_LABELS[state.user?.role] || '';
-  badge.style.cssText = `border:1px solid ${c.border};color:${c.accent};background:${c.bg};display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:6px;font-size:12px;font-weight:500;`;
-  document.getElementById('headerAvatar').textContent = state.user?.name?.charAt(0) || 'U';
-}
-
 // ═══════════════════════════════════════
 //   Render Page
 // ═══════════════════════════════════════
 function renderPage() {
   const main = document.getElementById('mainContent');
-  main.className = `relative z-[1] p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)] page-gradient-${state.currentPage}`;
+  main.className = 'relative z-[1] p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-3.5rem)] page-gradient-' + state.currentPage;
   switch (state.currentPage) {
     case 'home': main.innerHTML = renderHomePage(); break;
     case 'dashboard': main.innerHTML = renderControlPage(); break;
@@ -590,10 +601,10 @@ function renderHomePage() {
           </h3>
         </div>
         <div class="space-y-2 px-5 pb-5">
-          ${espStatusRow('wifi', 'wifi-off', 'الاتصال', esp.online ? (esp.lastSeen ? `منذ ${Math.max(0, Math.floor((Date.now() - esp.lastSeen) / 1000))}ث` : 'متصل') : 'غير متصل', esp.online)}
+          ${espStatusRow('wifi', 'wifi-off', 'الاتصال', esp.online ? (esp.lastSeen ? 'منذ ' + Math.max(0, Math.floor((Date.now() - esp.lastSeen) / 1000)) + 'ث' : 'متصل') : 'غير متصل', esp.online)}
           ${espStatusRow('door-open', 'door-open', 'البوابة', esp.gateOpen ? 'مفتوحة' : 'مغلقة', esp.gateOpen)}
           ${espStatusRow('door-open', 'door-open', 'باب الصالة', esp.doorOpen ? 'مفتوح' : 'مغلق', esp.doorOpen)}
-          ${espStatusRow('lightbulb', 'lightbulb', 'الأضواء', `${activeLights} / 6`, activeLights > 0)}
+          ${espStatusRow('lightbulb', 'lightbulb', 'الأضواء', activeLights + ' / 6', activeLights > 0)}
           ${espStatusRow('music', 'music', 'المشغل', esp.mp3Playing ? 'يشغل' : 'متوقف', esp.mp3Playing)}
         </div>
       </div>
@@ -602,7 +613,7 @@ function renderHomePage() {
 }
 
 function statCard(icon, label, value, color, isRevenue) {
-  return `<div class="animate-fade-up glass card-hover rounded-xl p-5 relative overflow-hidden" style="animation-delay:${Math.random() * 0.2}s;">
+  return `<div class="animate-fade-up glass card-hover rounded-xl p-5 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-br from-${color}-500/[0.08] to-transparent pointer-events-none"></div>
     <div class="relative flex items-center gap-4">
       <div class="p-3.5 rounded-xl bg-${color}-500/15 ring-1 ring-${color}-500/25">
@@ -696,7 +707,7 @@ function renderControlPage() {
           <button onclick="toggleSeat()" class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ${esp.seatActive ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg ring-1 ring-violet-400/30' : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] border border-white/[0.1]'}" style="${!esp.seatActive ? '' : 'box-shadow:0 4px 16px rgba(139,92,246,0.2);'}">
             <i data-lucide="armchair" class="size-4"></i> ${esp.seatActive ? 'إيقاف' : 'تفعيل'}
           </button>
-          ${esp.seatActive ? `<button onclick="resetSeat()" class="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 bg-white/[0.06] text-[#b0acb8] hover:bg-white/[0.1] border border-white/[0.1] cursor-pointer"><i data-lucide="rotate-ccw" class="size-4"></i> إعادة تعيين</button>` : ''}
+          ${esp.seatActive ? '<button onclick="resetSeat()" class="w-full py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 bg-white/[0.06] text-[#b0acb8] hover:bg-white/[0.1] border border-white/[0.1] cursor-pointer"><i data-lucide="rotate-ccw" class="size-4"></i> إعادة تعيين</button>' : ''}
         </div>
       </div>
     </div>
@@ -721,18 +732,7 @@ function renderControlPage() {
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             ${LIGHTS.map(l => {
               const isOn = esp.lights[l.key];
-              return `<div class="flex items-center justify-between rounded-xl px-4 py-3.5 transition-all duration-300 ${isOn ? 'bg-cyan-500/[0.08] border border-cyan-500/20' : 'bg-white/[0.06] border border-white/[0.1] hover:bg-white/[0.09]'}" style="${isOn ? 'box-shadow:0 0 15px rgba(6,182,212,0.08);' : ''}">
-                <div class="flex items-center gap-3">
-                  <div class="flex size-9 items-center justify-center rounded-lg ${isOn ? 'bg-cyan-500/15 ring-1 ring-cyan-500/25' : 'bg-white/5'}" style="${isOn ? 'box-shadow:0 0 10px rgba(6,182,212,0.2);' : ''}">
-                    <i data-lucide="${LIGHT_ICONS[l.key]}" class="size-4 ${isOn ? 'text-cyan-400' : 'text-[#b0acb8]'}"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-sm font-medium ${isOn ? 'text-cyan-300' : 'text-[#b0acb8]'}">${l.label}</span>
-                    <span class="text-[9px] text-[#b0acb8]/70 font-mono">${l.type}</span>
-                  </div>
-                </div>
-                <button onclick="toggleLight('${l.key}')" class="toggle-switch ${isOn ? 'on' : ''}" ${!esp.online ? 'disabled' : ''}></button>
-              </div>`;
+              return '<div class="flex items-center justify-between rounded-xl px-4 py-3.5 transition-all duration-300 ' + (isOn ? 'bg-cyan-500/[0.08] border border-cyan-500/20' : 'bg-white/[0.06] border border-white/[0.1] hover:bg-white/[0.09]') + '" style="' + (isOn ? 'box-shadow:0 0 15px rgba(6,182,212,0.08);' : '') + '"><div class="flex items-center gap-3"><div class="flex size-9 items-center justify-center rounded-lg ' + (isOn ? 'bg-cyan-500/15 ring-1 ring-cyan-500/25' : 'bg-white/5') + '" style="' + (isOn ? 'box-shadow:0 0 10px rgba(6,182,212,0.2);' : '') + '"><i data-lucide="' + LIGHT_ICONS[l.key] + '" class="size-4 ' + (isOn ? 'text-cyan-400' : 'text-[#b0acb8]') + '"></i></div><div class="flex flex-col"><span class="text-sm font-medium ' + (isOn ? 'text-cyan-300' : 'text-[#b0acb8]') + '">' + l.label + '</span><span class="text-[9px] text-[#b0acb8]/70 font-mono">' + l.type + '</span></div></div><button onclick="toggleLight(\'' + l.key + '\')" class="toggle-switch ' + (isOn ? 'on' : '') + '" ' + (!esp.online ? 'disabled' : '') + '></button></div>';
             }).join('')}
           </div>
           <div class="divider-gold"></div>
@@ -782,7 +782,7 @@ function renderControlPage() {
             <button onclick="nextTrack()" class="size-11 rounded-full flex items-center justify-center bg-white/[0.07] border border-white/[0.12] text-[#b0acb8] hover:bg-white/[0.11] hover:text-[#f5f0e8] cursor-pointer"><i data-lucide="skip-forward" class="size-4"></i></button>
           </div>
           <div class="flex gap-2 flex-wrap">
-            ${[1,2,3,4,5].map(t => `<button onclick="playTrackNum(${t})" class="h-8 px-3.5 text-xs font-medium rounded-lg cursor-pointer ${esp.mp3Track === t ? 'bg-pink-500/15 text-pink-400 border border-pink-500/25' : 'bg-white/[0.06] text-[#b0acb8] border border-white/[0.1] hover:bg-white/[0.09] hover:text-[#f5f0e8]'}">${t}</button>`).join('')}
+            ${[1,2,3,4,5].map(t => '<button onclick="playTrackNum(' + t + ')" class="h-8 px-3.5 text-xs font-medium rounded-lg cursor-pointer ' + (esp.mp3Track === t ? 'bg-pink-500/15 text-pink-400 border border-pink-500/25' : 'bg-white/[0.06] text-[#b0acb8] border border-white/[0.1] hover:bg-white/[0.09] hover:text-[#f5f0e8]') + '">' + t + '</button>').join('')}
           </div>
         </div>
       </div>
@@ -791,45 +791,13 @@ function renderControlPage() {
 }
 
 function gateDoorCard(title, isOpen, path, icon, desc) {
-  return `<div class="animate-fade-up" style="animation-delay:0.1s;">
-    <div class="glass rounded-xl overflow-hidden ${isOpen ? 'ring-1 ring-green-500/20' : ''}">
-      <div class="p-5 pb-4">
-        <div class="flex items-center justify-between mb-1">
-          <div class="flex items-center gap-3">
-            <div class="flex size-11 items-center justify-center rounded-xl ${isOpen ? 'bg-green-500/15 ring-1 ring-green-500/25' : 'bg-white/5 ring-1 ring-white/10'}">
-              <i data-lucide="${icon}" class="size-5 ${isOpen ? 'text-green-400' : 'text-[#b0acb8]'}"></i>
-            </div>
-            <div>
-              <h3 class="text-base font-bold text-[#f5f0e8] font-display">${title}</h3>
-              <p class="text-[11px] text-[#b0acb8]/90 mt-0.5 leading-relaxed">${desc}</p>
-            </div>
-          </div>
-          <span class="text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ${isOpen ? 'bg-green-500/10 text-green-400 border border-green-500/25' : 'bg-white/5 text-[#b0acb8] border border-white/10'}">${isOpen ? 'مفتوحة' : 'مغلقة'}</span>
-        </div>
-      </div>
-      <div class="px-5 pb-5 space-y-3">
-        <button onclick="fbWrite('/wedding_hall/${path}/open', true)" ${!state.esp32.online ? 'disabled' : ''} class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ${isOpen ? 'bg-gradient-to-r from-green-600 to-green-500 text-white ring-1 ring-green-400/30' : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]'}" style="${isOpen ? 'box-shadow:0 4px 16px rgba(34,197,94,0.2);' : ''}">
-          <i data-lucide="door-open" class="size-4"></i> فتح
-        </button>
-        <button onclick="fbWrite('/wedding_hall/${path}/open', false)" ${!state.esp32.online ? 'disabled' : ''} class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ${!isOpen ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#b0acb8] ring-1 ring-white/[0.1]' : 'bg-red-500/10 text-red-400 hover:bg-red-500/15 border border-red-500/20'}">
-          <i data-lucide="door-closed" class="size-4"></i> إغلاق
-        </button>
-      </div>
-    </div>
-  </div>`;
+  return '<div class="animate-fade-up" style="animation-delay:0.1s;"><div class="glass rounded-xl overflow-hidden ' + (isOpen ? 'ring-1 ring-green-500/20' : '') + '"><div class="p-5 pb-4"><div class="flex items-center justify-between mb-1"><div class="flex items-center gap-3"><div class="flex size-11 items-center justify-center rounded-xl ' + (isOpen ? 'bg-green-500/15 ring-1 ring-green-500/25' : 'bg-white/5 ring-1 ring-white/10') + '"><i data-lucide="' + icon + '" class="size-5 ' + (isOpen ? 'text-green-400' : 'text-[#b0acb8]') + '"></i></div><div><h3 class="text-base font-bold text-[#f5f0e8] font-display">' + title + '</h3><p class="text-[11px] text-[#b0acb8]/90 mt-0.5 leading-relaxed">' + desc + '</p></div></div><span class="text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm ' + (isOpen ? 'bg-green-500/10 text-green-400 border border-green-500/25' : 'bg-white/5 text-[#b0acb8] border border-white/10') + '">' + (isOpen ? 'مفتوحة' : 'مغلقة') + '</span></div></div><div class="px-5 pb-5 space-y-3"><button onclick="fbWrite(\'/wedding_hall/' + path + '/open\', true)" ' + (!state.esp32.online ? 'disabled' : '') + ' class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ' + (isOpen ? 'bg-gradient-to-r from-green-600 to-green-500 text-white ring-1 ring-green-400/30' : 'bg-white/[0.08] text-[#b0acb8] hover:bg-white/[0.12] hover:text-[#f5f0e8] border border-white/[0.1]') + '" style="' + (isOpen ? 'box-shadow:0 4px 16px rgba(34,197,94,0.2);' : '') + '"><i data-lucide="door-open" class="size-4"></i> فتح</button><button onclick="fbWrite(\'/wedding_hall/' + path + '/open\', false)" ' + (!state.esp32.online ? 'disabled' : '') + ' class="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 border-none cursor-pointer ' + (!isOpen ? 'bg-gradient-to-r from-[#2a2a35] to-[#1e1e28] text-[#b0acb8] ring-1 ring-white/[0.1]' : 'bg-red-500/10 text-red-400 hover:bg-red-500/15 border border-red-500/20') + '"><i data-lucide="door-closed" class="size-4"></i> إغلاق</button></div></div></div>';
 }
 
 function toggleSeat() { fbWrite('/wedding_hall/seat/active', !state.esp32.seatActive); }
 function resetSeat() { fbWrite('/wedding_hall/seat/active', false); }
-function toggleLight(key) {
-  const newVal = !state.esp32.lights[key];
-  fbWrite(`/wedding_hall/lights/${key}`, newVal);
-}
-function lightsAll(on) {
-  ['street','ship','ceiling','floor','pillar_outer','pillar_inner'].forEach(k => {
-    fbWrite(`/wedding_hall/lights/${k}`, on);
-  });
-}
+function toggleLight(key) { fbWrite('/wedding_hall/lights/' + key, !state.esp32.lights[key]); }
+function lightsAll(on) { ['street','ship','ceiling','floor','pillar_outer','pillar_inner'].forEach(k => fbWrite('/wedding_hall/lights/' + k, on)); }
 function toggleMp3() { fbWrite('/wedding_hall/mp3/playing', !state.esp32.mp3Playing); }
 function nextTrack() { const t = state.esp32.mp3Track + 1; fbWrite('/wedding_hall/mp3/track', t); if (!state.esp32.mp3Playing) fbWrite('/wedding_hall/mp3/playing', true); }
 function prevTrack() { const t = Math.max(0, state.esp32.mp3Track - 1); fbWrite('/wedding_hall/mp3/track', t); if (!state.esp32.mp3Playing) fbWrite('/wedding_hall/mp3/playing', true); }
@@ -840,98 +808,21 @@ function playTrackNum(t) { fbWrite('/wedding_hall/mp3/track', t); fbWrite('/wedd
 //   CUSTOMERS PAGE
 // ═══════════════════════════════════════
 function renderCustomersPage() {
-  return `<div class="space-y-6" style="position:relative;z-index:1;">
-    <div class="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-display font-bold flex items-center gap-3">
-          <span class="page-icon page-icon-customers"><i data-lucide="users" class="h-5 w-5 text-[#0a0a0f]"></i></span>
-          <span class="text-gradient-customers">إدارة الزبائن</span>
-        </h2>
-        <p class="text-[#8a8690] text-sm mt-1.5 mr-[52px]">إجمالي <span class="text-[#f5f0e8] font-mono">0</span> زبون مسجل</p>
-      </div>
-    </div>
-    <div class="glass rounded-2xl p-4 animate-fade-up stagger-1">
-      <div class="relative">
-        <i data-lucide="search" class="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8690]"></i>
-        <input placeholder="بحث بالاسم أو الهاتف أو البريد..." class="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.6)] focus-visible:ring-orange-500 focus-visible:border-orange-500/30 rounded-xl h-11 w-full focus:outline-none">
-      </div>
-    </div>
-    <div class="glass rounded-2xl overflow-hidden animate-fade-up stagger-2">
-      <div class="overflow-x-auto">
-        <table class="data-table">
-          <thead><tr><th>الاسم</th><th>الهاتف</th><th>البريد</th><th>الحجوزات</th></tr></thead>
-          <tbody>
-            <tr><td colspan="4" class="text-center py-16">
-              <div class="flex flex-col items-center gap-3 animate-fade-in">
-                <div class="w-16 h-16 rounded-2xl bg-orange-500/[0.08] flex items-center justify-center animate-float"><i data-lucide="users" class="h-7 w-7 text-orange-500 opacity-40"></i></div>
-                <p class="text-[#8a8690] text-sm">لا يوجد زبائن</p>
-                <p class="text-[rgba(138,134,144,0.5)] text-xs mt-1">قم بالتسجيل عبر تطبيق Next.js لإدارة البيانات</p>
-              </div>
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>`;
+  return '<div class="space-y-6" style="position:relative;z-index:1;"><div class="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><h2 class="text-2xl font-display font-bold flex items-center gap-3"><span class="page-icon page-icon-customers"><i data-lucide="users" class="h-5 w-5 text-[#0a0a0f]"></i></span><span class="text-gradient-customers">إدارة الزبائن</span></h2><p class="text-[#8a8690] text-sm mt-1.5 mr-[52px]">إجمالي <span class="text-[#f5f0e8] font-mono">0</span> زبون مسجل</p></div></div><div class="glass rounded-2xl p-4 animate-fade-up stagger-1"><div class="relative"><i data-lucide="search" class="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8a8690]"></i><input placeholder="بحث بالاسم أو الهاتف أو البريد..." class="pr-10 bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.06)] text-[#f5f0e8] placeholder:text-[rgba(138,134,144,0.6)] focus-visible:ring-orange-500 focus-visible:border-orange-500/30 rounded-xl h-11 w-full focus:outline-none"></div></div><div class="glass rounded-2xl overflow-hidden animate-fade-up stagger-2"><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>الاسم</th><th>الهاتف</th><th>البريد</th><th>الحجوزات</th></tr></thead><tbody><tr><td colspan="4" class="text-center py-16"><div class="flex flex-col items-center gap-3 animate-fade-in"><div class="w-16 h-16 rounded-2xl bg-orange-500/[0.08] flex items-center justify-center animate-float"><i data-lucide="users" class="h-7 w-7 text-orange-500 opacity-40"></i></div><p class="text-[#8a8690] text-sm">لا يوجد زبائن</p><p class="text-[rgba(138,134,144,0.5)] text-xs mt-1">قم بالتسجيل عبر تطبيق Next.js لإدارة البيانات</p></div></td></tr></tbody></table></div></div></div>';
 }
 
 // ═══════════════════════════════════════
 //   BOOKINGS PAGE
 // ═══════════════════════════════════════
 function renderBookingsPage() {
-  return `<div class="space-y-6" style="position:relative;z-index:1;">
-    <div class="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-display font-bold flex items-center gap-3">
-          <span class="page-icon page-icon-bookings"><i data-lucide="calendar-days" class="h-5 w-5 text-white"></i></span>
-          <span class="text-gradient-bookings">إدارة الحجوزات</span>
-        </h2>
-        <p class="text-[#8a8690] text-sm mt-1.5 mr-[52px]">إجمالي <span class="text-[#f5f0e8] font-mono">0</span> حجز</p>
-      </div>
-    </div>
-    <div class="glass rounded-2xl p-4 animate-fade-up stagger-1">
-      <div class="overflow-x-auto">
-        <table class="data-table">
-          <thead><tr><th>الزبون</th><th>تاريخ الحدث</th><th>نوع الحدث</th><th>الحالة</th></tr></thead>
-          <tbody>
-            <tr><td colspan="4" class="text-center py-16">
-              <div class="flex flex-col items-center gap-3"><div class="w-16 h-16 rounded-2xl bg-purple-500/[0.08] flex items-center justify-center animate-float"><i data-lucide="calendar-days" class="h-7 w-7 text-purple-500 opacity-40"></i></div><p class="text-[#8a8690] text-sm">لا يوجد حجوزات</p></div>
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>`;
+  return '<div class="space-y-6" style="position:relative;z-index:1;"><div class="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><h2 class="text-2xl font-display font-bold flex items-center gap-3"><span class="page-icon page-icon-bookings"><i data-lucide="calendar-days" class="h-5 w-5 text-white"></i></span><span class="text-gradient-bookings">إدارة الحجوزات</span></h2><p class="text-[#8a8690] text-sm mt-1.5 mr-[52px]">إجمالي <span class="text-[#f5f0e8] font-mono">0</span> حجز</p></div></div><div class="glass rounded-2xl p-4 animate-fade-up stagger-1"><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>الزبون</th><th>تاريخ الحدث</th><th>نوع الحدث</th><th>الحالة</th></tr></thead><tbody><tr><td colspan="4" class="text-center py-16"><div class="flex flex-col items-center gap-3"><div class="w-16 h-16 rounded-2xl bg-purple-500/[0.08] flex items-center justify-center animate-float"><i data-lucide="calendar-days" class="h-7 w-7 text-purple-500 opacity-40"></i></div><p class="text-[#8a8690] text-sm">لا يوجد حجوزات</p></div></td></tr></tbody></table></div></div></div>';
 }
 
 // ═══════════════════════════════════════
 //   BILLING PAGE
 // ═══════════════════════════════════════
 function renderBillingPage() {
-  return `<div class="space-y-6" style="position:relative;z-index:1;">
-    <div class="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-display font-bold flex items-center gap-3">
-          <span class="page-icon page-icon-billing"><i data-lucide="credit-card" class="h-5 w-5 text-white"></i></span>
-          <span class="text-gradient-billing">إدارة الفواتير والمدفوعات</span>
-        </h2>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-up stagger-1">
-      ${miniStatCard('dollar-sign', '#3b82f6', 'إجمالي الفواتير', '0 ر.س')}
-      ${miniStatCard('check-circle-2', '#22c55e', 'المدفوع', '0 ر.س')}
-      ${miniStatCard('clock', '#ef4444', 'المتبقي', '0 ر.س')}
-      ${miniStatCard('credit-card', '#10b981', 'حجوزات نشطة', '0')}
-    </div>
-    <div class="glass rounded-2xl overflow-hidden animate-fade-up stagger-2">
-      <table class="data-table">
-        <thead><tr><th>رقم الفاتورة</th><th>الحجز</th><th>الزبون</th><th>المبلغ</th><th>الحالة</th></tr></thead>
-        <tbody><tr><td colspan="5" class="text-center py-16">
-          <div class="flex flex-col items-center gap-3"><div class="w-16 h-16 rounded-2xl bg-emerald-500/[0.08] flex items-center justify-center animate-float"><i data-lucide="credit-card" class="h-7 w-7 text-emerald-500 opacity-40"></i></div><p class="text-[#8a8690] text-sm">لا يوجد مدفوعات</p></div>
-        </td></tr></tbody>
-      </table>
-    </div>
-  </div>`;
+  return '<div class="space-y-6" style="position:relative;z-index:1;"><div class="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><h2 class="text-2xl font-display font-bold flex items-center gap-3"><span class="page-icon page-icon-billing"><i data-lucide="credit-card" class="h-5 w-5 text-white"></i></span><span class="text-gradient-billing">إدارة الفواتير والمدفوعات</span></h2></div></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-up stagger-1">' + miniStatCard('dollar-sign', '#3b82f6', 'إجمالي الفواتير', '0 ر.س') + miniStatCard('check-circle-2', '#22c55e', 'المدفوع', '0 ر.س') + miniStatCard('clock', '#ef4444', 'المتبقي', '0 ر.س') + miniStatCard('credit-card', '#10b981', 'حجوزات نشطة', '0') + '</div><div class="glass rounded-2xl overflow-hidden animate-fade-up stagger-2"><table class="data-table"><thead><tr><th>رقم الفاتورة</th><th>الحجز</th><th>الزبون</th><th>المبلغ</th><th>الحالة</th></tr></thead><tbody><tr><td colspan="5" class="text-center py-16"><div class="flex flex-col items-center gap-3"><div class="w-16 h-16 rounded-2xl bg-emerald-500/[0.08] flex items-center justify-center animate-float"><i data-lucide="credit-card" class="h-7 w-7 text-emerald-500 opacity-40"></i></div><p class="text-[#8a8690] text-sm">لا يوجد مدفوعات</p></div></td></tr></tbody></table></div></div>';
 }
 
 // ═══════════════════════════════════════
@@ -945,62 +836,22 @@ function renderCalendarPage() {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDay = new Date(year, month, 1).getDay();
   const ARABIC_MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-
   let cells = '';
   for (let i = 0; i < firstDay; i++) cells += '<div class="h-16"></div>';
   for (let d = 1; d <= daysInMonth; d++) {
     const isToday = d === now.getDate();
-    cells += `<button class="h-16 rounded-lg text-center transition-all duration-200 relative border ${isToday ? 'border-2 border-pink-400 bg-pink-500/10' : 'border border-transparent hover:bg-[#1a1a25]/50'}">
-      <span class="text-sm font-medium ${isToday ? 'text-pink-400 font-bold' : 'text-[#f5f0e8]'}">${d}</span>
-    </button>`;
+    cells += '<button class="h-16 rounded-lg text-center transition-all duration-200 relative border ' + (isToday ? 'border-2 border-pink-400 bg-pink-500/10' : 'border border-transparent hover:bg-[#1a1a25]/50') + '"><span class="text-sm font-medium ' + (isToday ? 'text-pink-400 font-bold' : 'text-[#f5f0e8]') + '">' + d + '</span></button>';
   }
   const remaining = (7 - ((firstDay + daysInMonth) % 7)) % 7;
   for (let i = 0; i < remaining; i++) cells += '<div class="h-16"></div>';
-
-  return `<div class="space-y-6 animate-fade-up" style="position:relative;z-index:1;">
-    <div>
-      <h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-calendar font-display">
-        <i data-lucide="calendar-days" class="h-6 w-6 text-pink-400"></i> التقويم
-      </h2>
-      <p class="text-[#8a8690] text-sm mt-1">عرض الحجوزات الشهرية</p>
-    </div>
-    <div class="glass rounded-xl overflow-hidden card-hover border-pink-500/[0.12]">
-      <div class="p-4 sm:p-6">
-        <div class="flex items-center justify-between mb-6">
-          <span class="text-xl font-bold text-gradient-calendar font-display tracking-wide">${ARABIC_MONTHS[month]} ${year}</span>
-        </div>
-        <div class="grid grid-cols-7 gap-1 mb-2">
-          ${ARABIC_DAYS.map(d => `<div class="text-center text-xs font-semibold text-[#8a8690] py-2">${d}</div>`).join('')}
-        </div>
-        <div class="grid grid-cols-7 gap-1">${cells}</div>
-        <div class="flex items-center justify-center gap-5 mt-5 pt-4 border-t border-[#1f1f2e]">
-          <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-green-500"></div><span class="text-xs text-[#8a8690]">مؤكد</span></div>
-          <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div><span class="text-xs text-[#8a8690]">معلق</span></div>
-          <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-red-500"></div><span class="text-xs text-[#8a8690]">ملغي</span></div>
-        </div>
-      </div>
-    </div>
-  </div>`;
+  return '<div class="space-y-6 animate-fade-up" style="position:relative;z-index:1;"><div><h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-calendar font-display"><i data-lucide="calendar-days" class="h-6 w-6 text-pink-400"></i> التقويم</h2><p class="text-[#8a8690] text-sm mt-1">عرض الحجوزات الشهرية</p></div><div class="glass rounded-xl overflow-hidden card-hover border-pink-500/[0.12]"><div class="p-4 sm:p-6"><div class="flex items-center justify-between mb-6"><span class="text-xl font-bold text-gradient-calendar font-display tracking-wide">' + ARABIC_MONTHS[month] + ' ' + year + '</span></div><div class="grid grid-cols-7 gap-1 mb-2">' + ARABIC_DAYS.map(d => '<div class="text-center text-xs font-semibold text-[#8a8690] py-2">' + d + '</div>').join('') + '</div><div class="grid grid-cols-7 gap-1">' + cells + '</div><div class="flex items-center justify-center gap-5 mt-5 pt-4 border-t border-[#1f1f2e]"><div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-green-500"></div><span class="text-xs text-[#8a8690]">مؤكد</span></div><div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div><span class="text-xs text-[#8a8690]">معلق</span></div><div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-red-500"></div><span class="text-xs text-[#8a8690]">ملغي</span></div></div></div></div></div>';
 }
 
 // ═══════════════════════════════════════
 //   ACTIVITY PAGE
 // ═══════════════════════════════════════
 function renderActivityPage() {
-  return `<div class="space-y-6 animate-fade-up" style="position:relative;z-index:1;">
-    <div>
-      <h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-activity font-display">
-        <i data-lucide="clipboard-list" class="h-6 w-6 text-indigo-400"></i> سجل النشاطات
-      </h2>
-      <p class="text-[#8a8690] text-sm mt-1">متابعة جميع العمليات والإجراءات في النظام</p>
-    </div>
-    <div class="glass rounded-xl border-indigo-500/[0.12] p-6">
-      <div class="text-center py-12 text-[#8a8690]">
-        <i data-lucide="clipboard-list" class="h-12 w-12 mx-auto mb-3 opacity-30"></i>
-        <p>لا توجد سجلات نشاطات</p>
-      </div>
-    </div>
-  </div>`;
+  return '<div class="space-y-6 animate-fade-up" style="position:relative;z-index:1;"><div><h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-activity font-display"><i data-lucide="clipboard-list" class="h-6 w-6 text-indigo-400"></i> سجل النشاطات</h2><p class="text-[#8a8690] text-sm mt-1">متابعة جميع العمليات والإجراءات في النظام</p></div><div class="glass rounded-xl border-indigo-500/[0.12] p-6"><div class="text-center py-12 text-[#8a8690]"><i data-lucide="clipboard-list" class="h-12 w-12 mx-auto mb-3 opacity-30"></i><p>لا توجد سجلات نشاطات</p></div></div></div>';
 }
 
 // ═══════════════════════════════════════
@@ -1008,29 +859,7 @@ function renderActivityPage() {
 // ═══════════════════════════════════════
 function renderUsersPage() {
   if (state.user?.role !== 'admin') return unauthorizedBlock();
-  return `<div class="space-y-6" style="position:relative;z-index:1;">
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-bold flex items-center gap-3">
-          <span class="page-icon page-icon-users"><i data-lucide="shield" class="h-5 w-5 text-white"></i></span>
-          <span class="text-gradient-users">إدارة المستخدمين</span>
-        </h2>
-      </div>
-    </div>
-    <div class="glass rounded-2xl overflow-hidden">
-      <table class="data-table">
-        <thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th>الحالة</th></tr></thead>
-        <tbody>
-          ${QUICK_USERS.map(u => `<tr class="table-row-hover">
-            <td><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center shrink-0 text-white text-sm font-bold font-display">${u.name.charAt(0)}</div><span class="font-medium">${u.name}</span></div></td>
-            <td class="font-mono text-sm text-[#f5f0e8]" dir="ltr">${u.email}</td>
-            <td><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${u.role === 'admin' ? 'bg-red-500/10 text-red-400 border-red-500/20' : u.role === 'manager' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' : u.role === 'employee' ? 'bg-slate-400/10 text-slate-300 border-slate-400/20' : 'bg-gray-500/10 text-gray-400 border-gray-500/20'}">${ROLE_LABELS[u.role]}</span></td>
-            <td><span class="w-2 h-2 rounded-full bg-green-400 inline-block" style="box-shadow:0 0 6px rgba(34,197,94,0.5);"></span></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  </div>`;
+  return '<div class="space-y-6" style="position:relative;z-index:1;"><div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><h2 class="text-2xl font-bold flex items-center gap-3"><span class="page-icon page-icon-users"><i data-lucide="shield" class="h-5 w-5 text-white"></i></span><span class="text-gradient-users">إدارة المستخدمين</span></h2></div></div><div class="glass rounded-2xl overflow-hidden"><table class="data-table"><thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th>الحالة</th></tr></thead><tbody>' + QUICK_USERS.map(u => '<tr class="table-row-hover"><td><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center shrink-0 text-white text-sm font-bold font-display">' + u.name.charAt(0) + '</div><span class="font-medium">' + u.name + '</span></div></td><td class="font-mono text-sm text-[#f5f0e8]" dir="ltr">' + u.email + '</td><td><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ' + (u.role === 'admin' ? 'bg-red-500/10 text-red-400 border-red-500/20' : u.role === 'manager' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' : u.role === 'employee' ? 'bg-slate-400/10 text-slate-300 border-slate-400/20' : 'bg-gray-500/10 text-gray-400 border-gray-500/20') + '">' + ROLE_LABELS[u.role] + '</span></td><td><span class="w-2 h-2 rounded-full bg-green-400 inline-block" style="box-shadow:0 0 6px rgba(34,197,94,0.5);"></span></td></tr>').join('') + '</tbody></table></div></div>';
 }
 
 // ═══════════════════════════════════════
@@ -1038,34 +867,7 @@ function renderUsersPage() {
 // ═══════════════════════════════════════
 function renderSettingsPage() {
   if (state.user?.role !== 'admin') return unauthorizedBlock();
-  return `<div class="space-y-6 animate-fade-up" style="position:relative;z-index:1;">
-    <div>
-      <h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-settings font-display">
-        <i data-lucide="settings" class="h-6 w-6 text-slate-400"></i> الإعدادات
-      </h2>
-      <p class="text-[#8a8690] text-sm mt-1">إعدادات النظام والصالة</p>
-    </div>
-    <div class="glass rounded-xl overflow-hidden border-r-4" style="border-right-color:#f97316;">
-      <div class="p-5 pb-4 border-b border-white/5">
-        <h3 class="text-base flex items-center gap-2 text-[#f5f0e8]"><i data-lucide="flame" class="h-5 w-5 text-orange-500"></i> حالة Firebase</h3>
-      </div>
-      <div class="p-5 space-y-4">
-        <div class="flex items-center justify-between rounded-lg border px-4 py-3 bg-white/[0.02]">
-          <div class="flex items-center gap-3">
-            <i data-lucide="cpu" class="h-5 w-5 text-emerald-500"></i>
-            <div>
-              <p class="text-sm font-medium text-[#f5f0e8]">Firebase مُعد ومتصل</p>
-              <p class="text-xs text-[#8a8690] font-mono" dir="ltr">wedding-hall-24f25</p>
-            </div>
-          </div>
-          <span class="w-2.5 h-2.5 rounded-full bg-green-400" style="box-shadow:0 0 8px rgba(34,197,94,0.6);"></span>
-        </div>
-        <button onclick="resetAllDevices()" class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15 cursor-pointer text-sm font-medium">
-          <i data-lucide="rotate-ccw" class="h-4 w-4"></i> إعادة تعيين كل الأجهزة
-        </button>
-      </div>
-    </div>
-  </div>`;
+  return '<div class="space-y-6 animate-fade-up" style="position:relative;z-index:1;"><div><h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-settings font-display"><i data-lucide="settings" class="h-6 w-6 text-slate-400"></i> الإعدادات</h2><p class="text-[#8a8690] text-sm mt-1">إعدادات النظام والصالة</p></div><div class="glass rounded-xl overflow-hidden border-r-4" style="border-right-color:#f97316;"><div class="p-5 pb-4 border-b border-white/5"><h3 class="text-base flex items-center gap-2 text-[#f5f0e8]"><i data-lucide="flame" class="h-5 w-5 text-orange-500"></i> حالة Firebase</h3></div><div class="p-5 space-y-4"><div class="flex items-center justify-between rounded-lg border px-4 py-3 bg-white/[0.02]"><div class="flex items-center gap-3"><i data-lucide="cpu" class="h-5 w-5 text-emerald-500"></i><div><p class="text-sm font-medium text-[#f5f0e8]">Firebase مُعد ومتصل</p><p class="text-xs text-[#8a8690] font-mono" dir="ltr">wedding-hall-24f25</p></div></div><span class="w-2.5 h-2.5 rounded-full bg-green-400" style="box-shadow:0 0 8px rgba(34,197,94,0.6);"></span></div><button onclick="resetAllDevices()" class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/15 cursor-pointer text-sm font-medium"><i data-lucide="rotate-ccw" class="h-4 w-4"></i> إعادة تعيين كل الأجهزة</button></div></div></div>';
 }
 
 function resetAllDevices() {
@@ -1073,7 +875,7 @@ function resetAllDevices() {
   fbWrite('/wedding_hall/gate/open', false);
   fbWrite('/wedding_hall/door/open', false);
   fbWrite('/wedding_hall/seat/active', false);
-  ['street','ship','ceiling','floor','pillar_outer','pillar_inner'].forEach(k => fbWrite(`/wedding_hall/lights/${k}`, false));
+  ['street','ship','ceiling','floor','pillar_outer','pillar_inner'].forEach(k => fbWrite('/wedding_hall/lights/' + k, false));
   fbWrite('/wedding_hall/mp3/playing', false);
   fbWrite('/wedding_hall/mp3/track', 0);
 }
@@ -1083,80 +885,4 @@ function resetAllDevices() {
 // ═══════════════════════════════════════
 function renderProfilePage() {
   const u = state.user;
-  return `<div class="space-y-6 max-w-2xl mx-auto animate-fade-up" style="position:relative;z-index:1;">
-    <div>
-      <h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-profile font-display">
-        <i data-lucide="user" class="h-6 w-6 text-fuchsia-400"></i> الملف الشخصي
-      </h2>
-      <p class="text-[#8a8690] text-sm mt-1">إدارة بياناتك الشخصية وكلمة المرور</p>
-    </div>
-    <div class="glass rounded-xl card-hover border-fuchsia-500/[0.12] p-6">
-      <div class="flex items-center gap-4">
-        <div class="w-20 h-20 rounded-full bg-gradient-to-b from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-[#0a0a0f] text-3xl font-bold" style="box-shadow:0 0 20px rgba(232,121,249,0.3);">${u?.name?.charAt(0) || 'U'}</div>
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <h3 class="text-lg font-bold text-[#f5f0e8] font-display">${u?.name}</h3>
-            <span class="text-xs px-1.5 py-0.5 rounded-md ${u?.role === 'admin' ? 'bg-red-500/10 text-red-400' : u?.role === 'manager' ? 'bg-cyan-500/10 text-cyan-400' : u?.role === 'employee' ? 'bg-slate-400/10 text-slate-300' : 'bg-gray-500/10 text-gray-400'}">${ROLE_LABELS[u?.role || 'viewer']}</span>
-          </div>
-          <div class="flex items-center gap-4 mt-2 text-sm text-[#8a8690]">
-            <div class="flex items-center gap-1.5"><i data-lucide="mail" class="h-3.5 w-3.5 text-fuchsia-400"></i><span dir="ltr">${u?.email}</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="glass rounded-xl card-hover border-fuchsia-500/[0.12] p-6">
-      <h3 class="text-base flex items-center gap-2 text-[#f5f0e8] mb-4"><i data-lucide="lock" class="h-4 w-4 text-fuchsia-400"></i> تغيير كلمة المرور</h3>
-      <p class="text-sm text-[#8a8690]">لتغيير كلمة المرور، يرجى استخدام تطبيق Next.js الكامل</p>
-    </div>
-  </div>`;
-}
-
-function miniStatCard(icon, color, label, value) {
-  return `<div class="glass card-hover rounded-2xl p-4">
-    <div class="flex items-center gap-3">
-      <div class="p-3 rounded-xl" style="background:${color}15;"><i data-lucide="${icon}" class="h-5 w-5" style="color:${color};"></i></div>
-      <div><p class="text-xs text-[#8a8690]">${label}</p><p class="text-xl font-bold font-mono text-[#f5f0e8]">${value}</p></div>
-    </div>
-  </div>`;
-}
-
-function unauthorizedBlock() {
-  return `<div class="flex flex-col items-center justify-center min-h-[50vh] gap-4 animate-fade-up">
-    <i data-lucide="shield-alert" class="h-16 w-16 text-[#9490a0]/30"></i>
-    <h2 class="text-xl font-bold text-[#9490a0]">غير مصرح</h2>
-    <p class="text-sm text-[#9490a0]/70">ليس لديك صلاحية للوصول إلى هذه الصفحة</p>
-  </div>`;
-}
-
-// ═══════════════════════════════════════
-//   Init
-// ═══════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
-  lucide.createIcons();
-  const saved = localStorage.getItem('wedding-hall-user');
-  if (saved) {
-    try {
-      state.user = JSON.parse(saved);
-      document.getElementById('loginPage').classList.add('hidden');
-      document.getElementById('appPage').classList.remove('hidden');
-      initFirebase();
-      setupFirebaseListeners();
-      buildSidebar();
-      updateHeader();
-      renderPage();
-      lucide.createIcons();
-    } catch(e) { localStorage.removeItem('wedding-hall-user'); }
-  }
-
-  document.addEventListener('click', (e) => {
-    const btn = document.getElementById('notifBtn');
-    const dropdown = document.getElementById('notifDropdown');
-    if (btn && dropdown && !btn.contains(e.target) && !dropdown.contains(e.target)) {
-      state.notifOpen = false;
-      dropdown.classList.add('hidden');
-    }
-  });
-});
-</script>
-</body>
-</html>
+  return '<div class="space-y-6 max-w-2xl mx-auto animate-fade-up" style="position:relative;z-index:1;"><div><h2 class="text-2xl font-bold flex items-center gap-3 text-gradient-profile font-display"><i data-lucide="user" class="h-6 w-6 text-fuchsia-400"></i> الملف الشخصي</h2><p class="text-[#8a8690] text-sm mt-1">إدارة بياناتك الشخصية وكلمة المرور</p></div><div class="glass rounded-xl card-hover border-fuchsia-500/[0.12] p-6"><div class="flex items-center gap-4"><div class="w-20 h-20 rounded-full bg-gradient-to-b from-fuchsia-400 via-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-[#0a0a0f] text-3xl font-bold" style="box-shadow:0 0 20px rgba(232,121,249,0.3);">' + (u?.name?.charAt(0) || 'U') + '</div><div class="flex-1"><
